@@ -3,6 +3,8 @@ import ReactDOM from "react-dom";
 
 import App from "./App";
 import EventsPubSub from "./EventsPubSub";
+import UtilsProvider from "contexts/Utils";
+import APIProvider from "contexts/API";
 
 import "./index.scss";
 
@@ -10,4 +12,12 @@ import "./index.scss";
 window.PubSub = new EventsPubSub();
 
 // Render React App
-ReactDOM.render(<App />, document.getElementById("root"));
+
+ReactDOM.render(
+    <UtilsProvider>
+        <APIProvider>
+            <App />
+        </APIProvider>
+    </UtilsProvider>,
+    document.getElementById("root")
+);
