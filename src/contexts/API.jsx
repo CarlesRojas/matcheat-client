@@ -7,7 +7,7 @@ export const API = createContext();
 
 const APIProvider = (props) => {
     // Contexts
-    const { setCookie, getCookie } = useContext(Utils);
+    const { setCookie } = useContext(Utils);
 
     const apiURL = "https://matcheat.herokuapp.com/"; //"localhost:3100/";
 
