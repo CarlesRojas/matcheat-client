@@ -1,7 +1,6 @@
 {
     "name": "matcheat",
     "version": "0.1.0",
-    "homepage": "https://matcheat.netlify.app",
     "private": true,
     "dependencies": {
         "classnames": "^2.2.6",
