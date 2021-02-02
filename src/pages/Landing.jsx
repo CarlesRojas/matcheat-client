@@ -19,7 +19,7 @@ export default function Landing() {
     // Handle device orientation change
     const onOrientationChange = ({ gamma, beta }) => {
         console.log(gamma, beta);
-        setTilt({ tilt: `perspective(600px) rotateX(${clamp(-beta * 0.5, -10, 10)}deg) rotateY(${clamp(-gamma * 0.5, -10, 10)}deg)` });
+        setTilt({ tilt: `perspective(600px) rotateX(${clamp(beta * 0.5, -10, 10)}deg) rotateY(${clamp(-gamma * 0.5, -10, 10)}deg)` });
     };
 
     // Subscribe to events
