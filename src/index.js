@@ -12,7 +12,6 @@ import "./index.scss";
 window.PubSub = new EventsPubSub();
 
 // Render React App
-
 ReactDOM.render(
     <UtilsProvider>
         <APIProvider>

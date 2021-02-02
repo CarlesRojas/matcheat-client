@@ -18,32 +18,32 @@ $line-height: 22px;
 // #######################################
 
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 html {
-    width: 100%;
     height: 100%;
+    width: 100%;
     font-size: $font-size;
 }
 
 body {
-    width: 100%;
+    user-select: none;
     height: 100%;
+    width: 100%;
+
+    overflow: hidden;
 
     font-family: "Montserrat", "Helvetica", "Verdana", "Arial", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-
-    overflow: hidden;
-    user-select: none;
 }
 
 #root {
-    width: 100%;
     height: 100%;
+    width: 100%;
     background-color: $background;
     color: $text;
 
@@ -55,13 +55,104 @@ body {
 
 .app {
     position: relative;
-    width: 100%;
     height: 100%;
+    width: 100%;
 }
 
 .landing {
     position: relative;
-    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 100%;
-    background-color: rgb(255, 217, 217);
+    width: 100%;
+    background: rgb(255, 190, 137); // Fallback
+    background: linear-gradient(60deg, rgba(255, 116, 212, 1) 0%, rgba(255, 138, 95, 1) 100%);
+
+    .background {
+        position: absolute;
+        animation: move_background 100s linear infinite;
+        top: 0;
+        right: -100vw;
+        bottom: -100vh;
+        left: 0;
+        background-image: url("resources/background.svg");
+        background-repeat: repeat;
+        background-size: 50vw 50vw;
+
+        @keyframes move_background {
+            from {
+                transform: translate(0, 0);
+            }
+            to {
+                transform: translate(-100vw, -100vw);
+            }
+        }
+    }
+
+    .glass {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 90%;
+        border-radius: 20px;
+        padding: 15% 5%;
+        backdrop-filter: blur(6px);
+        border: solid 2px transparent;
+        background-clip: padding-box;
+        background-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.02);
+
+        .logo {
+            width: 50%;
+            z-index: 1;
+            margin-bottom: 30%;
+            animation: 3s infinite heartbeat;
+
+            @keyframes heartbeat {
+                0% {
+                    transform: scale(1);
+                }
+                5% {
+                    transform: scale(1.1);
+                }
+                10% {
+                    transform: scale(1);
+                }
+                12% {
+                    transform: scale(1);
+                }
+                17% {
+                    transform: scale(1.1);
+                }
+                22% {
+                    transform: scale(1);
+                }
+            }
+        }
+
+        .button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            z-index: 1;
+            background: white;
+            color: rgba(0, 0, 0, 0.6);
+            margin-bottom: 8%;
+            border-radius: 1000px;
+            padding: 4%;
+            font-weight: 800;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .login {
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            margin-bottom: 5%;
+        }
+    }
 }
