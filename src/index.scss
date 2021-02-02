@@ -14,10 +14,79 @@ $font-size: 18px;
 $line-height: 22px;
 
 // #######################################
+//      MIXINS
+// #######################################
+
+@mixin transition($x...) {
+    -webkit-transition: $x;
+    -moz-transition: $x;
+    -ms-transition: $x;
+    -o-transition: $x;
+    transition: $x;
+}
+
+@mixin transition-delay($delay) {
+    -webkit-transition-delay: $delay;
+    -moz-transition-delay: $delay;
+    -ms-transition-delay: $delay;
+    -o-transition-delay: $delay;
+    transition-delay: $delay;
+}
+
+@mixin calc($property, $expression) {
+    #{$property}: -webkit-calc(#{$expression});
+    #{$property}: -moz-calc(#{$expression});
+    #{$property}: -ms-calc(#{$expression});
+    #{$property}: -o-calc(#{$expression});
+    #{$property}: calc(#{$expression});
+}
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    -o-border-radius: $radius;
+    border-radius: $radius;
+}
+
+@mixin box-shadow($value) {
+    -webkit-box-shadow: $value;
+    -moz-box-shadow: $value;
+    -ms-box-shadow: $value;
+    -o-box-shadow: $value;
+    box-shadow: $value;
+}
+
+@mixin filter($value) {
+    -webkit-filter: $value;
+    -moz-filter: $value;
+    -ms-filter: $value;
+    -o-filter: $value;
+    filter: $value;
+}
+
+@mixin animation($animation) {
+    -webkit-animation: $animation;
+    -moz-animation: $animation;
+    -ms-animation: $animation;
+    -o-animation: $animation;
+    animation: $animation;
+}
+
+@mixin animation-delay($delay) {
+    -webkit-animation-delay: $delay;
+    -moz-animation-delay: $delay;
+    -ms-animation-delay: $delay;
+    -o-animation-delay: $delay;
+    animation-delay: $delay;
+}
+
+// #######################################
 //      MAIN ELEMENTS
 // #######################################
 
 * {
+    overflow: hidden;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -71,7 +140,6 @@ body {
 
     .background {
         position: absolute;
-        animation: move_background 100s linear infinite;
         top: 0;
         right: -100vw;
         bottom: -100vh;
@@ -79,6 +147,7 @@ body {
         background-image: url("resources/background.svg");
         background-repeat: repeat;
         background-size: 50vw 50vw;
+        @include animation(move_background 100s linear infinite);
 
         @keyframes move_background {
             from {
@@ -96,19 +165,21 @@ body {
         align-items: center;
         justify-content: center;
         width: 90%;
-        border-radius: 20px;
-        padding: 15% 5%;
-        backdrop-filter: blur(6px);
-        border: solid 2px transparent;
         background-clip: padding-box;
         background-color: rgba(255, 255, 255, 0.2);
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.02);
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
+        background-position: 50px -150px;
+        border: solid 2px transparent;
+        padding: 15% 5%;
+        backdrop-filter: blur(6px);
+        @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+        @include border-radius(20px);
 
         .logo {
             width: 50%;
             z-index: 1;
             margin-bottom: 30%;
-            animation: 3s infinite heartbeat;
+            @include animation(heartbeat 3s linear infinite);
 
             @keyframes heartbeat {
                 0% {
@@ -141,18 +212,23 @@ body {
             background: white;
             color: rgba(0, 0, 0, 0.6);
             margin-bottom: 8%;
-            border-radius: 1000px;
             padding: 4%;
             font-weight: 800;
             text-align: center;
             text-transform: uppercase;
+            @include border-radius(500px);
+            @include transition(transform 0.2s ease-in-out);
+
+            &:active {
+                transform: scale(1.05);
+            }
         }
 
         .login {
             background: transparent;
             color: white;
-            border: 1px solid white;
             margin-bottom: 5%;
+            border: 1px solid white;
         }
     }
 }
