@@ -81,6 +81,34 @@ $line-height: 22px;
     animation-delay: $delay;
 }
 
+@mixin inputPlaceholder() {
+    $selector: "";
+    $prefixes: (
+        moz: "::-moz",
+        webkit: "::-webkit",
+        ie: ":-ms",
+    );
+    @each $prop, $value in $prefixes {
+        @if $prop != "moz" {
+            $selector: #{$value}-input-placeholder;
+        } @else {
+            $selector: #{$value}-placeholder;
+        }
+        @if & {
+            &#{$selector} {
+                @content;
+            }
+        } @else {
+            #{$selector} {
+                @content;
+            }
+        }
+    }
+    &::placeholder {
+        @content;
+    }
+}
+
 // #######################################
 //      MAIN ELEMENTS
 // #######################################
@@ -130,9 +158,6 @@ body {
 
 .landing {
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     height: 100%;
     width: 100%;
     background: rgb(255, 190, 137); // Fallback
@@ -147,7 +172,7 @@ body {
         background-image: url("resources/background.svg");
         background-repeat: repeat;
         background-size: 50vw 50vw;
-        @include animation(move_background 100s linear infinite);
+        @include animation(move_background 50s linear infinite);
 
         @keyframes move_background {
             from {
@@ -159,76 +184,151 @@ body {
         }
     }
 
-    .glass {
+    .section {
+        position: absolute;
         display: flex;
-        flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 90%;
-        background-clip: padding-box;
-        background-color: rgba(255, 255, 255, 0.2);
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
-        background-position: 50px -150px;
-        border: solid 2px transparent;
-        padding: 15% 5%;
-        backdrop-filter: blur(6px);
-        @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
-        @include border-radius(20px);
+        height: 100%;
+        width: 100%;
 
-        .logo {
-            width: 50%;
-            z-index: 1;
-            margin-bottom: 30%;
-            @include animation(heartbeat 3s linear infinite);
-
-            @keyframes heartbeat {
-                0% {
-                    transform: scale(1);
-                }
-                5% {
-                    transform: scale(1.1);
-                }
-                10% {
-                    transform: scale(1);
-                }
-                12% {
-                    transform: scale(1);
-                }
-                17% {
-                    transform: scale(1.1);
-                }
-                22% {
-                    transform: scale(1);
-                }
-            }
-        }
-
-        .button {
+        .glass {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            height: 60%;
             width: 90%;
-            z-index: 1;
-            background: white;
-            color: rgba(0, 0, 0, 0.6);
-            margin-bottom: 8%;
-            padding: 4%;
-            font-weight: 800;
-            text-align: center;
-            text-transform: uppercase;
-            @include border-radius(500px);
-            @include transition(transform 0.2s ease-in-out);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
+            background-clip: padding-box;
+            background-position: 50px -150px;
+            border: solid 2px transparent;
+            backdrop-filter: blur(5px);
+            @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.15));
+            @include border-radius(20px);
 
-            &:active {
-                transform: scale(1.05);
+            .logo {
+                width: 50%;
+                z-index: 1;
+                margin-bottom: 25%;
+                @include animation(heartbeat 3s linear infinite);
+
+                @keyframes heartbeat {
+                    58% {
+                        transform: scale(1);
+                    }
+                    63% {
+                        transform: scale(1.1);
+                    }
+                    68% {
+                        transform: scale(1);
+                    }
+                    70% {
+                        transform: scale(1);
+                    }
+                    75% {
+                        transform: scale(1.1);
+                    }
+                    80% {
+                        transform: scale(1);
+                    }
+                }
+
+                &.small {
+                    width: 25%;
+                    margin-bottom: 15%;
+                }
             }
-        }
 
-        .login {
-            background: transparent;
-            color: white;
-            margin-bottom: 5%;
-            border: 1px solid white;
+            .button {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 80%;
+                z-index: 1;
+                background: white;
+                color: rgba(0, 0, 0, 0.6);
+                margin-bottom: 8%;
+                padding: 4%;
+                font-weight: 800;
+                text-align: center;
+                text-transform: uppercase;
+                @include border-radius(500px);
+                @include transition(transform 0.2s ease-in-out);
+
+                &:active {
+                    transform: scale(1.05);
+                }
+            }
+
+            .login {
+                background: transparent;
+                color: white;
+                margin-bottom: 5%;
+                margin-bottom: 0;
+                border: 1px solid white;
+            }
+
+            form {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                .inputContainer {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 80%;
+                    padding: 4%;
+                    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
+                    margin: 0 5%;
+                    margin-bottom: 8%;
+                    backdrop-filter: blur(6px);
+                    @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+                    @include border-radius(500px);
+
+                    .inputIcon {
+                        opacity: 0.5;
+                        height: 1rem;
+                        max-height: 1rem;
+                        min-height: 1rem;
+                        width: 1rem;
+                        max-width: 1rem;
+                        min-width: 1rem;
+                        margin-right: 0.4rem;
+
+                        path {
+                            fill: white !important;
+                        }
+
+                        &.email {
+                            height: 1.05rem;
+                            max-height: 1.05rem;
+                            min-height: 1.05rem;
+                            width: 1.05rem;
+                            max-width: 1.05rem;
+                            min-width: 1.05rem;
+                        }
+                    }
+
+                    .input {
+                        display: flex;
+                        align-items: center;
+                        background: none;
+                        color: white;
+                        border: 0;
+                        outline: none;
+                        font-size: 1rem;
+
+                        @include inputPlaceholder() {
+                            color: white;
+                            opacity: 0.7;
+                        }
+                    }
+                }
+            }
         }
     }
 }
