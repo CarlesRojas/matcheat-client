@@ -32,20 +32,23 @@ export default function Landing() {
     const [loginError, setLoginError] = useState(null);
     const [signUpError, setSignUpError] = useState(null);
 
-    // When te login form changes
+    // When the login form changes
     const onLoginFormChange = (event) => {
         const { name, value } = event.target;
         setLoginForm((prevState) => ({ ...prevState, [name]: value }));
     };
 
-    // When te signup form changes
+    // When the signup form changes
     const onSingupFormChange = (event) => {
         const { name, value } = event.target;
         setSingupForm((prevState) => ({ ...prevState, [name]: value }));
     };
 
-    // When the users tries ot login
-    const onLogin = async () => {
+    // When the users tries to login
+    const onLogin = async (event) => {
+        event.preventDefault();
+
+        // Login
         const loginResult = await login(loginForm.email, loginForm.password);
 
         // Throw error
@@ -53,8 +56,11 @@ export default function Landing() {
         else console.log(`LOGIN SUCCESSFUL ${loginResult.name}`);
     };
 
-    // When the users tries ot sign up
-    const onSignUp = async () => {
+    // When the users tries to sign up
+    const onSignUp = async (event) => {
+        event.preventDefault();
+
+        // Sign Up
         const singUpResult = await register(signupForm.name, signupForm.email, signupForm.password);
 
         // Throw error
@@ -77,23 +83,28 @@ export default function Landing() {
             timeline.fromTo(".welcome > .glass", { opacity: 0 }, { opacity: 1, duration: 1 }, "+=0.5");
         }
 
-        setLoginError(null);
-        setSignUpError(null);
+        resetForms();
         setPagePositions({ welcomeX: 0, loginX: SCREEN_WIDTH, signupX: SCREEN_WIDTH });
     };
 
     // Show the login screen
     const showLoginScreen = () => {
-        setLoginError(null);
-        setSignUpError(null);
+        resetForms();
         setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: 0, signupX: SCREEN_WIDTH });
     };
 
     // Show the signup screen
     const showSignupScreen = () => {
+        resetForms();
+        setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: 0 });
+    };
+
+    // Reset all form fields and errors
+    const resetForms = () => {
         setLoginError(null);
         setSignUpError(null);
-        setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: 0 });
+        setLoginForm({ email: "", password: "" });
+        setSingupForm({ name: "", email: "", password: "" });
     };
 
     // #################################################
@@ -157,7 +168,7 @@ export default function Landing() {
 
                     <SVG className="logo small" src={LogoIcon} />
 
-                    <form autoComplete="off">
+                    <form autoComplete="off" noValidate onSubmit={onLogin}>
                         <div className="inputContainer">
                             <SVG className="inputIcon email" src={EmailIcon} />
                             <input
@@ -165,7 +176,6 @@ export default function Landing() {
                                 type="email"
                                 placeholder=" email"
                                 name="email"
-                                required
                                 value={loginForm.email}
                                 onChange={onLoginFormChange}
                                 autoComplete="off"
@@ -179,16 +189,15 @@ export default function Landing() {
                                 type="password"
                                 placeholder=" password"
                                 name="password"
-                                required
                                 value={loginForm.password}
                                 onChange={onLoginFormChange}
                                 autoComplete="off"
                             ></input>
                         </div>
 
-                        <div className="button last" onClick={onLogin}>
+                        <button type="submit" className="button last">
                             Login
-                        </div>
+                        </button>
 
                         <div className="error">{loginError}</div>
                     </form>
@@ -201,7 +210,7 @@ export default function Landing() {
 
                     <SVG className="logo small" src={LogoIcon} />
 
-                    <form autoComplete="off">
+                    <form autoComplete="off" noValidate onSubmit={onSignUp}>
                         <div className="inputContainer">
                             <SVG className="inputIcon email" src={NameIcon} />
                             <input
@@ -209,7 +218,6 @@ export default function Landing() {
                                 type="text"
                                 placeholder=" name"
                                 name="name"
-                                required
                                 value={signupForm.name}
                                 onChange={onSingupFormChange}
                                 autoComplete="off"
@@ -223,7 +231,6 @@ export default function Landing() {
                                 type="email"
                                 placeholder=" email"
                                 name="email"
-                                required
                                 value={signupForm.email}
                                 onChange={onSingupFormChange}
                                 autoComplete="off"
@@ -237,16 +244,15 @@ export default function Landing() {
                                 type="password"
                                 placeholder=" password"
                                 name="password"
-                                required
                                 value={signupForm.password}
                                 onChange={onSingupFormChange}
                                 autoComplete="off"
                             ></input>
                         </div>
 
-                        <div className="button last" onClick={onSignUp}>
+                        <button type="submit" className="button last">
                             Sign Up
-                        </div>
+                        </button>
 
                         <div className="error">{signUpError}</div>
                     </form>
