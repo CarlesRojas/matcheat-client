@@ -204,7 +204,7 @@ body {
             background-position: 50px -150px;
             border: solid 2px transparent;
             backdrop-filter: blur(5px);
-            @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.15));
+            @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
             @include border-radius(20px);
 
             .logo {
@@ -246,13 +246,17 @@ body {
                 align-items: center;
                 width: 80%;
                 z-index: 1;
-                background: white;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.5) 75%);
+                background-position: 50px -150px;
+                border: solid 2px transparent;
+                backdrop-filter: blur(6px);
                 color: rgba(0, 0, 0, 0.6);
                 margin-bottom: 8%;
                 padding: 4%;
-                font-weight: 800;
+                font-weight: 700;
                 text-align: center;
                 text-transform: uppercase;
+                @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
                 @include border-radius(500px);
                 @include transition(transform 0.2s ease-in-out);
 
@@ -266,7 +270,7 @@ body {
                 color: white;
                 margin-bottom: 5%;
                 margin-bottom: 0;
-                border: 1px solid white;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 75%);
             }
 
             form {
@@ -282,10 +286,12 @@ body {
                     justify-content: center;
                     width: 80%;
                     padding: 4%;
-                    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
+                    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 75%);
+                    background-position: 50px -150px;
+                    border: solid 2px transparent;
+                    backdrop-filter: blur(6px);
                     margin: 0 5%;
                     margin-bottom: 8%;
-                    backdrop-filter: blur(6px);
                     @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
                     @include border-radius(500px);
 

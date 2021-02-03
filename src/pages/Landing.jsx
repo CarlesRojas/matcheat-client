@@ -57,11 +57,11 @@ export default function Landing() {
     // #################################################
 
     // Accelerometer string
-    const [{ tilt }, setTilt] = useSpring(() => ({ tilt: "perspective(1500px) rotateX(0deg) rotateY(0deg)" }));
+    const [{ tilt }, setTilt] = useSpring(() => ({ tilt: "perspective(2000px) rotateX(0deg) rotateY(0deg)" }));
 
     // Handle device orientation change
     const onOrientationChange = ({ gamma, beta }) => {
-        setTilt({ tilt: `perspective(1500px) rotateX(${clamp(beta * 0.5, -10, 10)}deg) rotateY(${clamp(-gamma * 0.5, -10, 10)}deg)` });
+        setTilt({ tilt: `perspective(2000px) rotateX(${clamp(beta * 0.5, -10, 10)}deg) rotateY(${clamp(-gamma * 0.5, -10, 10)}deg)` });
     };
 
     // #################################################
@@ -102,6 +102,8 @@ export default function Landing() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    console.log(currPage);
+
     return (
         <div className="landing">
             <div className="background"></div>
@@ -109,9 +111,11 @@ export default function Landing() {
             <animated.div className="section welcome" style={{ x: welcomeX }}>
                 <animated.div className="glass" style={{ transform: tilt }}>
                     <SVG className="logo" src={LogoIcon} />
+
                     <div className="button signup" onClick={showSignupScreen}>
                         Sign Up
                     </div>
+
                     <div className="button login" onClick={showLoginScreen}>
                         Login
                     </div>
@@ -148,6 +152,10 @@ export default function Landing() {
                                 onChange={onLoginFormChange}
                                 autoComplete="off"
                             ></input>
+                        </div>
+
+                        <div className="button" onClick={showLoginScreen}>
+                            Login
                         </div>
                     </form>
                 </animated.div>
