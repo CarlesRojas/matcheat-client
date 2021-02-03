@@ -10,7 +10,7 @@ const APIProvider = (props) => {
     // Contexts
     const { setCookie } = useContext(Utils);
 
-    const apiURL = "https://matcheat.herokuapp.com/"; //"localhost:3100/";
+    const apiURL = "https://matcheat.herokuapp.com/"; //"http://localhost:3100/";
 
     // Current user data
     const token = useRef(null);
@@ -19,10 +19,11 @@ const APIProvider = (props) => {
 
     const register = async (name, email, password) => {
         // Post data
-        const POST_DATA = new FormData();
-        POST_DATA.append("name", name);
-        POST_DATA.append("email", email);
-        POST_DATA.append("password", password);
+        var postData = {
+            name,
+            email,
+            password,
+        };
 
         try {
             // Fetch
@@ -30,8 +31,10 @@ const APIProvider = (props) => {
                 method: "post",
                 headers: {
                     Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
                 },
-                body: POST_DATA,
+                body: JSON.stringify(postData),
             });
 
             // Get data from response
@@ -40,14 +43,17 @@ const APIProvider = (props) => {
 
             // Return response
             return response;
-        } catch (e) {}
+        } catch (e) {
+            return e;
+        }
     };
 
     const login = async (email, password) => {
         // Post data
-        const POST_DATA = new FormData();
-        POST_DATA.append("email", email);
-        POST_DATA.append("password", password);
+        var postData = {
+            email,
+            password,
+        };
 
         try {
             // Fetch
@@ -55,8 +61,10 @@ const APIProvider = (props) => {
                 method: "post",
                 headers: {
                     Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
                 },
-                body: POST_DATA,
+                body: JSON.stringify(postData),
             });
 
             // Get data from response
@@ -69,7 +77,9 @@ const APIProvider = (props) => {
 
             // Return response
             return response;
-        } catch (e) {}
+        } catch (e) {
+            return e;
+        }
     };
 
     // Return the context

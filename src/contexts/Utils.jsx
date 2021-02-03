@@ -44,7 +44,7 @@ const UtilsProvider = (props) => {
         var cookies = {};
         for (var i = 0; i < pairs.length; i++) {
             var pair = pairs[i].split("=");
-            if (pair[0].includes("reddon")) cookies[(pair[0] + "").trim()] = unescape(pair.slice(1).join("="));
+            if (pair[0].includes("matcheat")) cookies[(pair[0] + "").trim()] = unescape(pair.slice(1).join("="));
         }
         return cookies;
     };
@@ -55,7 +55,7 @@ const UtilsProvider = (props) => {
         var multiple = res.split(";");
         for (var i = 0; i < multiple.length; i++) {
             var key = multiple[i].split("=");
-            if (key[0].includes("reddon")) document.cookie = key[0] + " =; expires = Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            if (key[0].includes("matcheat")) document.cookie = key[0] + " =; expires = Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         }
     };
 
