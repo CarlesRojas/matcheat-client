@@ -5,6 +5,7 @@ import gsap from "gsap";
 
 // Icons
 import LogoIcon from "resources/logo_white.svg";
+import NameIcon from "resources/icons/name.svg";
 import EmailIcon from "resources/icons/email.svg";
 import PasswordIcon from "resources/icons/password.svg";
 
@@ -68,13 +69,20 @@ export default function Landing() {
     //   FORMS
     // #################################################
 
+    // Form states
     const [loginForm, setLoginForm] = useState({ email: "", password: "" });
+    const [signupForm, setSingupForm] = useState({ name: "", email: "", password: "" });
 
     // When te login form changes
     const onLoginFormChange = (event) => {
         const { name, value } = event.target;
-        console.log(event.target);
         setLoginForm((prevState) => ({ ...prevState, [name]: value }));
+    };
+
+    // When te signup form changes
+    const onSingupFormChange = (event) => {
+        const { name, value } = event.target;
+        setSingupForm((prevState) => ({ ...prevState, [name]: value }));
     };
 
     // #################################################
@@ -154,7 +162,7 @@ export default function Landing() {
                             ></input>
                         </div>
 
-                        <div className="button" onClick={showLoginScreen}>
+                        <div className="button last" onClick={showLoginScreen}>
                             Login
                         </div>
                     </form>
@@ -163,9 +171,54 @@ export default function Landing() {
 
             <animated.div className="section signup" style={{ x: signupX }}>
                 <animated.div className="glass" style={{ transform: tilt }}>
-                    <SVG className="logo" src={LogoIcon} />
-                    <div className="button">Sign Up</div>
-                    <div className="button login">Login</div>
+                    <SVG className="logo small" src={LogoIcon} />
+                    <form autoComplete="off">
+                        <div className="inputContainer">
+                            <SVG className="inputIcon email" src={NameIcon} />
+                            <input
+                                className="input name"
+                                type="text"
+                                placeholder=" name"
+                                name="name"
+                                required
+                                value={signupForm.name}
+                                onChange={onSingupFormChange}
+                                autoComplete="off"
+                            ></input>
+                        </div>
+
+                        <div className="inputContainer">
+                            <SVG className="inputIcon email" src={EmailIcon} />
+                            <input
+                                className="input email"
+                                type="email"
+                                placeholder=" email"
+                                name="email"
+                                required
+                                value={signupForm.email}
+                                onChange={onSingupFormChange}
+                                autoComplete="off"
+                            ></input>
+                        </div>
+
+                        <div className="inputContainer">
+                            <SVG className="inputIcon" src={PasswordIcon} />
+                            <input
+                                className="input password"
+                                type="password"
+                                placeholder=" password"
+                                name="password"
+                                required
+                                value={signupForm.password}
+                                onChange={onSingupFormChange}
+                                autoComplete="off"
+                            ></input>
+                        </div>
+
+                        <div className="button last" onClick={showLoginScreen}>
+                            Sign Up
+                        </div>
+                    </form>
                 </animated.div>
             </animated.div>
         </div>

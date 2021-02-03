@@ -197,7 +197,6 @@ body {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 60%;
             width: 90%;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
             background-clip: padding-box;
@@ -210,7 +209,7 @@ body {
             .logo {
                 width: 50%;
                 z-index: 1;
-                margin-bottom: 25%;
+                margin: 10% 0 25% 0;
                 @include animation(heartbeat 3s linear infinite);
 
                 @keyframes heartbeat {
@@ -236,7 +235,7 @@ body {
 
                 &.small {
                     width: 25%;
-                    margin-bottom: 15%;
+                    margin: 10% 0 15% 0;
                 }
             }
 
@@ -244,7 +243,7 @@ body {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                width: 80%;
+                width: 85%;
                 z-index: 1;
                 background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.5) 75%);
                 background-position: 50px -150px;
@@ -263,14 +262,17 @@ body {
                 &:active {
                     transform: scale(1.05);
                 }
-            }
 
-            .login {
-                background: transparent;
-                color: white;
-                margin-bottom: 5%;
-                margin-bottom: 0;
-                background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 75%);
+                &.login {
+                    background: transparent;
+                    color: white;
+                    margin-bottom: 10%;
+                    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 75%);
+                }
+
+                &.last {
+                    margin-bottom: 10%;
+                }
             }
 
             form {
@@ -284,7 +286,7 @@ body {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    width: 80%;
+                    width: 85%;
                     padding: 4%;
                     background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 75%);
                     background-position: 50px -150px;
