@@ -67,7 +67,7 @@ export default function Background() {
             y: positionRef.current.y + pixelsPerSecond.current.y * deltaTime,
         };
 
-        if (pixelsPerSecond.current.x !== 0 || pixelsPerSecond.current.y !== 0) console.log(`XPos: ${newPosition.x}   XSpeed: ${pixelsPerSecond.current.x}`);
+        console.log(`XPos: ${newPosition.x}   XSpeed: ${pixelsPerSecond.current.x}`);
 
         setPosition(newPosition);
         positionRef.current = newPosition;
