@@ -34,8 +34,8 @@ export default function Background() {
         if (Math.abs(alpha) > 5 || Math.abs(beta) > 5) {
             // Save current motion only if it is bigger
             motion.current = {
-                alpha: Math.sign(motion.current.alpha) === Math.sign(alpha) && motion.current.alpha > alpha ? motion.current.alpha : alpha,
-                beta: Math.sign(motion.current.beta) === Math.sign(beta) && motion.current.beta > beta ? motion.current.beta : beta,
+                alpha: Math.sign(motion.current.alpha) === Math.sign(alpha) && Math.abs(motion.current.alpha) > Math.abs(alpha) ? motion.current.alpha : alpha,
+                beta: Math.sign(motion.current.beta) === Math.sign(beta) && Math.abs(motion.current.beta) > Math.abs(beta) ? motion.current.beta : beta,
             };
 
             // Update speed
