@@ -69,17 +69,17 @@ export default function Background() {
     const update = (deltaTime) => {
         // Frame deceleration
         const frameDesceleration = DECELERATION * deltaTime;
-        //debugger;
+
         // New speed same as old
         var newSpeed = { x: speed.get().x, y: speed.get().y };
 
         // Update x speed
         if (prevMotion.current.beta !== motion.current.beta) newSpeed.x = motion.current.beta;
-        else if (newSpeed.x !== 0) newSpeed.x > 0 ? Math.max(newSpeed.x - frameDesceleration, 0) : Math.min(newSpeed.x + frameDesceleration, 0);
+        else if (newSpeed.x !== 0) newSpeed.x = newSpeed.x > 0 ? Math.max(newSpeed.x - frameDesceleration, 0) : Math.min(newSpeed.x + frameDesceleration, 0);
 
         // Update y speed
         if (prevMotion.current.alpha !== motion.current.alpha) newSpeed.y = motion.current.alpha;
-        else if (newSpeed.y !== 0) newSpeed.y > 0 ? Math.max(newSpeed.y - frameDesceleration, 0) : Math.min(newSpeed.y + frameDesceleration, 0);
+        else if (newSpeed.y !== 0) newSpeed.y = newSpeed.y > 0 ? Math.max(newSpeed.y - frameDesceleration, 0) : Math.min(newSpeed.y + frameDesceleration, 0);
 
         // Set speed and save current motion
         if (prevMotion.current.beta !== motion.current.beta || prevMotion.current.alpha !== motion.current.alpha) {
