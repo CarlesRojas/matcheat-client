@@ -6,9 +6,10 @@ import { useSpring } from "react-spring";
 import Icons from "resources/background.svg";
 
 // Constants
-var SCREEN_WIDTH = window.innerWidth;
+const SCREEN_WIDTH = window.innerWidth;
+const SCREEN_HEIGHT = window.innerHeight;
 const TILE_SIZE = SCREEN_WIDTH / 2;
-const NUM_TILES = { x: 4, y: 8 };
+const NUM_TILES = { x: Math.ceil(SCREEN_WIDTH / TILE_SIZE) + 2, y: Math.ceil(SCREEN_HEIGHT / TILE_SIZE) + 2 };
 const MAX_FPS = 120;
 const FPS = 60;
 const DECELERATION = 15;
@@ -121,43 +122,33 @@ export default function Background() {
 
     // On componente mount
     useEffect(() => {
-        // Resize
-        const onResize = () => {
-            SCREEN_WIDTH = window.innerWidth;
-        };
-
         // Subscribe to events
-        window.addEventListener("resize", onResize);
         window.addEventListener("devicemotion", onDeviceMotion, true);
 
         // Start loop
         loop();
-        //const loopInterval = setInterval(loop, 1000 / FPS);
 
         // Unsubscribe from events and stop loop
         return () => {
-            window.removeEventListener("resize", onResize);
             window.removeEventListener("devicemotion", onDeviceMotion, true);
 
             // Cancel animation
             if (frameID.current) window.cancelAnimationFrame(frameID.current);
-            //clearInterval(loopInterval);
         };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    var tiles = [];
     // Tile matrix
+    var tiles = [];
     for (let i = 0; i < NUM_TILES.x; i++) {
         for (let j = 0; j < NUM_TILES.y; j++) {
+            // Get position
+            let xPos = (position.x + (i - 1) * TILE_SIZE) % (NUM_TILES.x * TILE_SIZE);
+            let yPos = (position.y + (j - 1) * TILE_SIZE) % (NUM_TILES.y * TILE_SIZE);
+
             tiles.push(
-                <SVG
-                    key={`${i - 1}-${j - 1}`}
-                    className="cell"
-                    src={Icons}
-                    style={{ width: TILE_SIZE, transform: `translate(${position.x + (i - 1) * TILE_SIZE}px, ${position.y + (j - 1) * TILE_SIZE}px)` }}
-                />
+                <SVG key={`${i - 1}-${j - 1}`} className="cell" src={Icons} style={{ width: TILE_SIZE, transform: `translate(${xPos}px, ${yPos}px)` }} />
             );
         }
     }
