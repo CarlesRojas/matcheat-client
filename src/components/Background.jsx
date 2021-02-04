@@ -32,16 +32,13 @@ export default function Background() {
 
         // Save current motion only if it is bigger
         motion.current = {
-            alpha: motion.current.alpha > alpha ? motion.current.alpha : alpha,
-            beta: motion.current.beta > beta ? motion.current.beta : beta,
+            alpha: Math.abs(alpha) > 20 ? alpha : motion.current.alpha,
+            beta: Math.abs(beta) > 20 ? beta : motion.current.beta,
         };
-        console.log(`Beta: ${motion.current.beta}   XSpeed: ${pixelsPerSecond.current.x}`);
 
         // Update speed
-        pixelsPerSecond.current = {
-            x: -beta * 0.2,
-            y: -alpha * 0.2,
-        };
+        pixelsPerSecond.current = { x: -beta * 0.5, y: -alpha * 0.5 };
+        if (Math.abs(alpha) > 20 || Math.abs(beta) > 20) console.log(`Beta: ${motion.current.beta}   XSpeed: ${pixelsPerSecond.current.x}`);
     };
 
     // #################################################
@@ -60,13 +57,17 @@ export default function Background() {
             y: pixelsPerSecond.current.y > 0 ? Math.max(pixelsPerSecond.current.y - 1, 0) : Math.min(pixelsPerSecond.current.y + 1, 0),
         };
 
+        // Stop at low speeds
+        if (Math.abs(pixelsPerSecond.current.x) < 3) pixelsPerSecond.current = { x: 0, y: pixelsPerSecond.current.y };
+        if (Math.abs(pixelsPerSecond.current.y) < 3) pixelsPerSecond.current = { x: pixelsPerSecond.current.x, y: 0 };
+
         // Update position
         var newPosition = {
             x: positionRef.current.x + pixelsPerSecond.current.x * deltaTime,
             y: positionRef.current.y + pixelsPerSecond.current.y * deltaTime,
         };
 
-        console.log(`XPos: ${newPosition.x}   XSpeed: ${pixelsPerSecond.current.x}`);
+        if (pixelsPerSecond.current.x !== 0 && pixelsPerSecond.current.y !== 0) console.log(`XPos: ${newPosition.x}   XSpeed: ${pixelsPerSecond.current.x}`);
 
         setPosition(newPosition);
         positionRef.current = newPosition;
