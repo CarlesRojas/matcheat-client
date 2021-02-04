@@ -10,6 +10,7 @@ var SCREEN_WIDTH = window.innerWidth;
 const TILE_SIZE = SCREEN_WIDTH / 2;
 const MAX_FPS = 120;
 const FPS = 10;
+const DECELERATION = 10;
 
 export default function Background() {
     // #################################################
@@ -51,10 +52,14 @@ export default function Background() {
 
     // Update actions
     const update = (deltaTime) => {
+        // Frame deceleration
+        const frameDesceleration = DECELERATION * deltaTime;
+        console.log(frameDesceleration);
+
         // Update speed
         pixelsPerSecond.current = {
-            x: pixelsPerSecond.current.x > 0 ? Math.max(pixelsPerSecond.current.x - 1, 0) : Math.min(pixelsPerSecond.current.x + 1, 0),
-            y: pixelsPerSecond.current.y > 0 ? Math.max(pixelsPerSecond.current.y - 1, 0) : Math.min(pixelsPerSecond.current.y + 1, 0),
+            x: pixelsPerSecond.current.x > 0 ? Math.max(pixelsPerSecond.current.x - frameDesceleration, 0) : Math.min(pixelsPerSecond.current.x + frameDesceleration, 0),
+            y: pixelsPerSecond.current.y > 0 ? Math.max(pixelsPerSecond.current.y - frameDesceleration, 0) : Math.min(pixelsPerSecond.current.y + frameDesceleration, 0),
         };
 
         // Stop at low speeds
