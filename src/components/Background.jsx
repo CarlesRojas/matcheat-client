@@ -7,8 +7,8 @@ import Icons from "resources/background.svg";
 
 // Constants
 var SCREEN_WIDTH = window.innerWidth;
-//const NUM_TILES = 4;
 const TILE_SIZE = SCREEN_WIDTH / 2;
+const NUM_TILES = { x: 4, y: 8 };
 const MAX_FPS = 120;
 const FPS = 60;
 const DECELERATION = 15;
@@ -46,10 +46,6 @@ export default function Background() {
                 (Math.sign(motion.current.alpha) === Math.sign(alpha) || motion.current.alpha === 0) && Math.abs(motion.current.alpha) > Math.abs(alpha)
                     ? motion.current.alpha
                     : alpha;
-
-            // if (Math.sign(newMotion.alpha) === Math.sign(alpha) || motion.current.alpha === 0)
-            //     newMotion.alpha = Math.abs(alpha) > Math.abs(newMotion.alpha) ? alpha : newMotion.alpha;
-            // else if (Math.abs(alpha) > 50) newMotion.alpha = alpha;
         }
 
         if (Math.abs(beta) > 20) {
@@ -57,26 +53,9 @@ export default function Background() {
                 (Math.sign(motion.current.beta) === Math.sign(beta) || motion.current.beta === 0) && Math.abs(motion.current.beta) > Math.abs(beta)
                     ? motion.current.beta
                     : beta;
-
-            // if (Math.sign(newMotion.beta) === Math.sign(beta) || motion.current.beta === 0) newMotion.beta = Math.abs(beta) > Math.abs(newMotion.beta) ? beta : newMotion.beta;
-            // else if (Math.abs(beta) > 50) newMotion.beta = beta;
         }
 
         motion.current = newMotion;
-
-        // if (Math.abs(alpha) > 40 || Math.abs(beta) > 40) {
-        //     // Save current motion only if it is bigger
-        //     motion.current = {
-        //         alpha:
-        //             (Math.sign(motion.current.alpha) === Math.sign(alpha) || motion.current.alpha === 0) && Math.abs(motion.current.alpha) > Math.abs(alpha)
-        //                 ? motion.current.alpha
-        //                 : alpha,
-        //         beta:
-        //             (Math.sign(motion.current.beta) === Math.sign(beta) || motion.current.beta === 0) && Math.abs(motion.current.beta) > Math.abs(beta)
-        //                 ? motion.current.beta
-        //                 : beta,
-        //     };
-        // }
     };
 
     // #################################################
@@ -168,9 +147,20 @@ export default function Background() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    return (
-        <div className="background">
-            <SVG className="cell" src={Icons} style={{ width: TILE_SIZE, transform: `translate(${position.x}px, ${position.y}px)` }} />
-        </div>
-    );
+    var tiles = [];
+    // Tile matrix
+    for (let i = 0; i < NUM_TILES.x; i++) {
+        for (let j = 0; j < NUM_TILES.y; j++) {
+            tiles.push(
+                <SVG
+                    key={`${i - 1}-${j - 1}`}
+                    className="cell"
+                    src={Icons}
+                    style={{ width: TILE_SIZE, transform: `translate(${position.x + (i - 1) * TILE_SIZE}px, ${position.y + (j - 1) * TILE_SIZE}px)` }}
+                />
+            );
+        }
+    }
+
+    return <div className="background">{tiles}</div>;
 }
