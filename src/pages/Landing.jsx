@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState } from "react";
 import SVG from "react-inlinesvg";
 import { useSpring, animated } from "react-spring";
 import gsap from "gsap";
+import { Redirect } from "react-router-dom";
 
 // Icons
 import LogoIcon from "resources/logo_white.svg";
@@ -21,6 +22,9 @@ export default function Landing() {
     // Contexts
     const { clamp } = useContext(Utils);
     const { register, login } = useContext(API);
+
+    // Redirect state
+    const [redirectTo, setRedirectTo] = useState(null);
 
     // #################################################
     //   FORMS
@@ -53,7 +57,11 @@ export default function Landing() {
 
         // Throw error
         if ("error" in loginResult) setLoginError(loginResult.error);
-        else console.log(`LOGIN SUCCESSFUL ${loginResult.name}`);
+        else {
+            console.log(loginResult);
+            console.log(`LOGIN SUCCESSFUL ${loginResult.name}`);
+            setRedirectTo("/home");
+        }
     };
 
     // When the users tries to sign up
@@ -63,9 +71,15 @@ export default function Landing() {
         // Sign Up
         const singUpResult = await register(signupForm.name, signupForm.email, signupForm.password);
 
+        // Login
+        await login(signupForm.email, signupForm.password);
+
         // Throw error
         if ("error" in singUpResult) setSignUpError(singUpResult.error);
-        else console.log(`SING UP SUCCESSFUL ${singUpResult.id}`);
+        else {
+            console.log(`SING UP SUCCESSFUL ${singUpResult.id}`);
+            setRedirectTo("/home");
+        }
     };
 
     // #################################################
@@ -112,11 +126,11 @@ export default function Landing() {
     // #################################################
 
     // Accelerometer string
-    const [{ tilt }, setTilt] = useSpring(() => ({ tilt: "perspective(2000px) rotateX(0deg) rotateY(0deg)" }));
+    const [{ tilt }, setTilt] = useSpring(() => ({ tilt: "perspective(2500px) rotateX(0deg) rotateY(0deg)" }));
 
     // Handle device orientation change
     const onOrientationChange = ({ gamma, beta }) => {
-        setTilt({ tilt: `perspective(2000px) rotateX(${clamp(beta * 0.5, -10, 10)}deg) rotateY(${clamp(-gamma * 0.5, -10, 10)}deg)` });
+        setTilt({ tilt: `perspective(2500px) rotateX(${clamp(beta * 0.5, -6, 6)}deg) rotateY(${clamp(-gamma * 0.5, -6, 6)}deg)` });
     };
 
     // #################################################
@@ -144,6 +158,8 @@ export default function Landing() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    if (redirectTo) return <Redirect to={redirectTo} push={true} />;
+
     return (
         <div className="landing">
             <animated.div className="section welcome" style={{ x: welcomeX }}>
@@ -166,7 +182,7 @@ export default function Landing() {
 
                     <SVG className="logo small" src={LogoIcon} />
 
-                    <form autoComplete="off" noValidate onSubmit={onLogin}>
+                    <form autoComplete="off" noValidate spellCheck="false" onSubmit={onLogin}>
                         <div className="inputContainer">
                             <SVG className="inputIcon email" src={EmailIcon} />
                             <input
@@ -208,7 +224,7 @@ export default function Landing() {
 
                     <SVG className="logo small" src={LogoIcon} />
 
-                    <form autoComplete="off" noValidate onSubmit={onSignUp}>
+                    <form autoComplete="off" noValidate spellCheck="false" onSubmit={onSignUp}>
                         <div className="inputContainer">
                             <SVG className="inputIcon email" src={NameIcon} />
                             <input

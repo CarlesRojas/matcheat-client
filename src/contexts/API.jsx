@@ -1,7 +1,8 @@
-import React, { useRef, createContext, useContext } from "react";
+import React, { createContext, useContext } from "react";
 
 // Contexts
 import { Utils } from "contexts/Utils";
+import { Data } from "contexts/Data";
 
 // API Context
 export const API = createContext();
@@ -9,13 +10,9 @@ export const API = createContext();
 const APIProvider = (props) => {
     // Contexts
     const { setCookie } = useContext(Utils);
+    const { token, username, userID } = useContext(Data);
 
     const apiURL = "https://matcheat.herokuapp.com/"; //"http://localhost:3100/";
-
-    // Current user data
-    const token = useRef(null);
-    const name = useRef(null);
-    const userID = useRef(null);
 
     const register = async (name, email, password) => {
         // Post data
@@ -70,7 +67,7 @@ const APIProvider = (props) => {
             // Get data from response
             const response = await rawResponse.json();
             if ("token" in response) token.current = response.token;
-            if ("name" in response) name.current = response.name;
+            if ("name" in response) username.current = response.name;
 
             // Set token cookie
             setCookie("matchEat_token", response.token, 365);
@@ -86,9 +83,6 @@ const APIProvider = (props) => {
     return (
         <API.Provider
             value={{
-                token,
-                name,
-                userID,
                 register,
                 login,
             }}

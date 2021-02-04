@@ -26,12 +26,12 @@ export default function App() {
                     {/* ################################# */}
                     {/*   HOME PAGE                       */}
                     {/* ################################# */}
-                    <Route path="/landing" component={Landing}></Route>
+                    <Route path="/home" component={Home}></Route>
 
                     {/* ################################# */}
                     {/*   LANDING PAGE                    */}
                     {/* ################################# */}
-                    <Route path="/" component={Home}></Route>
+                    <Route path="/" component={Landing}></Route>
                 </Switch>
             </Router>
         </div>

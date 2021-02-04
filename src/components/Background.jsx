@@ -1,9 +1,11 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect, useContext } from "react";
 import SVG from "react-inlinesvg";
-import { useSpring } from "react-spring";
 
 // Icons
 import Icons from "resources/background.svg";
+
+// Contexts
+import { Data } from "contexts/Data";
 
 // Constants
 const SCREEN_WIDTH = window.innerWidth;
@@ -12,24 +14,28 @@ const TILE_SIZE = SCREEN_WIDTH / 2;
 const NUM_TILES = { x: Math.ceil(SCREEN_WIDTH / TILE_SIZE) + 2, y: Math.ceil(SCREEN_HEIGHT / TILE_SIZE) + 2 };
 const MAX_FPS = 120;
 const FPS = 60;
-const DECELERATION = 15;
+const DECELERATION = 10;
 
 export default function Background() {
+    // Contexts
+    const { positionRef, position, setPosition, speed, setSpeed, motion, prevMotion } = useContext(Data);
+
     // #################################################
     //   ACCELEROMETER TILT
     // #################################################
 
+    /*
     // Current position
     const positionRef = useRef({ x: 0, y: 0 });
     const [position, setPosition] = useState({ x: 0, y: 0 });
 
     // Current Speed in pixels per second
-    //const pixelsPerSecond = useRef({ x: 0, y: 0 });
     const [{ speed }, setSpeed] = useSpring(() => ({ speed: { x: 0, y: 0 } }));
 
     // Current alpha and beta
     const motion = useRef({ alpha: 0, beta: 0 });
     const prevMotion = useRef({ alpha: 0, beta: 0 });
+    */
 
     // Handle device orientation change
     const onDeviceMotion = ({ rotationRate }) => {
@@ -42,14 +48,14 @@ export default function Background() {
         };
 
         // Update alpha
-        if (Math.abs(alpha) > 20) {
+        if (Math.abs(alpha) > 10) {
             newMotion.alpha =
                 (Math.sign(motion.current.alpha) === Math.sign(alpha) || motion.current.alpha === 0) && Math.abs(motion.current.alpha) > Math.abs(alpha)
                     ? motion.current.alpha
                     : alpha;
         }
 
-        if (Math.abs(beta) > 20) {
+        if (Math.abs(beta) > 10) {
             newMotion.beta =
                 (Math.sign(motion.current.beta) === Math.sign(beta) || motion.current.beta === 0) && Math.abs(motion.current.beta) > Math.abs(beta)
                     ? motion.current.beta
