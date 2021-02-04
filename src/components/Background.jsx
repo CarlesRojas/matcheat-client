@@ -11,7 +11,7 @@ var SCREEN_WIDTH = window.innerWidth;
 const TILE_SIZE = SCREEN_WIDTH / 2;
 const MAX_FPS = 120;
 const FPS = 60;
-//const DECELERATION = 20;
+const DECELERATION = 20;
 
 export default function Background() {
     // #################################################
@@ -68,7 +68,7 @@ export default function Background() {
     // Update actions
     const update = (deltaTime) => {
         // Frame deceleration
-        //const frameDesceleration = DECELERATION * deltaTime;
+        const frameDesceleration = DECELERATION * deltaTime;
         //debugger;
         // New speed same as old
         var newSpeed = { x: speed.get().x, y: speed.get().y };
