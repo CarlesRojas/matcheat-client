@@ -9,7 +9,7 @@ var SCREEN_WIDTH = window.innerWidth;
 //const NUM_TILES = 4;
 const TILE_SIZE = SCREEN_WIDTH / 2;
 const MAX_FPS = 120;
-const FPS = 60;
+const FPS = 10;
 
 export default function Background() {
     // #################################################
@@ -35,6 +35,11 @@ export default function Background() {
             alpha: motion.current.alpha > alpha ? motion.current.alpha : alpha,
             beta: motion.current.beta > beta ? motion.current.beta : beta,
         };
+        console.log("START MOTION");
+        console.log(motion.current);
+        console.log(pixelsPerSecond.current);
+        console.log("END MOTION");
+        console.log("");
 
         // Update speed
         pixelsPerSecond.current = {
@@ -53,16 +58,23 @@ export default function Background() {
 
     // Update actions
     const update = (deltaTime) => {
-        var newPosition = {
-            x: positionRef.current.x + pixelsPerSecond.current.x * deltaTime,
-            y: positionRef.current.y + pixelsPerSecond.current.y * deltaTime,
-        };
-
         // Update speed
         pixelsPerSecond.current = {
             x: pixelsPerSecond.current.x > 0 ? Math.max(pixelsPerSecond.current.x - 1, 0) : Math.min(pixelsPerSecond.current.x + 1, 0),
             y: pixelsPerSecond.current.y > 0 ? Math.max(pixelsPerSecond.current.y - 1, 0) : Math.min(pixelsPerSecond.current.y + 1, 0),
         };
+
+        // Update position
+        var newPosition = {
+            x: positionRef.current.x + pixelsPerSecond.current.x * deltaTime,
+            y: positionRef.current.y + pixelsPerSecond.current.y * deltaTime,
+        };
+
+        console.log("START UPDATE");
+        console.log(newPosition);
+        console.log(pixelsPerSecond.current);
+        console.log("END pixelsPerSecond.current");
+        console.log("");
 
         setPosition(newPosition);
         positionRef.current = newPosition;
