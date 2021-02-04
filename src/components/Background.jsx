@@ -75,11 +75,11 @@ export default function Background() {
 
         // Update x speed
         if (prevMotion.current.beta !== motion.current.beta) newSpeed.x = motion.current.beta;
-        //else if (newSpeed.x !== 0) newSpeed.x > 0 ? Math.max(newSpeed.x - frameDesceleration, 0) : Math.min(newSpeed.x + frameDesceleration, 0);
+        else if (newSpeed.x !== 0) newSpeed.x > 0 ? Math.max(newSpeed.x - frameDesceleration, 0) : Math.min(newSpeed.x + frameDesceleration, 0);
 
         // Update y speed
         if (prevMotion.current.alpha !== motion.current.alpha) newSpeed.y = motion.current.alpha;
-        //else if (newSpeed.y !== 0) newSpeed.y > 0 ? Math.max(newSpeed.y - frameDesceleration, 0) : Math.min(newSpeed.y + frameDesceleration, 0);
+        else if (newSpeed.y !== 0) newSpeed.y > 0 ? Math.max(newSpeed.y - frameDesceleration, 0) : Math.min(newSpeed.y + frameDesceleration, 0);
 
         // Set speed and save current motion
         if (prevMotion.current.beta !== motion.current.beta || prevMotion.current.alpha !== motion.current.alpha) {
