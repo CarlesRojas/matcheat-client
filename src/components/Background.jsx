@@ -16,9 +16,6 @@ export default function Background() {
     //   ACCELEROMETER TILT
     // #################################################
 
-    // Framerate
-    const frameCountMotion = useRef(0);
-
     // Current position
     const positionRef = useRef({ x: 0, y: 0 });
     const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -31,28 +28,20 @@ export default function Background() {
 
     // Handle device orientation change
     const onDeviceMotion = ({ rotationRate }) => {
-        window.requestAnimationFrame(() => {
-            frameCountMotion.current++;
+        const { alpha, beta } = rotationRate;
 
-            if (frameCountMotion.current >= Math.round(MAX_FPS / FPS)) {
-                const { alpha, beta } = rotationRate;
+        // Save current motion only if it is bigger
+        motion.current = {
+            alpha: motion.current.alpha > alpha ? motion.current.alpha : alpha,
+            beta: motion.current.beta > beta ? motion.current.beta : beta,
+        };
+        console.log(`Beta: ${motion.current.beta}   XSpeed: ${pixelsPerSecond.current.x}`);
 
-                // Save current motion only if it is bigger
-                motion.current = {
-                    alpha: motion.current.alpha > alpha ? motion.current.alpha : alpha,
-                    beta: motion.current.beta > beta ? motion.current.beta : beta,
-                };
-                console.log(`Beta: ${motion.current.beta}   XSpeed: ${pixelsPerSecond.current.x}`);
-
-                // Update speed
-                pixelsPerSecond.current = {
-                    x: -beta * 0.2,
-                    y: -alpha * 0.2,
-                };
-
-                frameCountLoop.current = 0;
-            }
-        });
+        // Update speed
+        pixelsPerSecond.current = {
+            x: -beta * 0.2,
+            y: -alpha * 0.2,
+        };
     };
 
     // #################################################
@@ -60,7 +49,7 @@ export default function Background() {
     // #################################################
 
     const frameID = useRef(0);
-    const frameCountLoop = useRef(0);
+    const frameCount = useRef(0);
     const lastFrameTime = useRef(Date.now());
 
     // Update actions
@@ -85,9 +74,9 @@ export default function Background() {
 
     // Called every frame
     const loop = () => {
-        frameCountLoop.current++;
+        frameCount.current++;
 
-        if (frameCountLoop.current >= Math.round(MAX_FPS / FPS)) {
+        if (frameCount.current >= Math.round(MAX_FPS / FPS)) {
             // Get delta time
             var currentTime = Date.now();
             var deltaTime = (currentTime - lastFrameTime.current) / 1000;
@@ -95,7 +84,7 @@ export default function Background() {
 
             // Update
             update(deltaTime);
-            frameCountLoop.current = 0;
+            frameCount.current = 0;
         }
         frameID.current = window.requestAnimationFrame(loop);
     };
