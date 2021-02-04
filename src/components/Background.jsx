@@ -32,13 +32,13 @@ export default function Background() {
 
         // Save current motion only if it is bigger
         motion.current = {
-            alpha: Math.abs(alpha) > 20 ? alpha : motion.current.alpha,
-            beta: Math.abs(beta) > 20 ? beta : motion.current.beta,
+            alpha: Math.abs(alpha) > 5 ? alpha : motion.current.alpha,
+            beta: Math.abs(beta) > 5 ? beta : motion.current.beta,
         };
 
         // Update speed
-        pixelsPerSecond.current = { x: -beta * 0.5, y: -alpha * 0.5 };
-        if (Math.abs(alpha) > 20 || Math.abs(beta) > 20) console.log(`Beta: ${motion.current.beta}   XSpeed: ${pixelsPerSecond.current.x}`);
+        pixelsPerSecond.current = { x: beta * 0.5, y: alpha * 0.5 };
+        if (Math.abs(alpha) > 5 || Math.abs(beta) > 5) console.log(`Beta: ${motion.current.beta}   XSpeed: ${pixelsPerSecond.current.x}`);
     };
 
     // #################################################
@@ -58,8 +58,8 @@ export default function Background() {
         };
 
         // Stop at low speeds
-        if (Math.abs(pixelsPerSecond.current.x) < 3) pixelsPerSecond.current = { x: 0, y: pixelsPerSecond.current.y };
-        if (Math.abs(pixelsPerSecond.current.y) < 3) pixelsPerSecond.current = { x: pixelsPerSecond.current.x, y: 0 };
+        if (Math.abs(pixelsPerSecond.current.x) < 1) pixelsPerSecond.current = { x: 0, y: pixelsPerSecond.current.y };
+        if (Math.abs(pixelsPerSecond.current.y) < 1) pixelsPerSecond.current = { x: pixelsPerSecond.current.x, y: 0 };
 
         // Update position
         var newPosition = {
@@ -67,7 +67,7 @@ export default function Background() {
             y: positionRef.current.y + pixelsPerSecond.current.y * deltaTime,
         };
 
-        if (pixelsPerSecond.current.x !== 0 && pixelsPerSecond.current.y !== 0) console.log(`XPos: ${newPosition.x}   XSpeed: ${pixelsPerSecond.current.x}`);
+        if (pixelsPerSecond.current.x !== 0 || pixelsPerSecond.current.y !== 0) console.log(`XPos: ${newPosition.x}   XSpeed: ${pixelsPerSecond.current.x}`);
 
         setPosition(newPosition);
         positionRef.current = newPosition;
