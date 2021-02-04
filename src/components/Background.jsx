@@ -33,12 +33,15 @@ export default function Background() {
 
         if (Math.abs(alpha) > 5 || Math.abs(beta) > 5) {
             // Save current motion only if it is bigger
-            motion.current = { alpha, beta };
+            motion.current = {
+                alpha: motion.current.alpha > 0 === alpha > 0 && motion.current.alpha > alpha ? motion.current.alpha : alpha,
+                beta: motion.current.beta > 0 === beta > 0 && motion.current.beta > beta ? motion.current.beta : beta,
+            };
 
             // Update speed
             pixelsPerSecond.current = {
-                x: Math.abs(beta) > 5 ? beta : pixelsPerSecond.current.x,
-                y: Math.abs(alpha) > 5 ? alpha : pixelsPerSecond.current.y,
+                x: Math.abs(motion.current.beta) > 5 ? motion.current.beta : pixelsPerSecond.current.x,
+                y: Math.abs(motion.current.alpha) > 5 ? motion.current.alpha : pixelsPerSecond.current.y,
             };
 
             console.log(`Beta: ${motion.current.beta}   XSpeed: ${pixelsPerSecond.current.x}`);
