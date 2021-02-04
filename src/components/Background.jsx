@@ -85,9 +85,9 @@ export default function Background() {
         if (prevMotion.current.beta !== motion.current.beta || prevMotion.current.alpha !== motion.current.alpha) {
             console.log(`New Beta: ${motion.current.beta}    New Speed ${newSpeed.x}`);
 
-            setSpeed({ speed: newSpeed });
             prevMotion.current = motion.current;
         }
+        setSpeed({ speed: newSpeed });
         // Update speed
         // pixelsPerSecond.current = {
         //     x: pixelsPerSecond.current.x > 0 ? Math.max(pixelsPerSecond.current.x - frameDesceleration, 0) : Math.min(pixelsPerSecond.current.x + frameDesceleration, 0),
