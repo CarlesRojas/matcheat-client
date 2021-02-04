@@ -146,8 +146,6 @@ export default function Landing() {
 
     return (
         <div className="landing">
-            <div className="background"></div>
-
             <animated.div className="section welcome" style={{ x: welcomeX }}>
                 <animated.div className="glass" style={{ transform: tilt }}>
                     <SVG className="logo" src={LogoIcon} />

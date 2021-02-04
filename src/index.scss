@@ -154,35 +154,50 @@ body {
     position: relative;
     height: 100%;
     width: 100%;
+
+    // background: rgb(255, 190, 137); // Fallback
+    // background: linear-gradient(60deg, rgba(255, 116, 212, 1) 0%, rgba(255, 138, 95, 1) 100%);
+
+    // .background {
+    //     position: absolute;
+    //     top: 0;
+    //     right: -100vw;
+    //     bottom: -100vh;
+    //     left: 0;
+    //     background-image: url("resources/background.svg");
+    //     background-repeat: repeat;
+    //     background-size: 50vw 50vw;
+    //     @include animation(move_background 50s linear infinite);
+
+    //     @keyframes move_background {
+    //         from {
+    //             transform: translate(0, 0);
+    //         }
+    //         to {
+    //             transform: translate(-100vw, -100vw);
+    //         }
+    //     }
+    // }
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgb(255, 190, 137); // Fallback
+    background: linear-gradient(60deg, rgba(255, 116, 212, 1) 0%, rgba(255, 138, 95, 1) 100%);
+
+    .cell {
+        position: absolute;
+    }
 }
 
 .landing {
     position: relative;
     height: 100%;
     width: 100%;
-    background: rgb(255, 190, 137); // Fallback
-    background: linear-gradient(60deg, rgba(255, 116, 212, 1) 0%, rgba(255, 138, 95, 1) 100%);
-
-    .background {
-        position: absolute;
-        top: 0;
-        right: -100vw;
-        bottom: -100vh;
-        left: 0;
-        background-image: url("resources/background.svg");
-        background-repeat: repeat;
-        background-size: 50vw 50vw;
-        @include animation(move_background 50s linear infinite);
-
-        @keyframes move_background {
-            from {
-                transform: translate(0, 0);
-            }
-            to {
-                transform: translate(-100vw, -100vw);
-            }
-        }
-    }
 
     .section {
         position: absolute;

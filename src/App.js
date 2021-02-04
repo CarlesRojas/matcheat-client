@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
 import Landing from "pages/Landing";
+import Home from "pages/Home";
+import Background from "components/Background";
 
 // Contexts
 import { Utils } from "./contexts/Utils";
@@ -15,18 +17,23 @@ export default function App() {
     if (getCookie("matcheat_dark_mode") !== "0") document.body.classList.add("dark");
 
     return (
-        <Router>
-            <Switch>
-                {/* ################################# */}
-                {/*   HOME PAGE                       */}
-                {/* ################################# */}
-                {/* <Route path="/home" component={Home}></Route> */}
+        <div className="app">
+            {/* <div className="background"></div> */}
+            <Background />
 
-                {/* ################################# */}
-                {/*   LANDING PAGE                    */}
-                {/* ################################# */}
-                <Route path="/" component={Landing}></Route>
-            </Switch>
-        </Router>
+            <Router>
+                <Switch>
+                    {/* ################################# */}
+                    {/*   HOME PAGE                       */}
+                    {/* ################################# */}
+                    <Route path="/landing" component={Landing}></Route>
+
+                    {/* ################################# */}
+                    {/*   LANDING PAGE                    */}
+                    {/* ################################# */}
+                    <Route path="/" component={Home}></Route>
+                </Switch>
+            </Router>
+        </div>
     );
 }
