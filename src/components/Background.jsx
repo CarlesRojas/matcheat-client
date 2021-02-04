@@ -16,6 +16,9 @@ export default function Background() {
     //   ACCELEROMETER TILT
     // #################################################
 
+    // Framerate
+    const frameCountMotion = useRef(0);
+
     // Current position
     const positionRef = useRef({ x: 0, y: 0 });
     const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -28,24 +31,28 @@ export default function Background() {
 
     // Handle device orientation change
     const onDeviceMotion = ({ rotationRate }) => {
-        const { alpha, beta } = rotationRate;
+        window.requestAnimationFrame(() => {
+            frameCountMotion.current++;
 
-        // Save current motion only if it is bigger
-        motion.current = {
-            alpha: motion.current.alpha > alpha ? motion.current.alpha : alpha,
-            beta: motion.current.beta > beta ? motion.current.beta : beta,
-        };
-        console.log("START MOTION");
-        console.log(motion.current);
-        console.log(pixelsPerSecond.current);
-        console.log("END MOTION");
-        console.log("");
+            if (frameCountMotion.current >= Math.round(MAX_FPS / FPS)) {
+                const { alpha, beta } = rotationRate;
 
-        // Update speed
-        pixelsPerSecond.current = {
-            x: -beta * 0.2,
-            y: -alpha * 0.2,
-        };
+                // Save current motion only if it is bigger
+                motion.current = {
+                    alpha: motion.current.alpha > alpha ? motion.current.alpha : alpha,
+                    beta: motion.current.beta > beta ? motion.current.beta : beta,
+                };
+                console.log(`Beta: ${motion.current.beta}   XSpeed: ${pixelsPerSecond.current.x}`);
+
+                // Update speed
+                pixelsPerSecond.current = {
+                    x: -beta * 0.2,
+                    y: -alpha * 0.2,
+                };
+
+                frameCountLoop.current = 0;
+            }
+        });
     };
 
     // #################################################
@@ -53,7 +60,7 @@ export default function Background() {
     // #################################################
 
     const frameID = useRef(0);
-    const frameCount = useRef(0);
+    const frameCountLoop = useRef(0);
     const lastFrameTime = useRef(Date.now());
 
     // Update actions
@@ -70,11 +77,7 @@ export default function Background() {
             y: positionRef.current.y + pixelsPerSecond.current.y * deltaTime,
         };
 
-        console.log("START UPDATE");
-        console.log(newPosition);
-        console.log(pixelsPerSecond.current);
-        console.log("END pixelsPerSecond.current");
-        console.log("");
+        console.log(`XPos: ${newPosition.x}   XSpeed: ${pixelsPerSecond.current.x}`);
 
         setPosition(newPosition);
         positionRef.current = newPosition;
@@ -82,9 +85,9 @@ export default function Background() {
 
     // Called every frame
     const loop = () => {
-        frameCount.current++;
+        frameCountLoop.current++;
 
-        if (frameCount.current >= Math.round(MAX_FPS / FPS)) {
+        if (frameCountLoop.current >= Math.round(MAX_FPS / FPS)) {
             // Get delta time
             var currentTime = Date.now();
             var deltaTime = (currentTime - lastFrameTime.current) / 1000;
@@ -92,7 +95,7 @@ export default function Background() {
 
             // Update
             update(deltaTime);
-            frameCount.current = 0;
+            frameCountLoop.current = 0;
         }
         frameID.current = window.requestAnimationFrame(loop);
     };
