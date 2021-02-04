@@ -12,16 +12,16 @@ import EmailIcon from "resources/icons/email.svg";
 import PasswordIcon from "resources/icons/password.svg";
 
 // Contexts
-import { Utils } from "contexts/Utils";
 import { API } from "contexts/API";
+import { Data } from "contexts/Data";
 
 // Constants
 var SCREEN_WIDTH = window.innerWidth;
 
 export default function Landing() {
     // Contexts
-    const { clamp } = useContext(Utils);
     const { register, login } = useContext(API);
+    const { setBackgroundGradient } = useContext(Data);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
@@ -97,18 +97,21 @@ export default function Landing() {
             timeline.fromTo(".welcome > .glass", { opacity: 0 }, { opacity: 1, duration: 1 }, "+=0.5");
         }
 
+        setBackgroundGradient("pink");
         resetForms();
         setPagePositions({ welcomeX: 0, loginX: SCREEN_WIDTH, signupX: SCREEN_WIDTH });
     };
 
     // Show the login screen
     const showLoginScreen = () => {
+        setBackgroundGradient("red");
         resetForms();
         setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: 0, signupX: SCREEN_WIDTH });
     };
 
     // Show the signup screen
     const showSignupScreen = () => {
+        setBackgroundGradient("purple");
         resetForms();
         setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: 0 });
     };
@@ -119,18 +122,6 @@ export default function Landing() {
         setSignUpError(null);
         setLoginForm({ email: "", password: "" });
         setSingupForm({ name: "", email: "", password: "" });
-    };
-
-    // #################################################
-    //   ACCELEROMETER TILT
-    // #################################################
-
-    // Accelerometer string
-    const [{ tilt }, setTilt] = useSpring(() => ({ tilt: "perspective(2500px) rotateX(0deg) rotateY(0deg)" }));
-
-    // Handle device orientation change
-    const onOrientationChange = ({ gamma, beta }) => {
-        setTilt({ tilt: `perspective(2500px) rotateX(${clamp(beta * 0.5, -6, 6)}deg) rotateY(${clamp(-gamma * 0.5, -6, 6)}deg)` });
     };
 
     // #################################################
@@ -149,21 +140,22 @@ export default function Landing() {
 
         // Subscribe to events
         window.addEventListener("resize", onResize);
-        window.addEventListener("deviceorientation", onOrientationChange, true);
         return () => {
             window.removeEventListener("resize", onResize);
-            window.removeEventListener("deviceorientation", onOrientationChange, true);
         };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    if (redirectTo) return <Redirect to={redirectTo} push={true} />;
+    if (redirectTo) {
+        setBackgroundGradient("blue");
+        return <Redirect to={redirectTo} push={true} />;
+    }
 
     return (
         <div className="landing">
             <animated.div className="section welcome" style={{ x: welcomeX }}>
-                <animated.div className="glass" style={{ transform: tilt }}>
+                <animated.div className="glass">
                     <SVG className="logo" src={LogoIcon} />
 
                     <div className="button signup" onClick={showSignupScreen}>
@@ -177,7 +169,7 @@ export default function Landing() {
             </animated.div>
 
             <animated.div className="section login" style={{ x: loginX }}>
-                <animated.div className="glass" style={{ transform: tilt }}>
+                <animated.div className="glass">
                     <SVG className="backButton" src={BackIcon} onClick={() => showWelcomeScreen(false)} />
 
                     <SVG className="logo small" src={LogoIcon} />
@@ -219,7 +211,7 @@ export default function Landing() {
             </animated.div>
 
             <animated.div className="section signup" style={{ x: signupX }}>
-                <animated.div className="glass" style={{ transform: tilt }}>
+                <animated.div className="glass">
                     <SVG className="backButton" src={BackIcon} onClick={() => showWelcomeScreen(false)} />
 
                     <SVG className="logo small" src={LogoIcon} />

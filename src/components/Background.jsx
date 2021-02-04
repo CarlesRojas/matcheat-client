@@ -18,24 +18,11 @@ const DECELERATION = 10;
 
 export default function Background() {
     // Contexts
-    const { positionRef, position, setPosition, speed, setSpeed, motion, prevMotion } = useContext(Data);
+    const { positionRef, position, setPosition, speed, setSpeed, motion, prevMotion, gradient } = useContext(Data);
 
     // #################################################
     //   ACCELEROMETER TILT
     // #################################################
-
-    /*
-    // Current position
-    const positionRef = useRef({ x: 0, y: 0 });
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-
-    // Current Speed in pixels per second
-    const [{ speed }, setSpeed] = useSpring(() => ({ speed: { x: 0, y: 0 } }));
-
-    // Current alpha and beta
-    const motion = useRef({ alpha: 0, beta: 0 });
-    const prevMotion = useRef({ alpha: 0, beta: 0 });
-    */
 
     // Handle device orientation change
     const onDeviceMotion = ({ rotationRate }) => {
@@ -159,5 +146,9 @@ export default function Background() {
         }
     }
 
-    return <div className="background">{tiles}</div>;
+    return (
+        <div className="background" style={{ backgroundImage: gradient.get() }}>
+            {tiles}
+        </div>
+    );
 }
