@@ -41,15 +41,25 @@ export default function Background() {
         };
 
         // Update alpha
-        if (Math.abs(alpha) > 25) {
-            if (Math.sign(newMotion.alpha) === Math.sign(alpha) || motion.current.alpha === 0)
-                newMotion.alpha = Math.abs(alpha) > Math.abs(newMotion.alpha) ? alpha : newMotion.alpha;
-            else if (Math.abs(alpha) > 50) newMotion.alpha = alpha;
+        if (Math.abs(alpha) > 20) {
+            newMotion.alpha =
+                (Math.sign(motion.current.alpha) === Math.sign(alpha) || motion.current.alpha === 0) && Math.abs(motion.current.alpha) > Math.abs(alpha)
+                    ? motion.current.alpha
+                    : alpha;
+
+            // if (Math.sign(newMotion.alpha) === Math.sign(alpha) || motion.current.alpha === 0)
+            //     newMotion.alpha = Math.abs(alpha) > Math.abs(newMotion.alpha) ? alpha : newMotion.alpha;
+            // else if (Math.abs(alpha) > 50) newMotion.alpha = alpha;
         }
 
-        if (Math.abs(beta) > 25) {
-            if (Math.sign(newMotion.beta) === Math.sign(beta) || motion.current.beta === 0) newMotion.beta = Math.abs(beta) > Math.abs(newMotion.beta) ? beta : newMotion.beta;
-            else if (Math.abs(beta) > 50) newMotion.beta = beta;
+        if (Math.abs(beta) > 10) {
+            newMotion.beta =
+                (Math.sign(motion.current.beta) === Math.sign(beta) || motion.current.beta === 0) && Math.abs(motion.current.beta) > Math.abs(beta)
+                    ? motion.current.beta
+                    : beta;
+
+            // if (Math.sign(newMotion.beta) === Math.sign(beta) || motion.current.beta === 0) newMotion.beta = Math.abs(beta) > Math.abs(newMotion.beta) ? beta : newMotion.beta;
+            // else if (Math.abs(beta) > 50) newMotion.beta = beta;
         }
 
         motion.current = newMotion;
