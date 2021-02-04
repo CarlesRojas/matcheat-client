@@ -9,7 +9,7 @@ var SCREEN_WIDTH = window.innerWidth;
 //const NUM_TILES = 4;
 const TILE_SIZE = SCREEN_WIDTH / 2;
 const MAX_FPS = 120;
-const FPS = 10;
+const FPS = 60;
 const DECELERATION = 10;
 
 export default function Background() {
@@ -31,15 +31,18 @@ export default function Background() {
     const onDeviceMotion = ({ rotationRate }) => {
         const { alpha, beta } = rotationRate;
 
-        // Save current motion only if it is bigger
-        motion.current = {
-            alpha: Math.abs(alpha) > 5 ? alpha : motion.current.alpha,
-            beta: Math.abs(beta) > 5 ? beta : motion.current.beta,
-        };
+        if (Math.abs(alpha) > 5 || Math.abs(beta) > 5) {
+            // Save current motion only if it is bigger
+            motion.current = { alpha, beta };
 
-        // Update speed
-        pixelsPerSecond.current = { x: beta * 0.5, y: alpha * 0.5 };
-        if (Math.abs(alpha) > 5 || Math.abs(beta) > 5) console.log(`Beta: ${motion.current.beta}   XSpeed: ${pixelsPerSecond.current.x}`);
+            // Update speed
+            pixelsPerSecond.current = {
+                x: Math.abs(beta) > 5 ? beta : pixelsPerSecond.current.x,
+                y: Math.abs(alpha) > 5 ? alpha : pixelsPerSecond.current.y,
+            };
+
+            console.log(`Beta: ${motion.current.beta}   XSpeed: ${pixelsPerSecond.current.x}`);
+        }
     };
 
     // #################################################
