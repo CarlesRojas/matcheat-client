@@ -23,12 +23,24 @@ export default function Background() {
     // Current Speed
     const pixelsPerSecond = useRef({ x: 0, y: 0 });
 
+    // Current alpha and beta
+    const motion = useRef({ alpha: 0, beta: 0 });
+
     // Handle device orientation change
-    const onDeviceMotion = (data) => {
-        if ("rotationRate" in data && "alpha" in data.rotationRate && "beta" in data.rotationRate && "gamma" in data.rotationRate) {
-            console.log(data.rotationRate.alpha, data.rotationRate.beta, data.rotationRate.gamma);
-        } else if ("rotationRate" in data) console.log(data.rotationRate);
-        else console.log(data);
+    const onDeviceMotion = ({ rotationRate }) => {
+        const { alpha, beta } = rotationRate;
+
+        // Save current motion only if it is bigger
+        motion.current = {
+            alpha: motion.current.alpha > alpha ? motion.current.alpha : alpha,
+            beta: motion.current.beta > beta ? motion.current.beta : beta,
+        };
+
+        // Update speed
+        pixelsPerSecond.current = {
+            x: -beta * 0.2,
+            y: -alpha * 0.2,
+        };
     };
 
     // #################################################
@@ -44,6 +56,12 @@ export default function Background() {
         var newPosition = {
             x: positionRef.current.x + pixelsPerSecond.current.x * deltaTime,
             y: positionRef.current.y + pixelsPerSecond.current.y * deltaTime,
+        };
+
+        // Update speed
+        pixelsPerSecond.current = {
+            x: pixelsPerSecond.current.x > 0 ? Math.max(pixelsPerSecond.current.x - 1, 0) : Math.min(pixelsPerSecond.current.x + 1, 0),
+            y: pixelsPerSecond.current.y > 0 ? Math.max(pixelsPerSecond.current.y - 1, 0) : Math.min(pixelsPerSecond.current.y + 1, 0),
         };
 
         setPosition(newPosition);
