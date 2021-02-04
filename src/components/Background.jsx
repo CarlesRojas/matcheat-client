@@ -52,7 +52,7 @@ export default function Background() {
             // else if (Math.abs(alpha) > 50) newMotion.alpha = alpha;
         }
 
-        if (Math.abs(beta) > 10) {
+        if (Math.abs(beta) > 20) {
             newMotion.beta =
                 (Math.sign(motion.current.beta) === Math.sign(beta) || motion.current.beta === 0) && Math.abs(motion.current.beta) > Math.abs(beta)
                     ? motion.current.beta
