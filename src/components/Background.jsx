@@ -31,7 +31,7 @@ export default function Background() {
     const onDeviceMotion = ({ rotationRate }) => {
         const { alpha, beta } = rotationRate;
 
-        if (Math.abs(alpha) > 5 || Math.abs(beta) > 5) {
+        if (Math.abs(alpha) > 50 || Math.abs(beta) > 50) {
             // Save current motion only if it is bigger
             motion.current = {
                 alpha: Math.sign(motion.current.alpha) === Math.sign(alpha) && Math.abs(motion.current.alpha) > Math.abs(alpha) ? motion.current.alpha : alpha,
