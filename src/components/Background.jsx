@@ -24,8 +24,11 @@ export default function Background() {
     const pixelsPerSecond = useRef({ x: 0, y: 0 });
 
     // Handle device orientation change
-    const onDeviceMotion = ({ alpha, beta, gamma }) => {
-        console.log({ alpha, beta, gamma });
+    const onDeviceMotion = (data) => {
+        if ("rotationRate" in data && "alpha" in data.rotationRate && "beta" in data.rotationRate && "gamma" in data.rotationRate) {
+            console.log(data.rotationRate.alpha, data.rotationRate.beta, data.rotationRate.gamma);
+        } else if ("rotationRate" in data) console.log(data.rotationRate);
+        else console.log(data);
     };
 
     // #################################################
