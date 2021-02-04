@@ -52,6 +52,8 @@ export default function Background() {
             else if (Math.abs(beta) > 50) newMotion.beta = beta;
         }
 
+        motion.current = newMotion;
+
         // if (Math.abs(alpha) > 40 || Math.abs(beta) > 40) {
         //     // Save current motion only if it is bigger
         //     motion.current = {
