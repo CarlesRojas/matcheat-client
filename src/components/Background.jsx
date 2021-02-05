@@ -132,15 +132,19 @@ export default function Background() {
 
     // Tile matrix
     var tiles = [];
+    var xSize = NUM_TILES.x * TILE_SIZE;
+    var ySize = NUM_TILES.y * TILE_SIZE;
     for (let i = 0; i < NUM_TILES.x; i++) {
         for (let j = 0; j < NUM_TILES.y; j++) {
             // Get X position
-            if (position.x > 0) var xPos = ((position.x + i * TILE_SIZE) % (NUM_TILES.x * TILE_SIZE)) - TILE_SIZE;
-            else xPos = ((position.x + i * TILE_SIZE) % -(NUM_TILES.x * TILE_SIZE)) - TILE_SIZE;
+            var displX = position.x + i * TILE_SIZE;
+            if (displX > 0) var xPos = (displX % xSize) - TILE_SIZE;
+            else xPos = TILE_SIZE * (NUM_TILES.x - 1) - (Math.abs(displX) % xSize);
 
             // Get Y position
-            if (position.x > 0) var yPos = ((position.y + j * TILE_SIZE) % (NUM_TILES.y * TILE_SIZE)) - TILE_SIZE;
-            else yPos = ((position.y + j * TILE_SIZE) % -(NUM_TILES.y * TILE_SIZE)) - TILE_SIZE;
+            var displY = position.y + j * TILE_SIZE;
+            if (displY > 0) var yPos = (displY % ySize) - TILE_SIZE;
+            else yPos = TILE_SIZE * (NUM_TILES.x - 1) - (Math.abs(displY) % ySize);
 
             if (i === 0 && j === 0) console.log(`Pos: ${position.x}   Final: ${xPos}`);
 
