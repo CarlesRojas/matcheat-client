@@ -35,14 +35,14 @@ export default function Background() {
         };
 
         // Update alpha
-        if (Math.abs(alpha) > 10) {
+        if (Math.abs(alpha) > 15) {
             newMotion.alpha =
                 (Math.sign(motion.current.alpha) === Math.sign(alpha) || motion.current.alpha === 0) && Math.abs(motion.current.alpha) > Math.abs(alpha)
                     ? motion.current.alpha
                     : alpha;
         }
 
-        if (Math.abs(beta) > 10) {
+        if (Math.abs(beta) > 15) {
             newMotion.beta =
                 (Math.sign(motion.current.beta) === Math.sign(beta) || motion.current.beta === 0) && Math.abs(motion.current.beta) > Math.abs(beta) ? motion.current.beta : beta;
         }
