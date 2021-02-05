@@ -140,7 +140,7 @@ export default function Background() {
 
             // Get Y position
             if (position.x > 0) var yPos = ((position.y + j * TILE_SIZE) % (NUM_TILES.y * TILE_SIZE)) - TILE_SIZE;
-            else var yPos = ((position.y + j * TILE_SIZE) % -(NUM_TILES.y * TILE_SIZE)) - TILE_SIZE;
+            else yPos = ((position.y + j * TILE_SIZE) % -(NUM_TILES.y * TILE_SIZE)) - TILE_SIZE;
 
             if (i === 0 && j === 0) console.log(`Pos: ${position.x}   Final: ${xPos}`);
 
