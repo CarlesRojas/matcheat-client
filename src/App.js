@@ -1,24 +1,14 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
 import Landing from "pages/Landing";
+import Auth from "pages/Auth";
 import Home from "pages/Home";
 import Background from "components/Background";
 
-// Contexts
-import { Utils } from "./contexts/Utils";
-
 export default function App() {
-    // Contexts
-    const { setCookie, getCookie } = useContext(Utils);
-
-    // Dark mode
-    setCookie("matcheat_dark_mode", 1);
-    if (getCookie("matcheat_dark_mode") !== "0") document.body.classList.add("dark");
-
     return (
         <div className="app">
-            {/* <div className="background"></div> */}
             <Background />
 
             <Router>
@@ -27,6 +17,11 @@ export default function App() {
                     {/*   HOME PAGE                       */}
                     {/* ################################# */}
                     <Route path="/home" component={Home}></Route>
+
+                    {/* ################################# */}
+                    {/*   AUTH PAGE                    */}
+                    {/* ################################# */}
+                    <Route path="/auth" component={Auth}></Route>
 
                     {/* ################################# */}
                     {/*   LANDING PAGE                    */}

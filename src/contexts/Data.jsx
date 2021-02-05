@@ -1,10 +1,16 @@
-import React, { createContext, useRef, useState } from "react";
+import React, { createContext, useRef, useState, useContext } from "react";
 import { useSpring } from "react-spring";
+
+// Contexts
+import { Utils } from "contexts/Utils";
 
 // Data Context
 export const Data = createContext();
 
 const DataProvider = (props) => {
+    // Contexts
+    const { getCookie } = useContext(Utils);
+
     // USER
     const token = useRef(null);
     const username = useRef(null);
@@ -23,13 +29,14 @@ const DataProvider = (props) => {
         pink: ["#ff74d4", "#ff8a5f"],
         purple: ["#8374ff", "#ff74d4"],
         blue: ["#232b62", "#78d3ff"],
+        green: ["#2d903a", "#78d3ff"],
+        fcb: ["#ff5f7d", "#5542be"],
     };
-    const currGradient = useRef("pink");
+    const currGradient = useRef(getCookie("matchEat_token") ? "fcb" : "pink");
     const [{ gradient }, setGradient] = useSpring(() => ({
         gradient: `linear-gradient(60deg, ${gradients[currGradient.current][0]} 0%, ${gradients[currGradient.current][1]} 100%)`,
         config: { friction: 30 },
     }));
-
     const setBackgroundGradient = (gradientName) => {
         if (!(gradientName in gradients)) return;
 

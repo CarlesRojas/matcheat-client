@@ -4,11 +4,6 @@
 
 $background: rgb(220, 220, 220);
 $text: rgb(58, 58, 58);
-$link: rgba(0, 106, 177, 0.75);
-
-$background-dark: rgb(20, 20, 20);
-$text-dark: rgb(230, 230, 230);
-$link-dark: rgba(0, 153, 255, 0.75);
 
 $font-size: 18px;
 $line-height: 22px;
@@ -143,18 +138,34 @@ body {
     width: 100%;
     background-color: $background;
     color: $text;
-
-    .dark & {
-        background-color: $background-dark;
-        color: $text-dark;
-    }
 }
+
+// Autofill color
+:-webkit-autofill,
+:-webkit-autofill:hover,
+:-webkit-autofill:focus {
+    box-sizing: border-box;
+    width: inherit;
+    border: 0px solid rgba(255, 255, 255, 0);
+    -webkit-text-fill-color: white;
+    transition: background-color 10000s;
+    border-radius: 1000px;
+    padding: 0 10px;
+}
+
+// #######################################
+//      APP
+// #######################################
 
 .app {
     position: relative;
     height: 100%;
     width: 100%;
 }
+
+// #######################################
+//      BACKGROUND
+// #######################################
 
 .background {
     position: absolute;
@@ -168,7 +179,11 @@ body {
     }
 }
 
-.landing {
+// #######################################
+//      AUTH
+// #######################################
+
+.auth {
     position: relative;
     height: 100%;
     width: 100%;
@@ -248,6 +263,7 @@ body {
             }
 
             .button {
+                cursor: pointer;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -391,15 +407,48 @@ body {
     }
 }
 
-// Autofill color
-:-webkit-autofill,
-:-webkit-autofill:hover,
-:-webkit-autofill:focus {
-    box-sizing: border-box;
-    width: inherit;
-    border: 0px solid rgba(255, 255, 255, 0);
-    -webkit-text-fill-color: white;
-    transition: background-color 10000s;
-    border-radius: 1000px;
-    padding: 0 10px;
+// #######################################
+//      HOME
+// #######################################
+
+.home {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .button {
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 85%;
+        z-index: 1;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.5) 75%);
+        background-position: 50px -150px;
+        color: rgba(0, 0, 0, 0.6);
+        margin-bottom: 8%;
+        border: solid 2px transparent;
+        border: 0;
+        outline: none;
+        padding: 4%;
+        font-weight: 700;
+        font-size: 1rem;
+        text-align: center;
+        text-transform: uppercase;
+        backdrop-filter: blur(6px);
+        @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+        @include border-radius(500px);
+        @include transition(transform 0.2s ease-in-out);
+
+        &:active {
+            transform: scale(1.05);
+        }
+
+        &.last {
+            margin-bottom: 5%;
+        }
+    }
 }
