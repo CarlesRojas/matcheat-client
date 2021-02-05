@@ -144,9 +144,7 @@ export default function Background() {
             // Get Y position
             var displY = position.y + j * TILE_SIZE;
             if (displY > 0) var yPos = (displY % ySize) - TILE_SIZE;
-            else yPos = TILE_SIZE * (NUM_TILES.x - 1) - (Math.abs(displY) % ySize);
-
-            if (i === 0 && j === 0) console.log(`Pos: ${position.x}   Final: ${xPos}`);
+            else yPos = TILE_SIZE * (NUM_TILES.y - 1) - (Math.abs(displY) % ySize);
 
             tiles.push(<SVG key={`${i - 1}-${j - 1}`} className="cell" src={Icons} style={{ width: TILE_SIZE, transform: `translate(${xPos}px, ${yPos}px)` }} />);
         }
