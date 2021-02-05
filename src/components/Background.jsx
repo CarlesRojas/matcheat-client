@@ -44,9 +44,7 @@ export default function Background() {
 
         if (Math.abs(beta) > 10) {
             newMotion.beta =
-                (Math.sign(motion.current.beta) === Math.sign(beta) || motion.current.beta === 0) && Math.abs(motion.current.beta) > Math.abs(beta)
-                    ? motion.current.beta
-                    : beta;
+                (Math.sign(motion.current.beta) === Math.sign(beta) || motion.current.beta === 0) && Math.abs(motion.current.beta) > Math.abs(beta) ? motion.current.beta : beta;
         }
 
         motion.current = newMotion;
@@ -139,10 +137,9 @@ export default function Background() {
             // Get position
             let xPos = ((position.x + i * TILE_SIZE) % (NUM_TILES.x * TILE_SIZE)) - TILE_SIZE;
             let yPos = ((position.y + j * TILE_SIZE) % (NUM_TILES.y * TILE_SIZE)) - TILE_SIZE;
+            if (i === 0 && j === 0) console.log(`Pos: ${position.x}   Final: ${xPos}`);
 
-            tiles.push(
-                <SVG key={`${i - 1}-${j - 1}`} className="cell" src={Icons} style={{ width: TILE_SIZE, transform: `translate(${xPos}px, ${yPos}px)` }} />
-            );
+            tiles.push(<SVG key={`${i - 1}-${j - 1}`} className="cell" src={Icons} style={{ width: TILE_SIZE, transform: `translate(${xPos}px, ${yPos}px)` }} />);
         }
     }
 
