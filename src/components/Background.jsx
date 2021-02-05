@@ -134,9 +134,14 @@ export default function Background() {
     var tiles = [];
     for (let i = 0; i < NUM_TILES.x; i++) {
         for (let j = 0; j < NUM_TILES.y; j++) {
-            // Get position
-            let xPos = ((position.x + i * TILE_SIZE) % (NUM_TILES.x * TILE_SIZE)) - TILE_SIZE;
-            let yPos = ((position.y + j * TILE_SIZE) % (NUM_TILES.y * TILE_SIZE)) - TILE_SIZE;
+            // Get X position
+            if (position.x > 0) var xPos = ((position.x + i * TILE_SIZE) % (NUM_TILES.x * TILE_SIZE)) - TILE_SIZE;
+            else xPos = ((position.x + i * TILE_SIZE) % -(NUM_TILES.x * TILE_SIZE)) - TILE_SIZE;
+
+            // Get Y position
+            if (position.x > 0) var yPos = ((position.y + j * TILE_SIZE) % (NUM_TILES.y * TILE_SIZE)) - TILE_SIZE;
+            else var yPos = ((position.y + j * TILE_SIZE) % -(NUM_TILES.y * TILE_SIZE)) - TILE_SIZE;
+
             if (i === 0 && j === 0) console.log(`Pos: ${position.x}   Final: ${xPos}`);
 
             tiles.push(<SVG key={`${i - 1}-${j - 1}`} className="cell" src={Icons} style={{ width: TILE_SIZE, transform: `translate(${xPos}px, ${yPos}px)` }} />);
