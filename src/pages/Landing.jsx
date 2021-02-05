@@ -1,8 +1,9 @@
-import React, { useEffect, useContext, useState } from "react";
-import SVG from "react-inlinesvg";
-import { useSpring, animated } from "react-spring";
-import gsap from "gsap";
+import React, { useEffect, useContext, useState, useRef } from "react";
 import { Redirect } from "react-router-dom";
+import { useSpring, animated } from "react-spring";
+import { useDrag } from "react-use-gesture";
+import SVG from "react-inlinesvg";
+import gsap from "gsap";
 
 // Icons
 import LogoIcon from "resources/logo_white.svg";
@@ -52,12 +53,17 @@ export default function Landing() {
     const onLogin = async (event) => {
         event.preventDefault();
 
+        // Show loading screen
+        showLoadingScreen();
+
         // Login
         const loginResult = await login(loginForm.email, loginForm.password);
 
         // Throw error
-        if ("error" in loginResult) setLoginError(loginResult.error);
-        else {
+        if ("error" in loginResult) {
+            setLoginError(loginResult.error);
+            showLoginScreen(true);
+        } else {
             console.log(loginResult);
             console.log(`LOGIN SUCCESSFUL ${loginResult.name}`);
             setRedirectTo("/home");
@@ -68,6 +74,9 @@ export default function Landing() {
     const onSignUp = async (event) => {
         event.preventDefault();
 
+        // Show loading screen
+        showLoadingScreen();
+
         // Sign Up
         const singUpResult = await register(signupForm.name, signupForm.email, signupForm.password);
 
@@ -75,8 +84,10 @@ export default function Landing() {
         await login(signupForm.email, signupForm.password);
 
         // Throw error
-        if ("error" in singUpResult) setSignUpError(singUpResult.error);
-        else {
+        if ("error" in singUpResult) {
+            setSignUpError(singUpResult.error);
+            showSignupScreen(true);
+        } else {
             console.log(`SING UP SUCCESSFUL ${singUpResult.id}`);
             setRedirectTo("/home");
         }
@@ -86,8 +97,16 @@ export default function Landing() {
     //   PAGE NAVIGATION
     // #################################################
 
+    // Current page: "welcome" "login" "signup" "loading"
+    const currPage = useRef("welcome");
+
     // Page position spring
-    const [{ welcomeX, loginX, signupX }, setPagePositions] = useSpring(() => ({ welcomeX: 0, loginX: SCREEN_WIDTH, signupX: SCREEN_WIDTH }));
+    const [{ welcomeX, loginX, signupX, loadingX }, setPagePositions] = useSpring(() => ({
+        welcomeX: 0,
+        loginX: SCREEN_WIDTH,
+        signupX: SCREEN_WIDTH,
+        loadingX: SCREEN_WIDTH,
+    }));
 
     // Show the welcome screen
     const showWelcomeScreen = (first) => {
@@ -97,23 +116,33 @@ export default function Landing() {
             timeline.fromTo(".welcome > .glass", { opacity: 0 }, { opacity: 1, duration: 1 }, "+=0.5");
         }
 
+        currPage.current = "welcome";
         setBackgroundGradient("pink");
         resetForms();
-        setPagePositions({ welcomeX: 0, loginX: SCREEN_WIDTH, signupX: SCREEN_WIDTH });
+        setPagePositions({ welcomeX: 0, loginX: SCREEN_WIDTH, signupX: SCREEN_WIDTH, loadingX: SCREEN_WIDTH });
     };
 
     // Show the login screen
-    const showLoginScreen = () => {
+    const showLoginScreen = (formError) => {
+        currPage.current = "login";
         setBackgroundGradient("red");
-        resetForms();
-        setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: 0, signupX: SCREEN_WIDTH });
+        if (!formError) resetForms();
+        setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: 0, signupX: SCREEN_WIDTH, loadingX: SCREEN_WIDTH });
     };
 
     // Show the signup screen
-    const showSignupScreen = () => {
+    const showSignupScreen = (formError) => {
+        currPage.current = "signup";
         setBackgroundGradient("purple");
-        resetForms();
-        setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: 0 });
+        if (!formError) resetForms();
+        setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: 0, loadingX: SCREEN_WIDTH });
+    };
+
+    // Show the signup screen
+    const showLoadingScreen = () => {
+        if (currPage.current === "login") setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: -SCREEN_WIDTH, signupX: SCREEN_WIDTH, loadingX: 0 });
+        else setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: -SCREEN_WIDTH, loadingX: 0 });
+        currPage.current = "loading";
     };
 
     // Reset all form fields and errors
@@ -123,6 +152,42 @@ export default function Landing() {
         setLoginForm({ email: "", password: "" });
         setSingupForm({ name: "", email: "", password: "" });
     };
+
+    // #################################################
+    //   BACK GESTURE
+    // #################################################
+
+    // Horizontal gesture
+    const gestureBind = useDrag(
+        ({ event, cancel, canceled, down, vxvy: [vx], movement: [mx] }) => {
+            // Stop event propagation
+            event.stopPropagation();
+
+            // Return if canceled
+            if (canceled) return;
+
+            // Cancel gesture
+            if (currPage.current !== "login" && currPage.current !== "signup") {
+                cancel();
+                return;
+            }
+
+            // Snap to the welcome screen or stay on te current page
+            if (!down) {
+                if (mx > 100 || vx > 1) showWelcomeScreen();
+                else if (currPage.current === "login") showLoginScreen(true);
+                else showSignupScreen(true);
+            }
+
+            // Update the position while the gesture is active
+            else {
+                var displ = Math.max(mx, -20);
+                if (currPage.current === "login") setPagePositions({ welcomeX: -SCREEN_WIDTH + displ, loginX: displ, signupX: SCREEN_WIDTH, loadingX: SCREEN_WIDTH });
+                else setPagePositions({ welcomeX: -SCREEN_WIDTH + displ, loginX: SCREEN_WIDTH, signupX: displ, loadingX: SCREEN_WIDTH });
+            }
+        },
+        { filterTaps: true, axis: "x" }
+    );
 
     // #################################################
     //   COMPONENT MOUNT
@@ -169,7 +234,7 @@ export default function Landing() {
             </animated.div>
 
             <animated.div className="section login" style={{ x: loginX }}>
-                <animated.div className="glass">
+                <animated.div className="glass" {...gestureBind()}>
                     <SVG className="backButton" src={BackIcon} onClick={() => showWelcomeScreen(false)} />
 
                     <SVG className="logo small" src={LogoIcon} />
@@ -211,7 +276,7 @@ export default function Landing() {
             </animated.div>
 
             <animated.div className="section signup" style={{ x: signupX }}>
-                <animated.div className="glass">
+                <animated.div className="glass" {...gestureBind()}>
                     <SVG className="backButton" src={BackIcon} onClick={() => showWelcomeScreen(false)} />
 
                     <SVG className="logo small" src={LogoIcon} />
@@ -263,6 +328,10 @@ export default function Landing() {
                         <div className="error">{signUpError}</div>
                     </form>
                 </animated.div>
+            </animated.div>
+
+            <animated.div className="section loading" style={{ x: loadingX }}>
+                <SVG className="loadingIcon" src={LogoIcon} />
             </animated.div>
         </div>
     );

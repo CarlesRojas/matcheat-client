@@ -262,6 +262,7 @@ body {
                 outline: none;
                 padding: 4%;
                 font-weight: 700;
+                font-size: 1rem;
                 text-align: center;
                 text-transform: uppercase;
                 backdrop-filter: blur(6px);
@@ -358,6 +359,33 @@ body {
                     font-size: 0.8em;
                     font-weight: 500;
                     text-align: center;
+                }
+            }
+        }
+
+        .loadingIcon {
+            width: 25%;
+            z-index: 1;
+            @include animation(heartbeat 1.5s linear infinite);
+
+            @keyframes heartbeat {
+                10% {
+                    transform: scale(1);
+                }
+                20% {
+                    transform: scale(1.1);
+                }
+                30% {
+                    transform: scale(1);
+                }
+                35% {
+                    transform: scale(1);
+                }
+                45% {
+                    transform: scale(1.1);
+                }
+                55% {
+                    transform: scale(1);
                 }
             }
         }
