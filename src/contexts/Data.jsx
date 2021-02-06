@@ -19,7 +19,7 @@ const DataProvider = (props) => {
     // BACKGROUND POSITION
     const positionRef = useRef({ x: 0, y: 0 });
     const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [{ speed }, setSpeed] = useSpring(() => ({ speed: { x: 0, y: 0 } }));
+    const [{ speed }, setSpeed] = useSpring(() => ({ speed: { x: 0, y: 0 }, config: { mass: 100 } }));
     const motion = useRef({ alpha: 0, beta: 0 });
     const prevMotion = useRef({ alpha: 0, beta: 0 });
 
