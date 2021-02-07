@@ -180,6 +180,106 @@ body {
 }
 
 // #######################################
+//      LANDING
+// #######################################
+
+.landing {
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    .section {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+
+        .glass {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 50%;
+            width: 90%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
+            background-clip: padding-box;
+            background-position: 50px -150px;
+            border: solid 2px transparent;
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+            @include border-radius(20px);
+
+            .logo {
+                z-index: 1;
+                width: 25%;
+                margin: 0 0 10% 0;
+                @include animation(heartbeat 3s linear infinite);
+
+                @keyframes heartbeat {
+                    58% {
+                        transform: scale(1);
+                    }
+                    63% {
+                        transform: scale(1.1);
+                    }
+                    68% {
+                        transform: scale(1);
+                    }
+                    70% {
+                        transform: scale(1);
+                    }
+                    75% {
+                        transform: scale(1.1);
+                    }
+                    80% {
+                        transform: scale(1);
+                    }
+                }
+            }
+
+            .askPermissionText {
+                color: white;
+                font-weight: 600;
+                padding: 0 10%;
+                text-align: center;
+                margin-bottom: 10%;
+            }
+
+            .button {
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 85%;
+                z-index: 1;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.5) 75%);
+                background-position: 50px -150px;
+                color: rgba(0, 0, 0, 0.6);
+                border: solid 2px transparent;
+                border: 0;
+                outline: none;
+                padding: 4%;
+                font-weight: 700;
+                font-size: 1rem;
+                text-align: center;
+                text-transform: uppercase;
+                backdrop-filter: blur(6px);
+                @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+                @include border-radius(500px);
+                @include transition(transform 0.2s ease-in-out);
+
+                &:active {
+                    transform: scale(1.05);
+                }
+            }
+        }
+    }
+}
+
+// #######################################
 //      AUTH
 // #######################################
 
