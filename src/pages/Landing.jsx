@@ -9,6 +9,9 @@ import LogoIcon from "resources/logo_white.svg";
 // Contexts
 import { API } from "contexts/API";
 
+// Constants
+const ASK_PERMISSIONS = false;
+
 export default function Landing() {
     // Contexts
     const { isLoggedIn } = useContext(API);
@@ -55,7 +58,7 @@ export default function Landing() {
         window.addEventListener("devicemotion", onDeviceMotion, true);
 
         // Start timer to check for the permissions
-        if (typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function") {
+        if (ASK_PERMISSIONS && typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function") {
             checkPermissionsTimeout.current = setTimeout(() => {
                 // permissions have been granted
                 if (permissionsGranted.current) {
