@@ -5,6 +5,9 @@ import { useDrag } from "react-use-gesture";
 import SVG from "react-inlinesvg";
 import gsap from "gsap";
 
+// Components
+import Glass from "components/Glass";
+
 // Icons
 import LogoIcon from "resources/logo_white.svg";
 import BackIcon from "resources/icons/arrow.svg";
@@ -17,15 +20,16 @@ import { API } from "contexts/API";
 import { Data } from "contexts/Data";
 
 // Constants
-var SCREEN_WIDTH = window.innerWidth;
+const SCREEN_WIDTH = window.innerWidth;
 
 export default function Auth() {
     // Contexts
-    const { register, login } = useContext(API);
+    const { register, login, isLoggedIn } = useContext(API);
     const { setBackgroundGradient } = useContext(Data);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
+    const isLoggedInRef = useRef(false);
 
     // #################################################
     //   FORMS
@@ -194,47 +198,48 @@ export default function Auth() {
 
     // On componente mount
     useEffect(() => {
-        // Resize
-        const onResize = () => {
-            SCREEN_WIDTH = window.innerWidth;
-        };
+        // Change Color
+        setBackgroundGradient("pink");
 
         // Go to welcome page
-        showWelcomeScreen(true);
-
-        // Subscribe to events
-        window.addEventListener("resize", onResize);
-        return () => {
-            window.removeEventListener("resize", onResize);
-        };
+        if (!isLoggedInRef.current) showWelcomeScreen(true);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // #################################################
+    //   RENDER
+    // #################################################
+
     // Redirect to new route
     if (redirectTo) {
-        setBackgroundGradient("fcb");
-        return <Redirect to={redirectTo} push={false} />;
+        return <Redirect to={redirectTo} push={true} />;
+    }
+
+    // If already logged in -> go to home
+    if (isLoggedIn()) {
+        isLoggedInRef.current = true;
+        return <Redirect to={"/home"} push={true} />;
     }
 
     return (
         <div className="auth">
             <animated.div className="section welcome" style={{ x: welcomeX }}>
-                <animated.div className="glass">
+                <Glass style={{ minHeight: "70%" }}>
                     <SVG className="logo" src={LogoIcon} />
 
-                    <div className="button signup" onClick={showSignupScreen}>
+                    <div className="button" onClick={showSignupScreen}>
                         Sign Up
                     </div>
 
-                    <div className="button login" onClick={showLoginScreen}>
+                    <div className="button lower" onClick={showLoginScreen}>
                         Login
                     </div>
-                </animated.div>
+                </Glass>
             </animated.div>
 
-            <animated.div className="section login" style={{ x: loginX }}>
-                <animated.div className="glass" {...gestureBind()}>
+            <animated.div className="section login" style={{ x: loginX }} {...gestureBind()}>
+                <Glass style={{ minHeight: "70%" }}>
                     <SVG className="backButton" src={BackIcon} onClick={() => showWelcomeScreen(false)} />
 
                     <SVG className="logo small" src={LogoIcon} />
@@ -272,11 +277,11 @@ export default function Auth() {
 
                         <div className="error">{loginError}</div>
                     </form>
-                </animated.div>
+                </Glass>
             </animated.div>
 
-            <animated.div className="section signup" style={{ x: signupX }}>
-                <animated.div className="glass" {...gestureBind()}>
+            <animated.div className="section signup" style={{ x: signupX }} {...gestureBind()}>
+                <Glass style={{ minHeight: "70%" }}>
                     <SVG className="backButton" src={BackIcon} onClick={() => showWelcomeScreen(false)} />
 
                     <SVG className="logo small" src={LogoIcon} />
@@ -327,7 +332,7 @@ export default function Auth() {
 
                         <div className="error">{signUpError}</div>
                     </form>
-                </animated.div>
+                </Glass>
             </animated.div>
 
             <animated.div className="section loading" style={{ x: loadingX }}>

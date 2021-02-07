@@ -163,21 +163,11 @@ body {
     width: 100%;
 }
 
-// #######################################
-//      BACKGROUND
-// #######################################
-
-.background {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    .cell {
-        position: absolute;
-    }
-}
+// ##############################################################################
+// ##############################################################################
+//      PAGES
+// ##############################################################################
+// ##############################################################################
 
 // #######################################
 //      LANDING
@@ -195,87 +185,14 @@ body {
         justify-content: center;
         height: 100%;
         width: 100%;
+    }
 
-        .glass {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 50%;
-            width: 90%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
-            background-clip: padding-box;
-            background-position: 50px -150px;
-            border: solid 2px transparent;
-            backdrop-filter: blur(5px);
-            opacity: 0;
-            @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
-            @include border-radius(20px);
-
-            .logo {
-                z-index: 1;
-                width: 25%;
-                margin: 0 0 10% 0;
-                @include animation(heartbeat 3s linear infinite);
-
-                @keyframes heartbeat {
-                    58% {
-                        transform: scale(1);
-                    }
-                    63% {
-                        transform: scale(1.1);
-                    }
-                    68% {
-                        transform: scale(1);
-                    }
-                    70% {
-                        transform: scale(1);
-                    }
-                    75% {
-                        transform: scale(1.1);
-                    }
-                    80% {
-                        transform: scale(1);
-                    }
-                }
-            }
-
-            .askPermissionText {
-                color: white;
-                font-weight: 600;
-                padding: 0 10%;
-                text-align: center;
-                margin-bottom: 10%;
-            }
-
-            .button {
-                cursor: pointer;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                width: 85%;
-                z-index: 1;
-                background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.5) 75%);
-                background-position: 50px -150px;
-                color: rgba(0, 0, 0, 0.6);
-                border: solid 2px transparent;
-                border: 0;
-                outline: none;
-                padding: 4%;
-                font-weight: 700;
-                font-size: 1rem;
-                text-align: center;
-                text-transform: uppercase;
-                backdrop-filter: blur(6px);
-                @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
-                @include border-radius(500px);
-                @include transition(transform 0.2s ease-in-out);
-
-                &:active {
-                    transform: scale(1.05);
-                }
-            }
-        }
+    .askPermissionText {
+        color: white;
+        font-weight: 600;
+        padding: 0 10%;
+        text-align: center;
+        margin-bottom: 10%;
     }
 }
 
@@ -296,185 +213,96 @@ body {
         height: 100%;
         width: 100%;
 
-        .glass {
+        .backButton {
+            position: absolute;
+            height: 4rem;
+            max-height: 4rem;
+            min-height: 4rem;
+            width: 4rem;
+            max-width: 4rem;
+            min-width: 4rem;
+            top: 0;
+            left: 0;
+            opacity: 0.7;
+            padding: 1.2rem;
+
+            path {
+                fill: white !important;
+            }
+        }
+
+        form {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 70%;
-            width: 90%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
-            background-clip: padding-box;
-            background-position: 50px -150px;
-            border: solid 2px transparent;
-            backdrop-filter: blur(5px);
-            @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
-            @include border-radius(20px);
+            width: 100%;
 
-            .backButton {
-                position: absolute;
-                height: 4rem;
-                max-height: 4rem;
-                min-height: 4rem;
-                width: 4rem;
-                max-width: 4rem;
-                min-width: 4rem;
-                top: 0;
-                left: 0;
-                opacity: 0.7;
-                padding: 1.2rem;
-
-                path {
-                    fill: white !important;
-                }
-            }
-
-            .logo {
-                width: 50%;
-                z-index: 1;
-                margin: 15% 0 25% 0;
-                @include animation(heartbeat 3s linear infinite);
-
-                @keyframes heartbeat {
-                    58% {
-                        transform: scale(1);
-                    }
-                    63% {
-                        transform: scale(1.1);
-                    }
-                    68% {
-                        transform: scale(1);
-                    }
-                    70% {
-                        transform: scale(1);
-                    }
-                    75% {
-                        transform: scale(1.1);
-                    }
-                    80% {
-                        transform: scale(1);
-                    }
-                }
-
-                &.small {
-                    width: 25%;
-                    margin: 15% 0 15% 0;
-                }
-            }
-
-            .button {
-                cursor: pointer;
+            .inputContainer {
                 display: flex;
-                flex-direction: column;
                 align-items: center;
                 width: 85%;
-                z-index: 1;
-                background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.5) 75%);
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 75%);
                 background-position: 50px -150px;
-                color: rgba(0, 0, 0, 0.6);
+                margin: 0 5%;
                 margin-bottom: 8%;
                 border: solid 2px transparent;
-                border: 0;
-                outline: none;
                 padding: 4%;
-                font-weight: 700;
-                font-size: 1rem;
-                text-align: center;
-                text-transform: uppercase;
                 backdrop-filter: blur(6px);
                 @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
                 @include border-radius(500px);
-                @include transition(transform 0.2s ease-in-out);
 
-                &:active {
-                    transform: scale(1.05);
+                .inputIcon {
+                    height: 1rem;
+                    max-height: 1rem;
+                    min-height: 1rem;
+                    width: 1rem;
+                    max-width: 1rem;
+                    min-width: 1rem;
+                    opacity: 0.5;
+                    margin-right: 0.4rem;
+
+                    path {
+                        fill: white !important;
+                    }
+
+                    &.email {
+                        height: 1.05rem;
+                        max-height: 1.05rem;
+                        min-height: 1.05rem;
+                        width: 1.05rem;
+                        max-width: 1.05rem;
+                        min-width: 1.05rem;
+                    }
                 }
 
-                &.login {
-                    background: transparent;
-                    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 75%);
+                .input {
+                    display: flex;
+                    align-items: center;
+                    background: none;
                     color: white;
-                    margin-bottom: 15%;
-                }
+                    border: 0;
+                    outline: none;
+                    font-size: 1rem;
 
-                &.last {
-                    margin-bottom: 5%;
+                    @include inputPlaceholder() {
+                        color: white;
+                        opacity: 0.7;
+                    }
                 }
             }
 
-            form {
+            .error {
                 display: flex;
-                flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                width: 100%;
-
-                .inputContainer {
-                    display: flex;
-                    align-items: center;
-                    width: 85%;
-                    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 75%);
-                    background-position: 50px -150px;
-                    margin: 0 5%;
-                    margin-bottom: 8%;
-                    border: solid 2px transparent;
-                    padding: 4%;
-                    backdrop-filter: blur(6px);
-                    @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
-                    @include border-radius(500px);
-
-                    .inputIcon {
-                        height: 1rem;
-                        max-height: 1rem;
-                        min-height: 1rem;
-                        width: 1rem;
-                        max-width: 1rem;
-                        min-width: 1rem;
-                        opacity: 0.5;
-                        margin-right: 0.4rem;
-
-                        path {
-                            fill: white !important;
-                        }
-
-                        &.email {
-                            height: 1.05rem;
-                            max-height: 1.05rem;
-                            min-height: 1.05rem;
-                            width: 1.05rem;
-                            max-width: 1.05rem;
-                            min-width: 1.05rem;
-                        }
-                    }
-
-                    .input {
-                        display: flex;
-                        align-items: center;
-                        background: none;
-                        color: white;
-                        border: 0;
-                        outline: none;
-                        font-size: 1rem;
-
-                        @include inputPlaceholder() {
-                            color: white;
-                            opacity: 0.7;
-                        }
-                    }
-                }
-
-                .error {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    height: 2.7em;
-                    width: 85%;
-                    color: rgb(146, 0, 0);
-                    margin-bottom: 5%;
-                    font-size: 0.8em;
-                    font-weight: 500;
-                    text-align: center;
-                }
+                height: 2.7em;
+                width: 85%;
+                color: rgb(146, 0, 0);
+                margin-bottom: 5%;
+                font-size: 0.8em;
+                font-weight: 500;
+                text-align: center;
             }
         }
 
@@ -517,38 +345,235 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 
-    .button {
-        cursor: pointer;
+    .container {
+        flex-grow: 1;
+        width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 85%;
-        z-index: 1;
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.5) 75%);
-        background-position: 50px -150px;
-        color: rgba(0, 0, 0, 0.6);
-        margin-bottom: 8%;
-        border: solid 2px transparent;
-        border: 0;
-        outline: none;
-        padding: 4%;
-        font-weight: 700;
-        font-size: 1rem;
-        text-align: center;
+        justify-content: center;
+    }
+
+    .clickToClose {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100vh;
+        pointer-events: none;
+        display: none;
+        z-index: 50;
+
+        &.active {
+            display: block;
+            pointer-events: all;
+        }
+    }
+
+    .icon {
+        color: white;
+        height: 3rem;
+        max-height: 3rem;
+        min-height: 3rem;
+        width: 3rem;
+        max-width: 3rem;
+        min-width: 3rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .text {
+        color: white;
         text-transform: uppercase;
-        backdrop-filter: blur(6px);
-        @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
-        @include border-radius(500px);
+        font-weight: 800;
+        font-size: 1.3rem;
+    }
+}
+
+// #######################################
+//      CREATE ROOM
+// #######################################
+
+.createRoom {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+// #######################################
+//      JOIN ROOM
+// #######################################
+
+.joinRoom {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+// ##############################################################################
+// ##############################################################################
+//      COMPONENTS
+// ##############################################################################
+// ##############################################################################
+
+// #######################################
+//      NAVBAR
+// #######################################
+
+.navbar {
+    @include transition(height 0.5s ease-in-out);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 3rem;
+    z-index: 5;
+
+    .navbarLogo {
+        height: 3rem;
+        min-height: 3rem;
+        max-height: 3rem;
+        padding: 0.5rem;
+    }
+
+    .buttonContainer {
+        width: 100%;
+        height: 0rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+// #######################################
+//      BACKGROUND
+// #######################################
+
+.background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+
+    .cell {
+        position: absolute;
+    }
+}
+
+// #######################################
+//      GLASS
+// #######################################
+
+.glass {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
+    background-clip: padding-box;
+    background-position: 50px -150px;
+    border: solid 2px transparent;
+    backdrop-filter: blur(5px);
+    @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+    @include border-radius(20px);
+
+    &.clickable {
         @include transition(transform 0.2s ease-in-out);
 
         &:active {
             transform: scale(1.05);
         }
+    }
+}
 
-        &.last {
-            margin-bottom: 5%;
+// #######################################
+//      BUTTON
+// #######################################
+
+.button {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 85%;
+    z-index: 1;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.5) 75%);
+    background-position: 50px -150px;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 8%;
+    border: solid 2px transparent;
+    border: 0;
+    outline: none;
+    padding: 4%;
+    font-weight: 700;
+    font-size: 1rem;
+    text-align: center;
+    text-transform: uppercase;
+    backdrop-filter: blur(6px);
+    @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+    @include border-radius(500px);
+    @include transition(transform 0.2s ease-in-out);
+
+    &:active {
+        transform: scale(1.05);
+    }
+
+    &.lower {
+        background: transparent;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 75%);
+        color: white;
+        margin-bottom: 15%;
+    }
+
+    &.last {
+        margin-bottom: 4%;
+    }
+}
+
+// #######################################
+//      LOGO
+// #######################################
+
+.logo {
+    width: 50%;
+    z-index: 1;
+    margin: 15% 0 25% 0;
+    @include animation(heartbeat 3s linear infinite);
+
+    @keyframes heartbeat {
+        58% {
+            transform: scale(1);
         }
+        63% {
+            transform: scale(1.1);
+        }
+        68% {
+            transform: scale(1);
+        }
+        70% {
+            transform: scale(1);
+        }
+        75% {
+            transform: scale(1.1);
+        }
+        80% {
+            transform: scale(1);
+        }
+    }
+
+    &.small {
+        width: 25%;
+        margin: 8% 0 15% 0;
     }
 }

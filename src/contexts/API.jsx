@@ -81,7 +81,6 @@ const APIProvider = (props) => {
 
     // Log out the current user
     const logout = () => {
-        console.log("OLA");
         token.current = null;
         username.current = null;
         userID.current = null;

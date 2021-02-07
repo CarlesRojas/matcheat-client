@@ -1,9 +1,14 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
-import Landing from "pages/Landing";
-import Auth from "pages/Auth";
+// Pages
+import JoinRoom from "pages/JoinRoom";
+import CreateRoom from "pages/CreateRoom";
 import Home from "pages/Home";
+import Auth from "pages/Auth";
+import Landing from "pages/Landing";
+
+// Components
 import Background from "components/Background";
 
 export default function App() {
@@ -14,19 +19,29 @@ export default function App() {
             <Router>
                 <Switch>
                     {/* ################################# */}
-                    {/*   HOME PAGE                       */}
+                    {/*   JOIN ROOM                       */}
                     {/* ################################# */}
-                    <Route path="/home" component={Home}></Route>
+                    <Route path="/joinRoom" component={JoinRoom} exact></Route>
 
                     {/* ################################# */}
-                    {/*   AUTH PAGE                    */}
+                    {/*   CREATE ROOM PAGE                */}
                     {/* ################################# */}
-                    <Route path="/auth" component={Auth}></Route>
+                    <Route path="/createRoom" component={CreateRoom} exact></Route>
+
+                    {/* ################################# */}
+                    {/*   HOME PAGE                       */}
+                    {/* ################################# */}
+                    <Route path="/home" component={Home} exact></Route>
+
+                    {/* ################################# */}
+                    {/*   AUTH PAGE                       */}
+                    {/* ################################# */}
+                    <Route path="/auth" component={Auth} exact></Route>
 
                     {/* ################################# */}
                     {/*   LANDING PAGE                    */}
                     {/* ################################# */}
-                    <Route path="/" component={Landing}></Route>
+                    <Route path="/" component={Landing} exact></Route>
                 </Switch>
             </Router>
         </div>

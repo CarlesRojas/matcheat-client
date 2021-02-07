@@ -8,6 +8,10 @@ import LogoIcon from "resources/logo_white.svg";
 
 // Contexts
 import { API } from "contexts/API";
+import { Data } from "contexts/Data";
+
+// Components
+import Glass from "components/Glass";
 
 // Constants
 const ASK_PERMISSIONS = false;
@@ -15,6 +19,7 @@ const ASK_PERMISSIONS = false;
 export default function Landing() {
     // Contexts
     const { isLoggedIn } = useContext(API);
+    const { setBackgroundGradient } = useContext(Data);
 
     // #################################################
     //   CHECK PERMISSIONS
@@ -54,6 +59,9 @@ export default function Landing() {
 
     // On componente mount
     useEffect(() => {
+        // Change Color
+        setBackgroundGradient("pink");
+
         // Subscribe to events
         window.addEventListener("devicemotion", onDeviceMotion, true);
 
@@ -71,7 +79,7 @@ export default function Landing() {
                     const timeline = gsap.timeline({ defaults: { ease: "power1" } });
                     timeline.fromTo(".permissions > .glass", { opacity: 0 }, { opacity: 1, duration: 1 }, "+=0.5");
                 }
-            }, 4000);
+            }, 200);
         }
 
         // No permissions needed
@@ -89,11 +97,15 @@ export default function Landing() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // #################################################
+    //   RENDER
+    // #################################################
+
     if (!permissionsChecked || !permissionsGranted.current)
         return (
             <div className="landing">
                 <div className="section permissions">
-                    <div className="glass">
+                    <Glass style={{ minHeight: "50%" }}>
                         <SVG className="logo small" src={LogoIcon} />
 
                         <div className="askPermissionText">To work properly, MatchEat needs pemission to use your phone location and accelerometer.</div>
@@ -101,14 +113,14 @@ export default function Landing() {
                         <div className="button" onClick={onGrantPermissionsClick}>
                             Grant Permission
                         </div>
-                    </div>
+                    </Glass>
                 </div>
             </div>
         );
 
     // Already logged in -> Go Home
-    if (isLoggedIn()) return <Redirect to={"/home"} push={false} />;
+    if (isLoggedIn()) return <Redirect to={"/home"} push={true} />;
 
     // Not logged in -> Go to Auth
-    return <Redirect to={"/auth"} push={false} />;
+    return <Redirect to={"/auth"} push={true} />;
 }

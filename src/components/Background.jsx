@@ -130,6 +130,10 @@ export default function Background() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // #################################################
+    //   RENDER
+    // #################################################
+
     // Tile matrix
     var tiles = [];
     var xSize = NUM_TILES.x * TILE_SIZE;
