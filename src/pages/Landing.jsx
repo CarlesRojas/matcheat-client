@@ -22,12 +22,13 @@ export default function Landing() {
     const checkPermissionsTimeout = useRef(null);
 
     // Handle device orientation change
-    const onDeviceMotion = (event) => {
-        if (event) permissionsGranted.current = true;
+    const onDeviceMotion = () => {
+        permissionsGranted.current = true;
+        setPermissionsChecked(true);
     };
 
     // On grant permissions clicked
-    const onGrantPermissionsClick = (event) => {
+    const onGrantPermissionsClick = () => {
         const timeline = gsap.timeline({ defaults: { ease: "power1" } });
         timeline.fromTo(".permissions > .glass", { opacity: 1 }, { opacity: 0, duration: 1 });
 
@@ -67,7 +68,7 @@ export default function Landing() {
                     const timeline = gsap.timeline({ defaults: { ease: "power1" } });
                     timeline.fromTo(".permissions > .glass", { opacity: 0 }, { opacity: 1, duration: 1 }, "+=0.5");
                 }
-            }, 200);
+            }, 4000);
         }
 
         // No permissions needed
