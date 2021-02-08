@@ -23,7 +23,7 @@ import { Data } from "contexts/Data";
 const SCREEN_WIDTH = window.innerWidth;
 
 export default function Auth() {
-    console.log("%cRender Auth");
+    console.log("%cRender Auth", "color: grey; font-size: 11px");
 
     // Contexts
     const { register, login, isLoggedIn } = useContext(API);

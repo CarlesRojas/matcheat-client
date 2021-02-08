@@ -15,7 +15,7 @@ import JoinIcon from "resources/icons/join.svg";
 import { Data } from "contexts/Data";
 
 export default function Home() {
-    console.log("%cRender Home");
+    console.log("%cRender Home", "color: grey; font-size: 11px");
 
     // Contexts
     const { setBackgroundGradient } = useContext(Data);

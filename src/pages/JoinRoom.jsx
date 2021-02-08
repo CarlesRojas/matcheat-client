@@ -4,7 +4,7 @@ import React, { useEffect, useContext } from "react";
 import { Data } from "contexts/Data";
 
 export default function JoinRoom() {
-    console.log("%cRender Join Room");
+    console.log("%cRender Join Room", "color: grey; font-size: 11px");
 
     // Contexts
     const { setBackgroundGradient } = useContext(Data);

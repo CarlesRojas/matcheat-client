@@ -4,7 +4,7 @@ import React, { useEffect, useContext } from "react";
 import { Data } from "contexts/Data";
 
 export default function CreateRoom() {
-    console.log("%cRender Create Room");
+    console.log("%cRender Create Room", "color: grey; font-size: 11px");
 
     // Contexts
     const { setBackgroundGradient } = useContext(Data);
