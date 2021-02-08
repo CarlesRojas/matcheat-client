@@ -481,9 +481,8 @@ body {
     justify-content: center;
     width: 90%;
     background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
-    background-clip: padding-box;
     background-position: 50px -150px;
-    border: solid 2px transparent;
+    border: solid 1px rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(5px);
     @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
     @include border-radius(20px);
