@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useContext } from "react";
+import React, { useRef, useEffect, useState, useContext, memo } from "react";
+import { useSpring } from "react-spring";
 import SVG from "react-inlinesvg";
 
 // Icons
@@ -16,13 +17,22 @@ const MAX_FPS = 120;
 const FPS = 60;
 const DECELERATION = 10;
 
-export default function Background() {
+const Background = memo(() => {
+    console.log("RENDER BACKGROUND");
+
+    //export default function Background() {
     // Contexts
-    const { positionRef, position, setPosition, speed, setSpeed, motion, prevMotion, gradient } = useContext(Data);
+    const { positionRef, speedRef, motion, prevMotion, gradient } = useContext(Data);
 
     // #################################################
     //   ACCELEROMETER TILT
     // #################################################
+
+    // Current position
+    const [position, setPosition] = useState(positionRef.current);
+
+    // Current speed
+    const [{ speed }, setSpeed] = useSpring(() => ({ speed: speedRef.current }));
 
     // Handle device orientation change
     const onDeviceMotion = ({ rotationRate }) => {
@@ -78,16 +88,22 @@ export default function Background() {
         if (prevMotion.current.beta !== motion.current.beta || prevMotion.current.alpha !== motion.current.alpha) prevMotion.current = motion.current;
 
         // Update speed
-        setSpeed({ speed: newSpeed });
+        if (newSpeed.x !== speedRef.current.x || newSpeed.y !== speedRef.current.y) {
+            setSpeed({ speed: newSpeed });
+            speedRef.current = newSpeed;
+        }
 
-        // Update position
+        // Get te new position
         var newPosition = {
             x: positionRef.current.x + speed.get().x * deltaTime,
             y: positionRef.current.y + speed.get().y * deltaTime,
         };
 
-        setPosition(newPosition);
-        positionRef.current = newPosition;
+        // Update position
+        if (newPosition.x !== positionRef.current.x || newPosition.y !== positionRef.current.y) {
+            setPosition(newPosition);
+            positionRef.current = newPosition;
+        }
     };
 
     // Called every frame
@@ -159,4 +175,6 @@ export default function Background() {
             {tiles}
         </div>
     );
-}
+});
+
+export default Background;

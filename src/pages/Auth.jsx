@@ -23,6 +23,8 @@ import { Data } from "contexts/Data";
 const SCREEN_WIDTH = window.innerWidth;
 
 export default function Auth() {
+    console.log("RENDER AUTH");
+
     // Contexts
     const { register, login, isLoggedIn } = useContext(API);
     const { setBackgroundGradient } = useContext(Data);

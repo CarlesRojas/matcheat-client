@@ -4,6 +4,8 @@ import React, { useEffect, useContext } from "react";
 import { Data } from "contexts/Data";
 
 export default function JoinRoom() {
+    console.log("RENDER JOIN ROOM");
+
     // Contexts
     const { setBackgroundGradient } = useContext(Data);
 

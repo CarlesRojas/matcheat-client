@@ -1,4 +1,4 @@
-import React, { createContext, useRef, useState, useContext } from "react";
+import React, { createContext, useRef, useContext } from "react";
 import { useSpring } from "react-spring";
 
 // Contexts
@@ -18,8 +18,8 @@ const DataProvider = (props) => {
 
     // BACKGROUND POSITION
     const positionRef = useRef({ x: 0, y: 0 });
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [{ speed }, setSpeed] = useSpring(() => ({ speed: { x: 0, y: 0 } }));
+    const speedRef = useRef({ x: 0, y: 0 });
+    //const [{ speed }, setSpeed] = useSpring(() => ({ speed: { x: 0, y: 0 } }));
     const motion = useRef({ alpha: 0, beta: 0 });
     const prevMotion = useRef({ alpha: 0, beta: 0 });
 
@@ -55,10 +55,7 @@ const DataProvider = (props) => {
 
                 // BACKGROUND POSITION
                 positionRef,
-                position,
-                setPosition,
-                speed,
-                setSpeed,
+                speedRef,
                 motion,
                 prevMotion,
 
