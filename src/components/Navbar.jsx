@@ -11,7 +11,7 @@ import LogoIcon from "resources/logo_white.svg";
 import { API } from "contexts/API";
 
 export default function Navbar() {
-    console.log("RENDER NAVBAR");
+    console.log("%cRender Navbar");
 
     // Contexts
     const { logout } = useContext(API);

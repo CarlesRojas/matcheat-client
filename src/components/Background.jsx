@@ -18,7 +18,7 @@ const FPS = 60;
 const DECELERATION = 10;
 
 const Background = memo(() => {
-    console.log("RENDER BACKGROUND");
+    console.log("%cRender Background");
 
     //export default function Background() {
     // Contexts
@@ -27,6 +27,9 @@ const Background = memo(() => {
     // #################################################
     //   ACCELEROMETER TILT
     // #################################################
+
+    // Current position
+    const [prevGradient, setPrevGradient] = useState(gradient.get());
 
     // Current position
     const [position, setPosition] = useState(positionRef.current);
@@ -104,6 +107,9 @@ const Background = memo(() => {
             setPosition(newPosition);
             positionRef.current = newPosition;
         }
+
+        // Update Gradient
+        if (prevGradient !== gradient.get()) setPrevGradient(gradient.get());
     };
 
     // Called every frame

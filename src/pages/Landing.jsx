@@ -17,7 +17,7 @@ import Glass from "components/Glass";
 const ASK_PERMISSIONS = false;
 
 export default function Landing() {
-    console.log("RENDER LANDING");
+    console.log("%cRender Landing");
 
     // Contexts
     const { isLoggedIn } = useContext(API);

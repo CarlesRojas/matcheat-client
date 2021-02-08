@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function Glass({ children, style, onClick, classes }) {
-    console.log("RENDER GLASS");
+    console.log("%cRender Glass");
 
     // #################################################
     //   RENDER
