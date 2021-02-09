@@ -10,22 +10,23 @@ export const API = createContext();
 const APIProvider = (props) => {
     // Contexts
     const { setCookie, getCookie, clearCookies } = useContext(Utils);
-    const { token, username, userID } = useContext(Data);
+    const { token, username, userID, image } = useContext(Data);
 
     const apiURL = "https://matcheat.herokuapp.com/"; //"http://localhost:3100/";
 
     // Create a new user
-    const register = async (name, email, password) => {
+    const register = async (name, email, password, image) => {
         // Post data
         var postData = {
             name,
             email,
             password,
+            image,
         };
 
         try {
             // Fetch
-            await fetch(apiURL + "api_v1/user/register", {
+            var rawResponse = await fetch(apiURL + "api_v1/user/register", {
                 method: "post",
                 headers: {
                     Accept: "application/json, text/plain, */*",
@@ -35,7 +36,11 @@ const APIProvider = (props) => {
                 body: JSON.stringify(postData),
             });
 
-            return {};
+            // Get data from response
+            const response = await rawResponse.json();
+
+            // Return response
+            return response;
         } catch (e) {
             return e;
         }
@@ -66,11 +71,13 @@ const APIProvider = (props) => {
             if ("token" in response) token.current = response.token;
             if ("name" in response) username.current = response.name;
             if ("id" in response) userID.current = response.id;
+            if ("image" in response) image.current = response.image;
 
             // Set token cookie
             setCookie("matchEat_token", response.token, 365);
             setCookie("matchEat_name", response.name, 365);
             setCookie("matchEat_id", response.id, 365);
+            setCookie("matchEat_image", response.image, 365);
 
             // Return response
             return response;
@@ -93,17 +100,20 @@ const APIProvider = (props) => {
         const tokenInCookie = getCookie("matchEat_token");
         const nameInCookie = getCookie("matchEat_name");
         const idInCookie = getCookie("matchEat_id");
+        const imageInCookie = getCookie("matchEat_image");
 
         // If they exist, save in data and return true
-        if (tokenInCookie && nameInCookie && idInCookie) {
+        if (tokenInCookie && nameInCookie && idInCookie && imageInCookie) {
             token.current = tokenInCookie;
             username.current = nameInCookie;
             userID.current = idInCookie;
+            image.current = imageInCookie;
 
             // Renew expiration
             setCookie("matchEat_token", tokenInCookie, 365);
             setCookie("matchEat_name", nameInCookie, 365);
             setCookie("matchEat_id", idInCookie, 365);
+            setCookie("matchEat_image", idInCookie, 365);
 
             return true;
         }

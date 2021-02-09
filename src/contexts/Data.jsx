@@ -15,6 +15,7 @@ const DataProvider = (props) => {
     const token = useRef(null);
     const username = useRef(null);
     const userID = useRef(null);
+    const image = useRef(null);
 
     // BACKGROUND POSITION
     const positionRef = useRef({ x: 0, y: 0 });
@@ -52,6 +53,7 @@ const DataProvider = (props) => {
                 token,
                 username,
                 userID,
+                image,
 
                 // BACKGROUND POSITION
                 positionRef,

@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState, useRef } from "react";
 import { Redirect } from "react-router-dom";
 import { useSpring, animated } from "react-spring";
 import { useDrag } from "react-use-gesture";
+import Webcam from "react-webcam";
 import SVG from "react-inlinesvg";
 import gsap from "gsap";
 
@@ -14,6 +15,9 @@ import BackIcon from "resources/icons/arrow.svg";
 import NameIcon from "resources/icons/name.svg";
 import EmailIcon from "resources/icons/email.svg";
 import PasswordIcon from "resources/icons/password.svg";
+import CameraIcon from "resources/icons/cam.svg";
+
+import ProfilePlaceholderImg from "resources/profilePlaceholder.png";
 
 // Contexts
 import { API } from "contexts/API";
@@ -39,7 +43,7 @@ export default function Auth() {
 
     // Form states
     const [loginForm, setLoginForm] = useState({ email: "", password: "" });
-    const [signupForm, setSingupForm] = useState({ name: "", email: "", password: "" });
+    const [signupForm, setSingupForm] = useState({ name: "", email: "", password: "", image: "" });
     const [loginError, setLoginError] = useState(null);
     const [signUpError, setSignUpError] = useState(null);
 
@@ -83,16 +87,16 @@ export default function Auth() {
         showLoadingScreen();
 
         // Sign Up
-        const singUpResult = await register(signupForm.name, signupForm.email, signupForm.password);
-
-        // Login
-        await login(signupForm.email, signupForm.password);
+        const singUpResult = await register(signupForm.name, signupForm.email, signupForm.password, signupForm.image);
 
         // Throw error
         if ("error" in singUpResult) {
             setSignUpError(singUpResult.error);
             showSignupScreen(true);
         } else {
+            // Login
+            await login(signupForm.email, signupForm.password);
+
             console.log(`SING UP SUCCESSFUL`);
             setRedirectTo("/home");
         }
@@ -102,15 +106,17 @@ export default function Auth() {
     //   PAGE NAVIGATION
     // #################################################
 
-    // Current page: "welcome" "login" "signup" "loading"
-    const currPage = useRef("welcome");
+    // Current page: "welcome" "login" "signup" "loading" "camera"
+    const currPageRef = useRef("welcome");
+    const [, setCurrPage] = useState("welcome");
 
     // Page position spring
-    const [{ welcomeX, loginX, signupX, loadingX }, setPagePositions] = useSpring(() => ({
+    const [{ welcomeX, loginX, signupX, loadingX, cameraX }, setPagePositions] = useSpring(() => ({
         welcomeX: 0,
         loginX: SCREEN_WIDTH,
         signupX: SCREEN_WIDTH,
         loadingX: SCREEN_WIDTH,
+        cameraX: SCREEN_WIDTH,
     }));
 
     // Show the welcome screen
@@ -121,33 +127,46 @@ export default function Auth() {
             timeline.fromTo(".welcome > .glass", { opacity: 0 }, { opacity: 1, duration: 1 }, "+=0.5");
         }
 
-        currPage.current = "welcome";
         setBackgroundGradient("pink");
         resetForms();
-        setPagePositions({ welcomeX: 0, loginX: SCREEN_WIDTH, signupX: SCREEN_WIDTH, loadingX: SCREEN_WIDTH });
+        setPagePositions({ welcomeX: 0, loginX: SCREEN_WIDTH, signupX: SCREEN_WIDTH, loadingX: SCREEN_WIDTH, cameraX: SCREEN_WIDTH });
+        currPageRef.current = "welcome";
+        setCurrPage("welcome");
     };
 
     // Show the login screen
-    const showLoginScreen = (formError) => {
-        currPage.current = "login";
+    const showLoginScreen = (keepForm) => {
         setBackgroundGradient("red");
-        if (!formError) resetForms();
-        setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: 0, signupX: SCREEN_WIDTH, loadingX: SCREEN_WIDTH });
+        if (!keepForm) resetForms();
+        setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: 0, signupX: SCREEN_WIDTH, loadingX: SCREEN_WIDTH, cameraX: SCREEN_WIDTH });
+        currPageRef.current = "login";
+        setCurrPage("login");
     };
 
     // Show the signup screen
-    const showSignupScreen = (formError) => {
-        currPage.current = "signup";
+    const showSignupScreen = (keepForm) => {
         setBackgroundGradient("purple");
-        if (!formError) resetForms();
-        setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: 0, loadingX: SCREEN_WIDTH });
+        if (!keepForm) resetForms();
+        setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: 0, loadingX: SCREEN_WIDTH, cameraX: SCREEN_WIDTH });
+        currPageRef.current = "signup";
+        setCurrPage("signup");
+    };
+
+    // Show the camera screen
+    const showCameraScreen = () => {
+        setBackgroundGradient("green");
+        setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: -SCREEN_WIDTH, loadingX: SCREEN_WIDTH, cameraX: 0 });
+        currPageRef.current = "camera";
+        setCurrPage("camera");
     };
 
     // Show the signup screen
     const showLoadingScreen = () => {
-        if (currPage.current === "login") setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: -SCREEN_WIDTH, signupX: SCREEN_WIDTH, loadingX: 0 });
-        else setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: -SCREEN_WIDTH, loadingX: 0 });
-        currPage.current = "loading";
+        if (currPageRef.current === "login") setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: -SCREEN_WIDTH, signupX: SCREEN_WIDTH, loadingX: 0, cameraX: SCREEN_WIDTH });
+        else setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: -SCREEN_WIDTH, loadingX: 0, cameraX: SCREEN_WIDTH });
+
+        currPageRef.current = "loading";
+        setCurrPage("loading");
     };
 
     // Reset all form fields and errors
@@ -155,7 +174,22 @@ export default function Auth() {
         setLoginError(null);
         setSignUpError(null);
         setLoginForm({ email: "", password: "" });
-        setSingupForm({ name: "", email: "", password: "" });
+        setSingupForm({ name: "", email: "", password: "", image: "" });
+    };
+
+    // #################################################
+    //   WEBCAM
+    // #################################################
+
+    // Webcam reference
+    const cameraRef = React.useRef(null);
+
+    // Capture a screenshot and save it in the register form state
+    const capturePhoto = () => {
+        const imageSrc = cameraRef.current.getScreenshot({ width: 400, height: 400 });
+
+        setSingupForm((prevState) => ({ ...prevState, image: imageSrc }));
+        showSignupScreen(true);
     };
 
     // #################################################
@@ -172,23 +206,28 @@ export default function Auth() {
             if (canceled) return;
 
             // Cancel gesture
-            if (currPage.current !== "login" && currPage.current !== "signup") {
+            if (currPageRef.current !== "login" && currPageRef.current !== "signup" && currPageRef.current !== "camera") {
                 cancel();
                 return;
             }
 
             // Snap to the welcome screen or stay on te current page
             if (!down) {
-                if (mx > 100 || vx > 1) showWelcomeScreen();
-                else if (currPage.current === "login") showLoginScreen(true);
-                else showSignupScreen(true);
+                if (currPageRef.current === "camera" && (mx > 100 || vx > 1)) showSignupScreen(true);
+                else if (mx > 100 || vx > 1) showWelcomeScreen(false);
+                else if (currPageRef.current === "login") showLoginScreen(true);
+                else if (currPageRef.current === "signup") showSignupScreen(true);
+                else showCameraScreen();
             }
 
             // Update the position while the gesture is active
             else {
                 var displ = Math.max(mx, -20);
-                if (currPage.current === "login") setPagePositions({ welcomeX: -SCREEN_WIDTH + displ, loginX: displ, signupX: SCREEN_WIDTH, loadingX: SCREEN_WIDTH });
-                else setPagePositions({ welcomeX: -SCREEN_WIDTH + displ, loginX: SCREEN_WIDTH, signupX: displ, loadingX: SCREEN_WIDTH });
+                if (currPageRef.current === "login")
+                    setPagePositions({ welcomeX: -SCREEN_WIDTH + displ, loginX: displ, signupX: SCREEN_WIDTH, loadingX: SCREEN_WIDTH, cameraX: SCREEN_WIDTH });
+                else if (currPageRef.current === "signup")
+                    setPagePositions({ welcomeX: -SCREEN_WIDTH + displ, loginX: SCREEN_WIDTH, signupX: displ, loadingX: SCREEN_WIDTH, cameraX: SCREEN_WIDTH });
+                else setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: -SCREEN_WIDTH + displ, loadingX: SCREEN_WIDTH, cameraX: displ });
             }
         },
         { filterTaps: true, axis: "x" }
@@ -227,7 +266,7 @@ export default function Auth() {
     return (
         <div className="auth">
             <animated.div className="section welcome" style={{ x: welcomeX }}>
-                <Glass style={{ minHeight: "70%" }}>
+                <Glass style={{ minHeight: "66%" }}>
                     <SVG className="logo" src={LogoIcon} />
 
                     <div className="button" onClick={showSignupScreen}>
@@ -241,7 +280,7 @@ export default function Auth() {
             </animated.div>
 
             <animated.div className="section login" style={{ x: loginX }} {...gestureBind()}>
-                <Glass style={{ minHeight: "70%" }}>
+                <Glass style={{ minHeight: "66%" }}>
                     <SVG className="backButton" src={BackIcon} onClick={() => showWelcomeScreen(false)} />
 
                     <SVG className="logo small" src={LogoIcon} />
@@ -283,10 +322,10 @@ export default function Auth() {
             </animated.div>
 
             <animated.div className="section signup" style={{ x: signupX }} {...gestureBind()}>
-                <Glass style={{ minHeight: "70%" }}>
+                <Glass style={{ minHeight: "66%" }}>
                     <SVG className="backButton" src={BackIcon} onClick={() => showWelcomeScreen(false)} />
 
-                    <SVG className="logo small" src={LogoIcon} />
+                    <img src={signupForm.image ? signupForm.image : ProfilePlaceholderImg} alt="img" className="profileImage" onClick={showCameraScreen} />
 
                     <form autoComplete="off" noValidate spellCheck="false" onSubmit={onSignUp}>
                         <div className="inputContainer">
@@ -334,6 +373,25 @@ export default function Auth() {
 
                         <div className="error">{signUpError}</div>
                     </form>
+                </Glass>
+            </animated.div>
+
+            <animated.div className="section cam" style={{ x: cameraX }} {...gestureBind()}>
+                <Glass style={{ minHeight: "66%" }}>
+                    <SVG className="backButton" src={BackIcon} onClick={() => showSignupScreen(true)} />
+
+                    <Webcam
+                        className="webcam"
+                        audio={false}
+                        videoConstraints={{ facingMode: "user", aspectRatio: 1 }}
+                        mirrored={true}
+                        ref={cameraRef}
+                        screenshotFormat="image/png"
+                    />
+
+                    <div className="camButton">
+                        <SVG className="camIcon" src={CameraIcon} onClick={capturePhoto} />
+                    </div>
                 </Glass>
             </animated.div>
 
