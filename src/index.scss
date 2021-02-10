@@ -234,7 +234,7 @@ body {
         .profileImage {
             height: 30vw;
             width: 30vw;
-            background-color: red;
+            color: transparent;
             margin: 15% 0 8% 0;
             @include border-radius(100vh);
             @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
@@ -242,6 +242,31 @@ body {
 
             &:active {
                 transform: scale(1.05);
+            }
+        }
+
+        .placeholderContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 30vw;
+            width: 30vw;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
+            background-position: 50px -150px;
+            margin: 15% 0 8% 0;
+            border: solid 1px rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            @include border-radius(100vh);
+            @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+
+            .profileImagePlaceholder {
+                height: 15vw;
+                max-height: 15vw;
+                min-height: 15vw;
+                width: 15vw;
+                max-width: 15vw;
+                min-width: 15vw;
+                color: white;
             }
         }
 
@@ -405,40 +430,66 @@ body {
         align-items: center;
         justify-content: center;
         width: 100%;
-    }
+        z-index: 1;
 
-    .clickToClose {
-        pointer-events: none;
-        position: absolute;
-        display: none;
-        height: 100vh;
-        top: 0;
-        right: 0;
-        left: 0;
-        z-index: 50;
-
-        &.active {
-            pointer-events: all;
-            display: block;
+        .profileImage {
+            height: 30vw;
+            width: 30vw;
+            color: transparent;
+            margin-bottom: 2%;
+            @include border-radius(100vh);
+            @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
         }
-    }
 
-    .icon {
-        height: 3rem;
-        max-height: 3rem;
-        min-height: 3rem;
-        width: 3rem;
-        max-width: 3rem;
-        min-width: 3rem;
-        color: white;
-        margin-bottom: 0.8rem;
-    }
+        .placeholderContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 30vw;
+            width: 30vw;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
+            background-position: 50px -150px;
+            margin-bottom: 2%;
+            border: solid 1px rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            @include border-radius(100vh);
+            @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
 
-    .text {
-        color: white;
-        font-size: 1.3rem;
-        font-weight: 800;
-        text-transform: uppercase;
+            .profileImagePlaceholder {
+                height: 15vw;
+                max-height: 15vw;
+                min-height: 15vw;
+                width: 15vw;
+                max-width: 15vw;
+                min-width: 15vw;
+                color: white;
+            }
+        }
+
+        .profileName {
+            color: white;
+            margin-bottom: 7%;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .icon {
+            height: 3rem;
+            max-height: 3rem;
+            min-height: 3rem;
+            width: 3rem;
+            max-width: 3rem;
+            min-width: 3rem;
+            color: white;
+            margin-bottom: 0.8rem;
+        }
+
+        .text {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
     }
 }
 
@@ -453,6 +504,16 @@ body {
     justify-content: center;
     height: 100%;
     width: 100%;
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        z-index: 1;
+    }
 }
 // #######################################
 //      JOIN ROOM
@@ -465,6 +526,16 @@ body {
     justify-content: center;
     height: 100%;
     width: 100%;
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        z-index: 1;
+    }
 }
 
 // ##############################################################################
@@ -492,6 +563,22 @@ body {
         max-height: 3rem;
         min-height: 3rem;
         padding: 0.5rem;
+    }
+
+    .clickToClose {
+        pointer-events: none;
+        position: absolute;
+        display: none;
+        height: 100vh;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 50;
+
+        &.active {
+            pointer-events: all;
+            display: block;
+        }
     }
 
     .buttonContainer {

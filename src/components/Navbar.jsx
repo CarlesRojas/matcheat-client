@@ -11,7 +11,8 @@ import LogoIcon from "resources/logo_white.svg";
 import { API } from "contexts/API";
 
 export default function Navbar() {
-    console.log("%cRender Navbar", "color: grey; font-size: 11px");
+    // Print Render
+    if (process.env.NODE_ENV !== "production") console.log("%cRender Navbar", "color: grey; font-size: 11px");
 
     // Contexts
     const { logout } = useContext(API);
@@ -64,7 +65,7 @@ export default function Navbar() {
             <SVG className="navbarLogo" src={LogoIcon} onClick={onShowLogout} />
             <div className={classnames("clickToClose", { active: logoutActive })} onClick={onHideLogout}></div>
             <div className="buttonContainer">
-                <div className="button last " onClick={onLogout} style={{ zIndex: 100, display: "none" }}>
+                <div className="button last " onClick={onLogout} style={{ zIndex: 100, display: "none", marginBottom: 0 }}>
                     Logout
                 </div>
             </div>

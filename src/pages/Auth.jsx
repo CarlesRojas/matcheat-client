@@ -17,8 +17,6 @@ import EmailIcon from "resources/icons/email.svg";
 import PasswordIcon from "resources/icons/password.svg";
 import CameraIcon from "resources/icons/cam.svg";
 
-import ProfilePlaceholderImg from "resources/profilePlaceholder.png";
-
 // Contexts
 import { API } from "contexts/API";
 import { Data } from "contexts/Data";
@@ -27,7 +25,8 @@ import { Data } from "contexts/Data";
 const SCREEN_WIDTH = window.innerWidth;
 
 export default function Auth() {
-    console.log("%cRender Auth", "color: grey; font-size: 11px");
+    // Print Render
+    if (process.env.NODE_ENV !== "production") console.log("%cRender Auth", "color: grey; font-size: 11px");
 
     // Contexts
     const { register, login, isLoggedIn } = useContext(API);
@@ -95,10 +94,15 @@ export default function Auth() {
             showSignupScreen(true);
         } else {
             // Login
-            await login(signupForm.email, signupForm.password);
+            const loginResult = await login(signupForm.email, signupForm.password);
 
-            console.log(`SING UP SUCCESSFUL`);
-            setRedirectTo("/home");
+            if ("error" in loginResult) {
+                setSignUpError(loginResult.error);
+                showSignupScreen(true);
+            } else {
+                console.log(`SING UP SUCCESSFUL`);
+                setRedirectTo("/home");
+            }
         }
     };
 
@@ -263,10 +267,19 @@ export default function Auth() {
         return <Redirect to={"/home"} push={true} />;
     }
 
+    // Placeholder image if necessary
+    var profileImage = signupForm.image ? (
+        <img src={signupForm.image} alt="img" className="profileImage" onClick={showCameraScreen} />
+    ) : (
+        <div className="placeholderContainer" onClick={showCameraScreen}>
+            <SVG className="profileImagePlaceholder" src={CameraIcon} />
+        </div>
+    );
+
     return (
         <div className="auth">
             <animated.div className="section welcome" style={{ x: welcomeX }}>
-                <Glass style={{ minHeight: "66%" }}>
+                <Glass style={{ minHeight: "67%" }}>
                     <SVG className="logo" src={LogoIcon} />
 
                     <div className="button" onClick={showSignupScreen}>
@@ -280,7 +293,7 @@ export default function Auth() {
             </animated.div>
 
             <animated.div className="section login" style={{ x: loginX }} {...gestureBind()}>
-                <Glass style={{ minHeight: "66%" }}>
+                <Glass style={{ minHeight: "67%" }}>
                     <SVG className="backButton" src={BackIcon} onClick={() => showWelcomeScreen(false)} />
 
                     <SVG className="logo small" src={LogoIcon} />
@@ -322,10 +335,10 @@ export default function Auth() {
             </animated.div>
 
             <animated.div className="section signup" style={{ x: signupX }} {...gestureBind()}>
-                <Glass style={{ minHeight: "66%" }}>
+                <Glass style={{ minHeight: "67%" }}>
                     <SVG className="backButton" src={BackIcon} onClick={() => showWelcomeScreen(false)} />
 
-                    <img src={signupForm.image ? signupForm.image : ProfilePlaceholderImg} alt="img" className="profileImage" onClick={showCameraScreen} />
+                    {profileImage}
 
                     <form autoComplete="off" noValidate spellCheck="false" onSubmit={onSignUp}>
                         <div className="inputContainer">
@@ -377,7 +390,7 @@ export default function Auth() {
             </animated.div>
 
             <animated.div className="section cam" style={{ x: cameraX }} {...gestureBind()}>
-                <Glass style={{ minHeight: "66%" }}>
+                <Glass style={{ minHeight: "67%" }}>
                     <SVG className="backButton" src={BackIcon} onClick={() => showSignupScreen(true)} />
 
                     <Webcam

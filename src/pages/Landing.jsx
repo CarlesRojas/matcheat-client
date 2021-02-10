@@ -17,7 +17,8 @@ import Glass from "components/Glass";
 const ASK_PERMISSIONS = false;
 
 export default function Landing() {
-    console.log("%cRender Landing", "color: grey; font-size: 11px");
+    // Print Render
+    if (process.env.NODE_ENV !== "production") console.log("%cRender Landing", "color: grey; font-size: 11px");
 
     // Contexts
     const { isLoggedIn } = useContext(API);

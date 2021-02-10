@@ -18,7 +18,8 @@ const FPS = 60;
 const DECELERATION = 10;
 
 const Background = memo(() => {
-    console.log("%cRender Background", "color: grey; font-size: 11px");
+    // Print Render
+    if (process.env.NODE_ENV !== "production") console.log("%cRender Background", "color: grey; font-size: 11px");
 
     //export default function Background() {
     // Contexts

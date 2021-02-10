@@ -1,7 +1,8 @@
 import React from "react";
 
 export default function Glass({ children, style, onClick, classes }) {
-    console.log("%cRender Glass", "color: grey; font-size: 11px");
+    // Print Render
+    if (process.env.NODE_ENV !== "production") console.log("%cRender Glass", "color: grey; font-size: 11px");
 
     // #################################################
     //   RENDER

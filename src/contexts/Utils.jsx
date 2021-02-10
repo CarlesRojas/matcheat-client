@@ -142,7 +142,7 @@ const UtilsProvider = (props) => {
     const six_power = Math.pow(10, 6);
     const three_power = Math.pow(10, 3);
 
-    function format_number(num) {
+    const format_number = (num) => {
         var negative = num < 0;
         num = Math.abs(num);
         var letter = "";
@@ -172,7 +172,25 @@ const UtilsProvider = (props) => {
         else num = num.toFixed(Math.min(1, Math.max(0, num_characters - 1)));
 
         return (+parseFloat(num) * (negative ? -1 : 1)).toString() + letter;
-    }
+    };
+
+    // #######################################
+    //      URL TO FILE
+    // #######################################
+
+    const urltoFile = async (url, filename, mimeType) => {
+        // Get mime type
+        mimeType = mimeType || (url.match(/^data:([^;]+);/) || "")[1];
+
+        // Fetch as a file
+        var response = await fetch(url);
+
+        // Convert to array buffer
+        var buffer = await response.arrayBuffer();
+
+        // Return file
+        return new File([buffer], filename, { type: mimeType });
+    };
 
     // #######################################
     //      HOOKS
@@ -232,6 +250,9 @@ const UtilsProvider = (props) => {
 
                 // FORMAT NUMBERS
                 format_number,
+
+                // URL TO FILE
+                urltoFile,
 
                 // HOOKS
                 useForceUpdate,
