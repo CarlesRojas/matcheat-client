@@ -11,6 +11,9 @@ const DataProvider = (props) => {
     // Contexts
     const { getCookie } = useContext(Utils);
 
+    // LANDING CHECK
+    const landingDone = useRef(false);
+
     // USER
     const token = useRef(null);
     const username = useRef(null);
@@ -49,6 +52,9 @@ const DataProvider = (props) => {
     return (
         <Data.Provider
             value={{
+                // LANDING CHECK
+                landingDone,
+
                 // USER
                 token,
                 username,

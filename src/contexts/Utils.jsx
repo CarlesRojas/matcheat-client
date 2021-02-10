@@ -175,7 +175,7 @@ const UtilsProvider = (props) => {
     };
 
     // #######################################
-    //      URL TO FILE
+    //      IMAGE FILES
     // #######################################
 
     const urltoFile = async (url, filename, mimeType) => {
@@ -251,7 +251,7 @@ const UtilsProvider = (props) => {
                 // FORMAT NUMBERS
                 format_number,
 
-                // URL TO FILE
+                // IMAGE FILES
                 urltoFile,
 
                 // HOOKS

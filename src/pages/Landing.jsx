@@ -22,7 +22,7 @@ export default function Landing() {
 
     // Contexts
     const { isLoggedIn } = useContext(API);
-    const { setBackgroundGradient } = useContext(Data);
+    const { setBackgroundGradient, landingDone } = useContext(Data);
 
     // #################################################
     //   CHECK PERMISSIONS
@@ -120,6 +120,9 @@ export default function Landing() {
                 </div>
             </div>
         );
+
+    // Landing Complete
+    landingDone.current = true;
 
     // Already logged in -> Go Home
     if (isLoggedIn()) return <Redirect to={"/home"} push={true} />;

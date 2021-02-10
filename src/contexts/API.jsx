@@ -16,6 +16,9 @@ const APIProvider = (props) => {
 
     // Create a new user
     const register = async (name, email, password, image) => {
+        // Fail if there is no image
+        if (!image) return { error: "Profile picture missing." };
+
         // #################################################
         //   GET S3 URL WHERE WE CAN UPLOAD THE IMAGE
         // #################################################
@@ -124,6 +127,11 @@ const APIProvider = (props) => {
 
             // Get data from response
             const response = await rawResponse.json();
+
+            // Return with error if it is the case
+            if ("error" in response) return response;
+
+            // Save the new data
             if ("token" in response) token.current = response.token;
             if ("name" in response) username.current = response.name;
             if ("id" in response) userID.current = response.id;
