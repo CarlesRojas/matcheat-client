@@ -16,7 +16,8 @@
         "react-scripts": "3.4.3",
         "react-spring": "^9.0.0-rc.3",
         "react-use-gesture": "^7.0.16",
-        "react-webcam": "^5.2.2"
+        "react-webcam": "^5.2.2",
+        "socket.io-client": "^3.1.1"
     },
     "scripts": {
         "start": "react-scripts start",

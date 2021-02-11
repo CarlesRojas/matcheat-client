@@ -12,7 +12,7 @@ const APIProvider = (props) => {
     const { setCookie, getCookie, clearCookies, urltoFile } = useContext(Utils);
     const { token, username, userID, image } = useContext(Data);
 
-    const apiURL = "https://matcheat.herokuapp.com/"; //"http://localhost:3100/"; //
+    const apiURL = "http://localhost:3100/"; //"https://matcheat.herokuapp.com/"; //
 
     // Create a new user
     const register = async (name, email, password, image) => {
@@ -188,6 +188,7 @@ const APIProvider = (props) => {
     return (
         <API.Provider
             value={{
+                apiURL,
                 register,
                 login,
                 logout,

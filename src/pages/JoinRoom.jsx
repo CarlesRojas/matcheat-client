@@ -6,19 +6,34 @@ import Navbar from "components/Navbar";
 
 // Contexts
 import { Data } from "contexts/Data";
+import { Socket } from "contexts/Socket";
 
 export default function JoinRoom() {
     // Print Render
     if (process.env.NODE_ENV !== "production") console.log("%cRender Join Room", "color: grey; font-size: 11px");
 
     // Contexts
-    const { setBackgroundGradient, landingDone } = useContext(Data);
+    const { roomID, setBackgroundGradient, landingDone, username } = useContext(Data);
+    const { emit, sub, unsub } = useContext(Socket);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
 
     // Go to landing if not done already
     if (!redirectTo && !landingDone.current) setRedirectTo("/");
+
+    // Delete room if user leaves this page
+    const leaveRoom = () => {
+        roomID.current = null;
+    };
+
+    // #################################################
+    //   ROOM
+    // #################################################
+
+    const onUserJoinedRoom = (newUser) => {
+        console.log(newUser.username);
+    };
 
     // #################################################
     //   COMPONENT MOUNT
@@ -28,6 +43,18 @@ export default function JoinRoom() {
     useEffect(() => {
         // Change Color
         setBackgroundGradient("blue");
+
+        if (landingDone.current) {
+            // Create amd join the room ROJAS change testing to inputed number
+            emit("joinRoom", { roomID: "testing", username: username.current });
+
+            // Subscribe to a user joining the room
+            sub("userJoinedRoom", onUserJoinedRoom);
+        }
+        // Unsubscribe on unmount
+        return () => {
+            unsub("userJoinedRoom", onUserJoinedRoom);
+        };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -41,7 +68,7 @@ export default function JoinRoom() {
 
     return (
         <div className="joinRoom">
-            <Navbar prevPage="/home"></Navbar>
+            <Navbar prevPage="/home" onBackButtonClicked={leaveRoom}></Navbar>
             <div className="container"></div>
         </div>
     );

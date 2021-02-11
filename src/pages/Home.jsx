@@ -14,6 +14,7 @@ import JoinIcon from "resources/icons/join.svg";
 
 // Contexts
 import { Data } from "contexts/Data";
+import { Socket } from "contexts/Socket";
 
 export default function Home() {
     // Print Render
@@ -21,6 +22,7 @@ export default function Home() {
 
     // Contexts
     const { setBackgroundGradient, username, image, landingDone } = useContext(Data);
+    const { connect } = useContext(Socket);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
@@ -48,6 +50,9 @@ export default function Home() {
 
     // On componente mount
     useEffect(() => {
+        // Connect to socket
+        connect();
+
         // Change Color
         setBackgroundGradient("fcb");
 

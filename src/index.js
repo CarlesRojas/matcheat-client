@@ -8,6 +8,7 @@ import EventsPubSub from "./EventsPubSub";
 import UtilsProvider from "contexts/Utils";
 import DataProvider from "contexts/Data";
 import APIProvider from "contexts/API";
+import SocketProvider from "contexts/Socket";
 
 import "./index.scss";
 
@@ -19,9 +20,12 @@ ReactDOM.render(
     <UtilsProvider>
         <DataProvider>
             <APIProvider>
-                <App />
+                <SocketProvider>
+                    <App />
+                </SocketProvider>
             </APIProvider>
         </DataProvider>
     </UtilsProvider>,
+
     document.getElementById("root")
 );

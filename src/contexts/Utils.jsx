@@ -229,6 +229,19 @@ const UtilsProvider = (props) => {
         return /Android|Mobi/i.test(ua);
     };
 
+    // #######################################
+    //      RANDOWM IDS
+    // #######################################
+
+    function createUniqueID(length) {
+        var id = "";
+        var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) id += characters.charAt(Math.floor(Math.random() * charactersLength));
+
+        return /*new Date().toISOString() + "_" +*/ id;
+    }
+
     return (
         <Utils.Provider
             value={{
@@ -260,6 +273,9 @@ const UtilsProvider = (props) => {
 
                 // MOBILE CHECK
                 isMobile,
+
+                // RANDOWM IDS
+                createUniqueID,
             }}
         >
             {props.children}

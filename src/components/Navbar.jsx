@@ -11,7 +11,7 @@ import BackIcon from "resources/icons/arrow.svg";
 // Contexts
 import { API } from "contexts/API";
 
-export default function Navbar({ prevPage }) {
+export default function Navbar({ prevPage, onBackButtonClicked }) {
     // Print Render
     if (process.env.NODE_ENV !== "production") console.log("%cRender Navbar", "color: grey; font-size: 11px");
 
@@ -60,7 +60,17 @@ export default function Navbar({ prevPage }) {
     if (redirectTo) return <Redirect to={redirectTo} push={true} />;
 
     // Back button if necessary
-    var backButton = prevPage ? <SVG className="backButton" src={BackIcon} onClick={() => setRedirectTo(prevPage)} /> : null;
+    var backButton =
+        prevPage && onBackButtonClicked ? (
+            <SVG
+                className="backButton"
+                src={BackIcon}
+                onClick={() => {
+                    onBackButtonClicked();
+                    setRedirectTo(prevPage);
+                }}
+            />
+        ) : null;
 
     return (
         <div className="navbar">

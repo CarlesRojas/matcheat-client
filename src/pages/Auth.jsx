@@ -30,14 +30,11 @@ export default function Auth() {
 
     // Contexts
     const { register, login, isLoggedIn } = useContext(API);
-    const { setBackgroundGradient, landingDone } = useContext(Data);
+    const { setBackgroundGradient } = useContext(Data);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
     const isLoggedInRef = useRef(false);
-
-    // Go to landing if not done already
-    if (!redirectTo && !landingDone.current) setRedirectTo("/");
 
     // #################################################
     //   FORMS

@@ -20,6 +20,9 @@ const DataProvider = (props) => {
     const userID = useRef(null);
     const image = useRef(null);
 
+    // ROOM
+    const roomID = useRef(null);
+
     // BACKGROUND POSITION
     const positionRef = useRef({ x: 0, y: 0 });
     const speedRef = useRef({ x: 0, y: 0 });
@@ -60,6 +63,9 @@ const DataProvider = (props) => {
                 username,
                 userID,
                 image,
+
+                // ROOM
+                roomID,
 
                 // BACKGROUND POSITION
                 positionRef,

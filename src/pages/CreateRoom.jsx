@@ -5,20 +5,37 @@ import { Redirect } from "react-router-dom";
 import Navbar from "components/Navbar";
 
 // Contexts
+import { Utils } from "contexts/Utils";
 import { Data } from "contexts/Data";
+import { Socket } from "contexts/Socket";
 
 export default function CreateRoom() {
     // Print Render
     if (process.env.NODE_ENV !== "production") console.log("%cRender Create Room", "color: grey; font-size: 11px");
 
     // Contexts
-    const { setBackgroundGradient, landingDone } = useContext(Data);
+    const { createUniqueID } = useContext(Utils);
+    const { roomID, setBackgroundGradient, landingDone, username } = useContext(Data);
+    const { emit, sub, unsub } = useContext(Socket);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
 
     // Go to landing if not done already
     if (!redirectTo && !landingDone.current) setRedirectTo("/");
+
+    // Delete room if user leaves this page
+    const leaveRoom = () => {
+        roomID.current = null;
+    };
+
+    // #################################################
+    //   ROOM
+    // #################################################
+
+    const onUserJoinedRoom = (newUser) => {
+        console.log(newUser.username);
+    };
 
     // #################################################
     //   COMPONENT MOUNT
@@ -28,6 +45,27 @@ export default function CreateRoom() {
     useEffect(() => {
         // Change Color
         setBackgroundGradient("green");
+
+        if (landingDone.current) {
+            // Create room code
+            roomID.current = createUniqueID(6);
+
+            // ROJAS DELETE
+            roomID.current = "testing";
+
+            if (process.env.NODE_ENV !== "production") console.log(roomID.current);
+
+            // Create amd join the room
+            emit("createRoom", { roomID: roomID.current, username: username.current });
+
+            // Subscribe to a user joining the room
+            sub("userJoinedRoom", onUserJoinedRoom);
+        }
+
+        // Unsubscribe on unmount
+        return () => {
+            unsub("userJoinedRoom", onUserJoinedRoom);
+        };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -41,7 +79,7 @@ export default function CreateRoom() {
 
     return (
         <div className="createRoom">
-            <Navbar prevPage="/home"></Navbar>
+            <Navbar prevPage="/home" onBackButtonClicked={leaveRoom}></Navbar>
             <div className="container"></div>
         </div>
     );
