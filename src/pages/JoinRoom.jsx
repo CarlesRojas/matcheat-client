@@ -31,8 +31,14 @@ export default function JoinRoom() {
     //   ROOM
     // #################################################
 
+    // On a user joining the room
     const onUserJoinedRoom = (newUser) => {
-        console.log(newUser.username);
+        console.log(`${newUser.username} joined the room.`);
+    };
+
+    // On a user joining the room
+    const onUserLeftRoom = (oldUser) => {
+        console.log(`${oldUser.username} left the room.`);
     };
 
     // #################################################
@@ -50,6 +56,9 @@ export default function JoinRoom() {
 
             // Subscribe to a user joining the room
             sub("userJoinedRoom", onUserJoinedRoom);
+
+            // Subscribe to a user leaving the room
+            sub("userDisconnected", onUserLeftRoom);
         }
         // Unsubscribe on unmount
         return () => {
