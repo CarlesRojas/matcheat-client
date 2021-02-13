@@ -15,7 +15,7 @@ const APIProvider = (props) => {
     const apiURL = "http://localhost:3100/"; //"https://matcheat.herokuapp.com/"; //
 
     // Create a new user
-    const register = async (name, email, password, image) => {
+    const register = async (username, email, password, image) => {
         // Fail if there is no image
         if (!image) return { error: "Profile picture missing." };
 
@@ -24,7 +24,7 @@ const APIProvider = (props) => {
         // #################################################
 
         // Transform Base 64 to file
-        const fileName = new Date().toISOString() + "_" + name + ".png";
+        const fileName = new Date().toISOString() + "_" + username + ".png";
         var imageFile = await urltoFile(image, fileName);
 
         // Post data
@@ -77,7 +77,7 @@ const APIProvider = (props) => {
 
         // Post data
         postData = {
-            name,
+            username,
             email,
             password,
             image: url,
@@ -133,13 +133,13 @@ const APIProvider = (props) => {
 
             // Save the new data
             if ("token" in response) token.current = response.token;
-            if ("name" in response) username.current = response.name;
+            if ("username" in response) username.current = response.username;
             if ("id" in response) userID.current = response.id;
             if ("image" in response) image.current = response.image;
 
             // Set token cookie
             setCookie("matchEat_token", response.token, 365);
-            setCookie("matchEat_name", response.name, 365);
+            setCookie("matchEat_name", response.username, 365);
             setCookie("matchEat_id", response.id, 365);
             setCookie("matchEat_image", response.image, 365);
 

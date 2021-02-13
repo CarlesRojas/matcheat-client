@@ -58,7 +58,7 @@ export default function JoinRoom() {
             sub("userJoinedRoom", onUserJoinedRoom);
 
             // Subscribe to a user leaving the room
-            sub("userDisconnected", onUserLeftRoom);
+            sub("userLeftRoom", onUserLeftRoom);
         }
         // Unsubscribe on unmount
         return () => {

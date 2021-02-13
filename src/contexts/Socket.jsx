@@ -28,6 +28,15 @@ const SocketProvider = (props) => {
         socket.current.on("error", ({ error }) => {
             console.log(error); // ROJAS
         });
+
+        // Recieve error messages
+        socket.current.on("kicked", ({ info }) => {
+            console.log(info); // ROJAS
+        });
+
+        socket.current.on("disconnect", (event) => {
+            console.log(event); // ROJAS
+        });
     };
 
     // Disconnect from socket

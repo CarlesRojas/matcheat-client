@@ -42,7 +42,7 @@ export default function Auth() {
 
     // Form states
     const [loginForm, setLoginForm] = useState({ email: "", password: "" });
-    const [signupForm, setSingupForm] = useState({ name: "", email: "", password: "", image: "" });
+    const [signupForm, setSingupForm] = useState({ username: "", email: "", password: "", image: "" });
     const [loginError, setLoginError] = useState(null);
     const [signUpError, setSignUpError] = useState(null);
 
@@ -73,7 +73,7 @@ export default function Auth() {
             setLoginError(loginResult.error);
             showLoginScreen(true);
         } else {
-            console.log(`LOGIN SUCCESSFUL ${loginResult.name}`);
+            console.log(`LOGIN SUCCESSFUL ${loginResult.username}`);
             setRedirectTo("/home");
         }
     };
@@ -86,7 +86,7 @@ export default function Auth() {
         showLoadingScreen();
 
         // Sign Up
-        const singUpResult = await register(signupForm.name, signupForm.email, signupForm.password, signupForm.image);
+        const singUpResult = await register(signupForm.username, signupForm.email, signupForm.password, signupForm.image);
 
         // Throw error
         if ("error" in singUpResult) {
@@ -178,7 +178,7 @@ export default function Auth() {
         setLoginError(null);
         setSignUpError(null);
         setLoginForm({ email: "", password: "" });
-        setSingupForm({ name: "", email: "", password: "", image: "" });
+        setSingupForm({ username: "", email: "", password: "", image: "" });
     };
 
     // #################################################
@@ -345,8 +345,8 @@ export default function Auth() {
                                 className="input name"
                                 type="text"
                                 placeholder=" name"
-                                name="name"
-                                value={signupForm.name}
+                                name="username"
+                                value={signupForm.username}
                                 onChange={onSingupFormChange}
                                 autoComplete="off"
                             ></input>
