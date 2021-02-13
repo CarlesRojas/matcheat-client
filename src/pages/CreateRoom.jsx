@@ -1,6 +1,5 @@
 import React, { useEffect, useContext, useState, useRef } from "react";
 import { Redirect } from "react-router-dom";
-import copy from "copy-to-clipboard";
 import SVG from "react-inlinesvg";
 
 // Components
@@ -17,10 +16,10 @@ import { Socket } from "contexts/Socket";
 
 export default function CreateRoom() {
     // Print Render
-    if (process.env.NODE_ENV !== "production") console.log("%cRender Create Room", "color: grey; font-size: 11px");
+    if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Create Room", "color: grey; font-size: 11px");
 
     // Contexts
-    const { createUniqueID } = useContext(Utils);
+    const { createUniqueID, copy } = useContext(Utils);
     const { roomID, setRoomID, setBackgroundGradient, landingDone, username, socketError } = useContext(Data);
     const { emit, sub, unsub } = useContext(Socket);
 
@@ -71,7 +70,10 @@ export default function CreateRoom() {
     //   COPY CODE
     // #################################################
 
+    // Code reference
     const codeCopiedRef = useRef(null);
+
+    // On Code copied
     const onCopyCode = () => {
         // Show the copied message for a second
         codeCopiedRef.current.classList.remove("fadeOut");
@@ -79,7 +81,7 @@ export default function CreateRoom() {
         codeCopiedRef.current.classList.add("fadeOut");
 
         // Copy code to clipboard
-        copy(roomID);
+        copy("roomCode");
     };
 
     // #################################################
@@ -95,7 +97,7 @@ export default function CreateRoom() {
             // Create room code
             const newCode = createUniqueID(6);
             setRoomID(newCode);
-            if (process.env.NODE_ENV !== "production") console.log(newCode);
+            if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log(newCode);
 
             // Create amd join the room
             emit("createRoom", { roomID: newCode, username: username.current });
@@ -147,7 +149,9 @@ export default function CreateRoom() {
             <Navbar prevPage="/home" onBackButtonClicked={onBackButtonClicked}></Navbar>
             <div className="container">
                 <Glass style={glassStyle} onClick={onCopyCode} classes="clickable">
-                    <p className="roomCode">{roomID}</p>
+                    <form autoComplete="off" noValidate spellCheck="false">
+                        <input id="roomCode" className="roomCode" type="text" defaultValue={roomID ? roomID : ""} />
+                    </form>
                     <SVG className="copyIcon" src={CopyIcon} />
                 </Glass>
                 <p className="codeCopied" ref={codeCopiedRef}>

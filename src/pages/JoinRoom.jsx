@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, useRef } from "react";
 import { Redirect } from "react-router-dom";
 
 // Components
@@ -12,7 +12,7 @@ import { Socket } from "contexts/Socket";
 
 export default function JoinRoom() {
     // Print Render
-    if (process.env.NODE_ENV !== "production") console.log("%cRender Join Room", "color: grey; font-size: 11px");
+    if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Join Room", "color: grey; font-size: 11px");
 
     // Contexts
     const { setRoomID, setBackgroundGradient, landingDone, image, username, socketError } = useContext(Data);
@@ -27,6 +27,9 @@ export default function JoinRoom() {
     // #################################################
     //   FORM
     // #################################################
+
+    // Input reference
+    const inputRef = useRef(null);
 
     // Form states
     const [codeForm, setCodeForm] = useState("");
@@ -100,9 +103,14 @@ export default function JoinRoom() {
         // Change Color
         setBackgroundGradient("blue");
 
-        // Subscribe to error and disconnext events
-        window.PubSub.sub("onSocketError", onSocketError);
-        window.PubSub.sub("onSocketDisconnected", onSocketDisconnected);
+        if (landingDone.current) {
+            // Subscribe to error and disconnext events
+            window.PubSub.sub("onSocketError", onSocketError);
+            window.PubSub.sub("onSocketDisconnected", onSocketDisconnected);
+
+            // Focus the input
+            inputRef.current.focus();
+        }
 
         // Unsubscribe on unmount
         return () => {
@@ -143,7 +151,15 @@ export default function JoinRoom() {
 
                     <form autoComplete="off" noValidate spellCheck="false" onSubmit={onCodeEnter}>
                         <div className="inputContainer">
-                            <input className="input" type="text" placeholder=" enter room code" value={codeForm} onChange={onCodeFormChange} autoComplete="off"></input>
+                            <input
+                                className="input"
+                                type="text"
+                                placeholder=" enter room code"
+                                value={codeForm}
+                                onChange={onCodeFormChange}
+                                autoComplete="off"
+                                ref={inputRef}
+                            ></input>
                         </div>
 
                         <button type="submit" className="button last">

@@ -12,7 +12,7 @@ const APIProvider = (props) => {
     const { setCookie, getCookie, clearCookies, urltoFile } = useContext(Utils);
     const { token, username, userID, image } = useContext(Data);
 
-    const apiURL = "http://localhost:3100/"; //"https://matcheat.herokuapp.com/"; //
+    const apiURL = process.env.NODE_ENV === "production" ? "https://matcheat.herokuapp.com/" : "http://localhost:3100/";
 
     // Create a new user
     const register = async (username, email, password, image) => {

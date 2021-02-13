@@ -26,7 +26,7 @@ const SCREEN_WIDTH = window.innerWidth;
 
 export default function Auth() {
     // Print Render
-    if (process.env.NODE_ENV !== "production") console.log("%cRender Auth", "color: grey; font-size: 11px");
+    if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Auth", "color: grey; font-size: 11px");
 
     // Contexts
     const { register, login, isLoggedIn } = useContext(API);

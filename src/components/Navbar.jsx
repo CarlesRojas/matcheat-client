@@ -13,7 +13,7 @@ import { API } from "contexts/API";
 
 export default function Navbar({ prevPage, onBackButtonClicked }) {
     // Print Render
-    if (process.env.NODE_ENV !== "production") console.log("%cRender Navbar", "color: grey; font-size: 11px");
+    if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Navbar", "color: grey; font-size: 11px");
 
     // Contexts
     const { logout } = useContext(API);

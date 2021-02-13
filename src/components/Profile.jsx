@@ -8,7 +8,7 @@ import UserIcon from "resources/icons/user.svg";
 
 export default function Profile({ image, text, size, clickable }) {
     // Print Render
-    if (process.env.NODE_ENV !== "production") console.log("%cRender Profile", "color: grey; font-size: 11px");
+    if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Profile", "color: grey; font-size: 11px");
 
     // #################################################
     //   RANDOM CIRCLES

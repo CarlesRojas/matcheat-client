@@ -19,7 +19,7 @@ const DECELERATION = 10;
 
 const Background = memo(() => {
     // Print Render
-    if (process.env.NODE_ENV !== "production") console.log("%cRender Background", "color: grey; font-size: 11px");
+    if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Background", "color: grey; font-size: 11px");
 
     //export default function Background() {
     // Contexts
