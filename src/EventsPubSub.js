@@ -29,10 +29,16 @@ export default class EventsPubSub {
 #######################################
 
     {
-        event:          onIndexChange
-        desciption:     Called when the index changes
-        parameters:     {subreddit, index}
-        subreddit:      Subreddit where the index has changed: "all", "homeSubreddit" or "subreddit"
-        index:          New index
+        event:          onSocketError
+        desciption:     Called when there is an error with the sockets
+        parameters:     { error, errorCode }
+        error:          The error message
+        errorCode:      The error code
+    },
+
+    {
+        event:          onSocketDisconnected
+        desciption:     Called when the socket disconnects
+        parameters:     { }
     },
 */

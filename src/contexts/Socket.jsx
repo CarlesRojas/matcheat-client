@@ -25,17 +25,14 @@ const SocketProvider = (props) => {
         socket.current = socketIOClient(apiURL);
 
         // Recieve error messages
-        socket.current.on("error", ({ error }) => {
-            console.log(error); // ROJAS
+        socket.current.on("error", ({ error, errorCode }) => {
+            // Inform about the error
+            window.PubSub.emit("onSocketError", { error, errorCode });
         });
 
-        // Recieve error messages
-        socket.current.on("kicked", ({ info }) => {
-            console.log(info); // ROJAS
-        });
-
-        socket.current.on("disconnect", (event) => {
-            console.log(event); // ROJAS
+        socket.current.on("disconnect", () => {
+            // Inform about the disconnection
+            window.PubSub.emit("onSocketDisconnected");
         });
     };
 

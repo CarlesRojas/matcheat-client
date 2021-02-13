@@ -317,9 +317,9 @@ body {
                     width: 1rem;
                     max-width: 1rem;
                     min-width: 1rem;
+                    color: white;
                     opacity: 0.5;
                     margin-right: 0.4rem;
-                    color: white;
 
                     &.email {
                         height: 1.05rem;
@@ -427,6 +427,30 @@ body {
             font-size: 1.3rem;
             font-weight: 800;
             text-transform: uppercase;
+        }
+
+        .errorMessage {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 2rem;
+            max-width: 90%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
+            background-position: 50px -150px;
+            color: rgb(129, 14, 14);
+            opacity: 1;
+            border: solid 1px rgba(255, 255, 255, 0.15);
+            padding: 0.2em 2em;
+            font-size: 0.9rem;
+            font-weight: 700;
+            backdrop-filter: blur(5px);
+            @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+            @include transition(opacity 0.2s ease-in-out);
+            @include border-radius(20px);
+
+            &.hidden {
+                opacity: 0;
+            }
         }
     }
 }
@@ -615,9 +639,9 @@ body {
     }
 
     &.thinner {
-        @include box-shadow(5px 5px 10px rgba(0, 0, 0, 0.1));
-        font-size: 0.9rem;
         padding: 3% 4%;
+        font-size: 0.9rem;
+        @include box-shadow(5px 5px 10px rgba(0, 0, 0, 0.1));
     }
 }
 
@@ -635,9 +659,9 @@ body {
     min-width: 3rem;
     top: 0;
     left: 0;
+    color: white;
     opacity: 0.7;
     padding: 0.8rem;
-    color: white;
 }
 
 // #######################################
@@ -743,12 +767,12 @@ body {
         background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
         background-position: 50px -150px;
         color: white;
+        margin-top: 5em;
         border: solid 1px rgba(255, 255, 255, 0.15);
         padding: 0.2em 0.7em;
         font-size: 0.6em;
         font-weight: 700;
         backdrop-filter: blur(5px);
-        margin-top: 5em;
         @include border-radius(100vh);
         @include box-shadow(0.3em 0.3em 15px rgba(0, 0, 0, 0.1));
     }
@@ -762,10 +786,6 @@ body {
         @include border-radius(100vh);
         @include box-shadow(0.3em 0.3em 15px rgba(0, 0, 0, 0.1));
         @include animation(hoverOne 28s linear infinite);
-
-        &:first-child {
-            @include animation(hoverTwo 33s linear infinite);
-        }
 
         @keyframes hoverOne {
             0% {
@@ -807,6 +827,10 @@ body {
             100% {
                 transform: scale(1.1) translate(-0.2em, -0.4em);
             }
+        }
+
+        &:first-child {
+            @include animation(hoverTwo 33s linear infinite);
         }
     }
 }

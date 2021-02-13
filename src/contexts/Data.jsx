@@ -22,6 +22,7 @@ const DataProvider = (props) => {
 
     // ROOM
     const roomID = useRef(null);
+    const socketError = useRef(null);
 
     // BACKGROUND POSITION
     const positionRef = useRef({ x: 0, y: 0 });
@@ -37,9 +38,9 @@ const DataProvider = (props) => {
         purple: ["#8374ff", "#ff74d4"],
         blue: ["#232b62", "#78d3ff"],
         green: ["#2d903a", "#78d3ff"],
-        fcb: ["#ff5f7d", "#5542be"],
+        blaugrana: ["#ff5f7d", "#5542be"],
     };
-    const currGradient = useRef(getCookie("matchEat_token") ? "fcb" : "pink");
+    const currGradient = useRef(getCookie("matchEat_token") ? "blaugrana" : "pink");
     const [{ gradient }, setGradient] = useSpring(() => ({
         gradient: `linear-gradient(60deg, ${gradients[currGradient.current][0]} 0%, ${gradients[currGradient.current][1]} 100%)`,
         config: { friction: 30 },
@@ -66,6 +67,7 @@ const DataProvider = (props) => {
 
                 // ROOM
                 roomID,
+                socketError,
 
                 // BACKGROUND POSITION
                 positionRef,
