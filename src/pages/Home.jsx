@@ -114,7 +114,6 @@ export default function Home() {
     // Redirect to new route
     if (redirectTo) return <Redirect to={redirectTo} push={true} />;
 
-    console.log();
     return (
         <div className="home">
             <Navbar></Navbar>

@@ -3,6 +3,8 @@ import { Redirect } from "react-router-dom";
 
 // Components
 import Navbar from "components/Navbar";
+import Glass from "components/Glass";
+import Profile from "components/Profile";
 
 // Contexts
 import { Data } from "contexts/Data";
@@ -13,7 +15,7 @@ export default function JoinRoom() {
     if (process.env.NODE_ENV !== "production") console.log("%cRender Join Room", "color: grey; font-size: 11px");
 
     // Contexts
-    const { roomID, setBackgroundGradient, landingDone, username, socketError } = useContext(Data);
+    const { setRoomID, setBackgroundGradient, landingDone, image, username, socketError } = useContext(Data);
     const { emit, sub, unsub } = useContext(Socket);
 
     // Redirect state
@@ -22,9 +24,17 @@ export default function JoinRoom() {
     // Go to landing if not done already
     if (!redirectTo && !landingDone.current) setRedirectTo("/");
 
-    // Delete room if user leaves this page
-    const leaveRoom = () => {
-        roomID.current = null;
+    // #################################################
+    //   FORM
+    // #################################################
+
+    // Form states
+    const [codeForm, setCodeForm] = useState("");
+
+    // When the login form changes
+    const onCodeFormChange = (event) => {
+        const { value } = event.target;
+        setCodeForm(value);
     };
 
     // #################################################
@@ -36,9 +46,33 @@ export default function JoinRoom() {
         console.log(`${newUser.username} joined the room.`);
     };
 
-    // On a user joining the room
+    // On a user leaving the room
     const onUserLeftRoom = (oldUser) => {
         console.log(`${oldUser.username} left the room.`);
+    };
+
+    // Delete room if user leaves this page
+    const onBackButtonClicked = () => {
+        setRoomID(null);
+
+        // ROJAS send event to server to leave the room (Save the boss of a room in the DB Romm schema to delete it if he leaves)
+    };
+
+    // On code entered
+    const onCodeEnter = (event) => {
+        event.preventDefault();
+
+        // Create amd join the room ROJAS change testing to inputed number
+        emit("joinRoom", { roomID: codeForm, username: username.current });
+
+        // Subscribe to a user joining the room
+        sub("userJoinedRoom", onUserJoinedRoom);
+
+        // Subscribe to a user leaving the room
+        sub("userLeftRoom", onUserLeftRoom);
+
+        // Set room id
+        setRoomID(codeForm);
     };
 
     // #################################################
@@ -66,23 +100,14 @@ export default function JoinRoom() {
         // Change Color
         setBackgroundGradient("blue");
 
-        if (landingDone.current) {
-            // Create amd join the room ROJAS change testing to inputed number
-            emit("joinRoom", { roomID: "testing", username: username.current });
+        // Subscribe to error and disconnext events
+        window.PubSub.sub("onSocketError", onSocketError);
+        window.PubSub.sub("onSocketDisconnected", onSocketDisconnected);
 
-            // Subscribe to a user joining the room
-            sub("userJoinedRoom", onUserJoinedRoom);
-
-            // Subscribe to a user leaving the room
-            sub("userLeftRoom", onUserLeftRoom);
-
-            // Subscribe to error and disconnext events
-            window.PubSub.sub("onSocketError", onSocketError);
-            window.PubSub.sub("onSocketDisconnected", onSocketDisconnected);
-        }
         // Unsubscribe on unmount
         return () => {
             unsub("userJoinedRoom", onUserJoinedRoom);
+            unsub("userLeftRoom", onUserLeftRoom);
 
             // Unsubscribe to error and disconnext events
             window.PubSub.unsub("onSocketError", onSocketError);
@@ -99,10 +124,34 @@ export default function JoinRoom() {
     // Redirect to new route
     if (redirectTo) return <Redirect to={redirectTo} push={true} />;
 
+    // Style for the glass
+    const glassStyle = {
+        minHeight: "8vh",
+        padding: "2%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+    };
+
     return (
         <div className="joinRoom">
-            <Navbar prevPage="/home" onBackButtonClicked={leaveRoom}></Navbar>
-            <div className="container"></div>
+            <Navbar prevPage="/home" onBackButtonClicked={onBackButtonClicked}></Navbar>
+            <div className="container">
+                <Glass style={glassStyle} onClick={() => {}} classes="">
+                    <Profile image={image.current} text={username.current} size={"1.5rem"} clickable={false}></Profile>
+
+                    <form autoComplete="off" noValidate spellCheck="false" onSubmit={onCodeEnter}>
+                        <div className="inputContainer">
+                            <input className="input" type="text" placeholder=" enter room code" value={codeForm} onChange={onCodeFormChange} autoComplete="off"></input>
+                        </div>
+
+                        <button type="submit" className="button last">
+                            JOIN ROOM
+                        </button>
+                    </form>
+                </Glass>
+            </div>
         </div>
     );
 }

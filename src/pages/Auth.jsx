@@ -274,6 +274,12 @@ export default function Auth() {
         </div>
     );
 
+    // Placeholder camera
+    var webcam =
+        currPageRef.current === "camera" ? (
+            <Webcam className="webcam" audio={false} videoConstraints={{ facingMode: "user", aspectRatio: 1 }} mirrored={true} ref={cameraRef} screenshotFormat="image/png" />
+        ) : null;
+
     return (
         <div className="auth">
             <animated.div className="section welcome" style={{ x: welcomeX }}>
@@ -391,14 +397,15 @@ export default function Auth() {
                 <Glass style={{ minHeight: "67%" }}>
                     <SVG className="backButton" src={BackIcon} onClick={() => showSignupScreen(true)} />
 
-                    <Webcam
+                    {webcam}
+                    {/* <Webcam
                         className="webcam"
                         audio={false}
                         videoConstraints={{ facingMode: "user", aspectRatio: 1 }}
                         mirrored={true}
                         ref={cameraRef}
                         screenshotFormat="image/png"
-                    />
+                    /> */}
 
                     <div className="camButton">
                         <SVG className="camIcon" src={CameraIcon} onClick={capturePhoto} />

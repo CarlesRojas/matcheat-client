@@ -1,8 +1,14 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, useRef } from "react";
 import { Redirect } from "react-router-dom";
+import copy from "copy-to-clipboard";
+import SVG from "react-inlinesvg";
 
 // Components
 import Navbar from "components/Navbar";
+import Glass from "components/Glass";
+
+// Icons
+import CopyIcon from "resources/icons/copy.svg";
 
 // Contexts
 import { Utils } from "contexts/Utils";
@@ -15,7 +21,7 @@ export default function CreateRoom() {
 
     // Contexts
     const { createUniqueID } = useContext(Utils);
-    const { roomID, setBackgroundGradient, landingDone, username, socketError } = useContext(Data);
+    const { roomID, setRoomID, setBackgroundGradient, landingDone, username, socketError } = useContext(Data);
     const { emit, sub, unsub } = useContext(Socket);
 
     // Redirect state
@@ -23,11 +29,6 @@ export default function CreateRoom() {
 
     // Go to landing if not done already
     if (!redirectTo && !landingDone.current) setRedirectTo("/");
-
-    // Delete room if user leaves this page
-    const leaveRoom = () => {
-        roomID.current = null;
-    };
 
     // #################################################
     //   ROOM
@@ -38,9 +39,16 @@ export default function CreateRoom() {
         console.log(`${newUser.username} joined the room.`);
     };
 
-    // On a user joining the room
+    // On a user leaving the room
     const onUserLeftRoom = (oldUser) => {
         console.log(`${oldUser.username} left the room.`);
+    };
+
+    // Delete room if user leaves this page
+    const onBackButtonClicked = () => {
+        setRoomID(null);
+
+        // ROJAS send event to server to leave the room (Save the boss of a room in the DB Romm schema to delete it if he leaves)
     };
 
     // #################################################
@@ -60,6 +68,21 @@ export default function CreateRoom() {
     };
 
     // #################################################
+    //   COPY CODE
+    // #################################################
+
+    const codeCopiedRef = useRef(null);
+    const onCopyCode = () => {
+        // Show the copied message for a second
+        codeCopiedRef.current.classList.remove("fadeOut");
+        void codeCopiedRef.current.offsetWidth;
+        codeCopiedRef.current.classList.add("fadeOut");
+
+        // Copy code to clipboard
+        copy(roomID);
+    };
+
+    // #################################################
     //   COMPONENT MOUNT
     // #################################################
 
@@ -70,15 +93,12 @@ export default function CreateRoom() {
 
         if (landingDone.current) {
             // Create room code
-            roomID.current = createUniqueID(6);
-
-            // ROJAS DELETE
-            roomID.current = "testing";
-
-            if (process.env.NODE_ENV !== "production") console.log(roomID.current);
+            const newCode = createUniqueID(6);
+            setRoomID(newCode);
+            if (process.env.NODE_ENV !== "production") console.log(newCode);
 
             // Create amd join the room
-            emit("createRoom", { roomID: roomID.current, username: username.current });
+            emit("createRoom", { roomID: newCode, username: username.current });
 
             // Subscribe to a user joining the room
             sub("userJoinedRoom", onUserJoinedRoom);
@@ -94,6 +114,7 @@ export default function CreateRoom() {
         // Unsubscribe on unmount
         return () => {
             unsub("userJoinedRoom", onUserJoinedRoom);
+            unsub("userLeftRoom", onUserLeftRoom);
 
             // Unsubscribe to error and disconnext events
             window.PubSub.unsub("onSocketError", onSocketError);
@@ -110,10 +131,29 @@ export default function CreateRoom() {
     // Redirect to new route
     if (redirectTo) return <Redirect to={redirectTo} push={true} />;
 
+    // Style for the glass
+    const glassStyle = {
+        minHeight: "8vh",
+        margin: "2% 0",
+        padding: "2%",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+    };
+
     return (
         <div className="createRoom">
-            <Navbar prevPage="/home" onBackButtonClicked={leaveRoom}></Navbar>
-            <div className="container"></div>
+            <Navbar prevPage="/home" onBackButtonClicked={onBackButtonClicked}></Navbar>
+            <div className="container">
+                <Glass style={glassStyle} onClick={onCopyCode} classes="clickable">
+                    <p className="roomCode">{roomID}</p>
+                    <SVG className="copyIcon" src={CopyIcon} />
+                </Glass>
+                <p className="codeCopied" ref={codeCopiedRef}>
+                    Code Copied
+                </p>
+            </div>
         </div>
     );
 }

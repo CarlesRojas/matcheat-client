@@ -1,4 +1,4 @@
-import React, { createContext, useRef, useContext } from "react";
+import React, { createContext, useRef, useContext, useState } from "react";
 import { useSpring } from "react-spring";
 
 // Contexts
@@ -21,13 +21,12 @@ const DataProvider = (props) => {
     const image = useRef(null);
 
     // ROOM
-    const roomID = useRef(null);
+    const [roomID, setRoomID] = useState(null);
     const socketError = useRef(null);
 
     // BACKGROUND POSITION
     const positionRef = useRef({ x: 0, y: 0 });
     const speedRef = useRef({ x: 0, y: 0 });
-    //const [{ speed }, setSpeed] = useSpring(() => ({ speed: { x: 0, y: 0 } }));
     const motion = useRef({ alpha: 0, beta: 0 });
     const prevMotion = useRef({ alpha: 0, beta: 0 });
 
@@ -67,6 +66,7 @@ const DataProvider = (props) => {
 
                 // ROOM
                 roomID,
+                setRoomID,
                 socketError,
 
                 // BACKGROUND POSITION

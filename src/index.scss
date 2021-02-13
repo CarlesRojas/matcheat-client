@@ -342,7 +342,7 @@ body {
 
                     @include inputPlaceholder() {
                         color: white;
-                        opacity: 0.7;
+                        opacity: 0.4;
                     }
                 }
             }
@@ -364,7 +364,7 @@ body {
         .loadingIcon {
             width: 25%;
             z-index: 1;
-            @include animation(heartbeat 1.5s linear infinite);
+            @include animation(heartbeat 2s linear infinite);
 
             @keyframes heartbeat {
                 10% {
@@ -475,6 +475,43 @@ body {
         justify-content: center;
         width: 100%;
         z-index: 1;
+
+        .roomCode {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .copyIcon {
+            position: absolute;
+            height: 2.5rem;
+            max-height: 2.5rem;
+            min-height: 2.5rem;
+            width: 2.5rem;
+            max-width: 2.5rem;
+            min-width: 2.5rem;
+            right: 0;
+            color: white;
+            opacity: 0.7;
+            margin-right: 0.5rem;
+            padding: 0.5rem;
+        }
+
+        .codeCopied {
+            padding: 0.2em 1.2em;
+            color: white;
+            opacity: 0;
+            margin-bottom: 3%;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
+            background-position: 50px -150px;
+            border: solid 1px rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+            @include border-radius(20px);
+        }
     }
 }
 // #######################################
@@ -497,6 +534,58 @@ body {
         justify-content: center;
         width: 100%;
         z-index: 1;
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+
+            .inputContainer {
+                display: flex;
+                align-items: center;
+                width: 85%;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 75%);
+                background-position: 50px -150px;
+                margin: 0 5% 8%;
+                border: solid 2px transparent;
+                padding: 4%;
+                backdrop-filter: blur(6px);
+                @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+                @include border-radius(500px);
+
+                .input {
+                    display: flex;
+                    align-items: center;
+                    background: none;
+                    color: white;
+                    border: 0;
+                    outline: none;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    width: 100%;
+
+                    @include inputPlaceholder() {
+                        color: white;
+                        opacity: 0.4;
+                    }
+                }
+            }
+
+            .error {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 2.7em;
+                width: 85%;
+                color: rgb(146, 0, 0);
+                margin-bottom: 5%;
+                font-size: 0.8em;
+                font-weight: 500;
+                text-align: center;
+            }
+        }
     }
 }
 
@@ -831,6 +920,29 @@ body {
 
         &:first-child {
             @include animation(hoverTwo 33s linear infinite);
+        }
+    }
+}
+
+// #######################################
+//      FADEOUT ANIMATION
+// #######################################
+
+.fadeOut {
+    @include animation(fadeOut 1.5s ease-in-out);
+
+    @keyframes fadeOut {
+        0% {
+            opacity: 0;
+        }
+        20% {
+            opacity: 1;
+        }
+        70% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
         }
     }
 }
