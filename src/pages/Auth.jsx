@@ -128,7 +128,7 @@ export default function Auth() {
         // Fade in if it is the first time
         if (first) {
             const timeline = gsap.timeline({ defaults: { ease: "power1" } });
-            timeline.fromTo(".welcome > .glass", { opacity: 0 }, { opacity: 1, duration: 1 }, "+=0.5");
+            timeline.fromTo(".welcome > .glass", { opacity: 0 }, { opacity: 1, duration: 1 }, "+=0.25");
         }
 
         setBackgroundGradient("pink");

@@ -19,18 +19,20 @@ const SocketProvider = (props) => {
     // #################################################
 
     // Connect to socket
-    const connect = (errorCallback) => {
+    const connect = () => {
         if (socket.current) return;
 
         socket.current = socketIOClient(apiURL);
 
         // Recieve error messages
         socket.current.on("error", ({ error, errorCode }) => {
+            console.log(error);
             // Inform about the error
             window.PubSub.emit("onSocketError", { error, errorCode });
         });
 
         socket.current.on("disconnect", () => {
+            console.log("Disconnected from server");
             // Inform about the disconnection
             window.PubSub.emit("onSocketDisconnected");
         });

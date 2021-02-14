@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useState, useRef } from "react";
 import { Redirect } from "react-router-dom";
 import SVG from "react-inlinesvg";
+import gsap from "gsap";
 
 // Components
 import Navbar from "components/Navbar";
@@ -34,13 +35,13 @@ export default function CreateRoom() {
     // #################################################
 
     // On a user joining the room
-    const onUserJoinedRoom = (newUser) => {
-        console.log(`${newUser.username} joined the room.`);
+    const onUserJoinedRoom = ({ simplifiedUser, room }) => {
+        console.log(`${simplifiedUser.username} joined the room ${room.roomID}.`);
     };
 
     // On a user leaving the room
-    const onUserLeftRoom = (oldUser) => {
-        console.log(`${oldUser.username} left the room.`);
+    const onUserLeftRoom = ({ simplifiedUser, room }) => {
+        console.log(`${simplifiedUser.username} left the room ${room.roomID}.`);
     };
 
     // Delete room if user leaves this page
@@ -94,6 +95,10 @@ export default function CreateRoom() {
         setBackgroundGradient("green");
 
         if (landingDone.current) {
+            // Animate
+            const timeline = gsap.timeline({ defaults: { ease: "power1" } });
+            timeline.fromTo(".createRoom > .container > .glass", { opacity: 0 }, { opacity: 1, duration: 0.2 }, "+=0.25");
+
             // Create room code
             const newCode = createUniqueID(6);
             setRoomID(newCode);

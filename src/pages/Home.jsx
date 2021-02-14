@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
+import classnames from "classnames";
 import SVG from "react-inlinesvg";
 import gsap from "gsap";
-import classnames from "classnames";
 
 // Components
 import Glass from "components/Glass";
@@ -85,7 +85,7 @@ export default function Home() {
         // Animate
         if (landingDone.current) {
             const timeline = gsap.timeline({ defaults: { ease: "power1" } });
-            timeline.fromTo(".home > .container > .glass", { opacity: 0 }, { opacity: 1, duration: 0.2 }, "+=0.5");
+            timeline.fromTo(".home > .container > .glass", { opacity: 0 }, { opacity: 1, duration: 0.2 }, "+=0.25");
         }
 
         // Subscribe to error and disconnext events

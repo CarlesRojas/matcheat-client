@@ -80,7 +80,7 @@ export default function Landing() {
                 // Permissions have never been granted
                 else {
                     const timeline = gsap.timeline({ defaults: { ease: "power1" } });
-                    timeline.fromTo(".permissions > .glass", { opacity: 0 }, { opacity: 1, duration: 1 }, "+=0.5");
+                    timeline.fromTo(".permissions > .glass", { opacity: 0 }, { opacity: 1, duration: 1 }, "+=0.25");
                 }
             }, 200);
         }

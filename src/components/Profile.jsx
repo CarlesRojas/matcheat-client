@@ -25,7 +25,7 @@ export default function Profile({ image, text, size, clickable }) {
     // On componente mount
     useEffect(() => {
         const timeline = gsap.timeline({ defaults: { ease: "power1" } });
-        timeline.fromTo(".profile ", { opacity: 0 }, { opacity: 1, duration: 0.2 }, "+=0.5");
+        timeline.fromTo(".profile ", { opacity: 0 }, { opacity: 1, duration: 0.2 }, "+=0.25");
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
