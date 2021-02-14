@@ -6,6 +6,7 @@ import gsap from "gsap";
 // Components
 import Navbar from "components/Navbar";
 import Glass from "components/Glass";
+import Room from "components/Room";
 
 // Icons
 import CopyIcon from "resources/icons/copy.svg";
@@ -153,6 +154,7 @@ export default function CreateRoom() {
         <div className="createRoom">
             <Navbar prevPage="/home" onBackButtonClicked={onBackButtonClicked}></Navbar>
             <div className="container">
+                <Room />
                 <Glass style={glassStyle} onClick={onCopyCode} classes="clickable">
                     <form autoComplete="off" noValidate spellCheck="false">
                         <input id="roomCode" className="roomCode" type="text" defaultValue={roomID ? roomID : ""} />
