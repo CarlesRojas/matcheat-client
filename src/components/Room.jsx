@@ -89,7 +89,7 @@ export default function Room() {
                 d3
                     .forceCollide()
                     .radius(SCREEN_WIDTH * 0.12)
-                    .iterations(10)
+                    .iterations(3)
             )
             .force(
                 "center",
