@@ -55,8 +55,18 @@ export default function Home() {
     // #################################################
 
     // On socket error
-    const onSocketError = ({ error }) => {
-        if (!socketError.current) {
+    const onSocketError = ({ error, errorCode }) => {
+        // Server reconected
+        if (errorCode === 601) {
+            // Only update if socketError was not null
+            if (socketError.current) {
+                socketError.current = null;
+                forceUpdate();
+            }
+        }
+
+        // Other errors
+        else if (socketError.current !== error) {
             socketError.current = error;
             forceUpdate();
         }

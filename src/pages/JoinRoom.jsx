@@ -59,7 +59,8 @@ export default function JoinRoom() {
     const onBackButtonClicked = () => {
         setRoomID(null);
 
-        // ROJAS send event to server to leave the room (Save the boss of a room in the DB Romm schema to delete it if he leaves)
+        // Leave Room
+        emit("leaveRoom", {});
     };
 
     // On code entered

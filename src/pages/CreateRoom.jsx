@@ -49,7 +49,8 @@ export default function CreateRoom() {
     const onBackButtonClicked = () => {
         setRoomID(null);
 
-        // ROJAS send event to server to leave the room (Save the boss of a room in the DB Romm schema to delete it if he leaves)
+        // Leave Room
+        emit("leaveRoom", {});
     };
 
     // #################################################
@@ -105,6 +106,7 @@ export default function CreateRoom() {
             setRoomID(newCode);
             if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log(newCode);
 
+            console.log("Create Room");
             // Create amd join the room
             emit("createRoom", { roomID: newCode, username: username.current });
 
@@ -142,7 +144,7 @@ export default function CreateRoom() {
     // Style for the glass
     const glassStyle = {
         minHeight: "8vh",
-        margin: "2% 0",
+        margin: "0 0 5%",
         padding: "2%",
         display: "flex",
         flexDirection: "row",
@@ -155,15 +157,19 @@ export default function CreateRoom() {
             <Navbar prevPage="/home" onBackButtonClicked={onBackButtonClicked}></Navbar>
             <div className="container">
                 <Room />
+                <p className="codeCopied" ref={codeCopiedRef}>
+                    Code Copied
+                </p>
                 <Glass style={glassStyle} onClick={onCopyCode} classes="clickable">
                     <form autoComplete="off" noValidate spellCheck="false">
                         <input id="roomCode" className="roomCode" type="text" defaultValue={roomID ? roomID : ""} />
                     </form>
                     <SVG className="copyIcon" src={CopyIcon} />
                 </Glass>
-                <p className="codeCopied" ref={codeCopiedRef}>
-                    Code Copied
-                </p>
+
+                <div className="button last" style={{ width: "90%", minHeight: "2.7em" }}>
+                    START
+                </div>
             </div>
         </div>
     );

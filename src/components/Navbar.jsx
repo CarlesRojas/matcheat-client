@@ -32,6 +32,7 @@ export default function Navbar({ prevPage, onBackButtonClicked }) {
         setLogoutActive(true);
         const timeline = gsap.timeline({ defaults: { ease: "power1" } });
         timeline.fromTo(".buttonContainer", { height: "0rem" }, { height: "3.5rem", duration: 0.2 });
+        timeline.fromTo(".navbar", { minHeight: "3rem" }, { minHeight: "6.5rem", duration: 0.2 }, "-=0.2");
         timeline.fromTo(".buttonContainer > .button", { display: "none" }, { display: "block" });
         timeline.fromTo(".buttonContainer > .button", { opacity: 0 }, { opacity: 1, duration: 0.2 }, "-=0.5");
     };
@@ -44,6 +45,7 @@ export default function Navbar({ prevPage, onBackButtonClicked }) {
         timeline.fromTo(".buttonContainer > .button", { opacity: 1 }, { opacity: 0, duration: 0.2 });
         timeline.fromTo(".buttonContainer > .button", { display: "block" }, { display: "none" });
         timeline.fromTo(".buttonContainer", { height: "3.5rem" }, { height: "0rem", duration: 0.2 }, "-=0.5");
+        timeline.fromTo(".navbar", { minHeight: "6.5rem" }, { minHeight: "3rem", duration: 0.2 }, "-=0.5");
     };
 
     // Log out
