@@ -52,12 +52,22 @@ export default function CreateRoom() {
         console.log(`${simplifiedUser.username} left the room ${room.roomID}.`);
     };
 
-    // Delete room if user leaves this page
-    const onBackButtonClicked = () => {
+    // Leave the room
+    const leaveRoom = (inform) => {
+        // Delete the room code
         setRoomID(null);
 
-        // Leave Room
-        emit("leaveRoom", {});
+        // Clear the room users array
+        setRoomUsers([]);
+
+        // Inform others in the room
+        if (inform) emit("leaveRoom", {});
+    };
+
+    // Delete room if user leaves this page
+    const onBackButtonClicked = () => {
+        // Leave room
+        leaveRoom(true);
     };
 
     // #################################################
@@ -66,13 +76,25 @@ export default function CreateRoom() {
 
     // On socket error
     const onSocketError = ({ error }) => {
+        // Set error
         socketError.current = error;
+
+        // Leave room
+        leaveRoom(false);
+
+        // Redirect to home
         setRedirectTo("/home");
     };
 
     // On socket disconnection
     const onSocketDisconnected = () => {
+        // Set error
         socketError.current = "Disconnected from the server";
+
+        // Leave room
+        leaveRoom(false);
+
+        // Redirect to home
         setRedirectTo("/home");
     };
 

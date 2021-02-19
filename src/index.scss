@@ -961,7 +961,7 @@ body {
         color: transparent;
         margin: -0.8em 0.5em -0.8em -0.8em;
         @include border-radius(100vh);
-        @include box-shadow(0.1em 0.1em 10px rgba(0, 0, 0, 0.1));
+        @include box-shadow(0 0 20px rgba(0, 0, 0, 0.2));
         @include transition(transform 0.2s ease-in-out);
 
         &.inverted {
@@ -992,7 +992,7 @@ body {
         border: solid 1px rgba(255, 255, 255, 0.15);
         backdrop-filter: blur(5px);
         @include border-radius(100vh);
-        @include box-shadow(0.1em 0.1em 10px rgba(0, 0, 0, 0.1));
+        @include box-shadow(0 0 20px rgba(0, 0, 0, 0.2));
 
         .placeholder {
             height: 50%;

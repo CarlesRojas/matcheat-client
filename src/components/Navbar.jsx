@@ -10,6 +10,8 @@ import BackIcon from "resources/icons/arrow.svg";
 
 // Contexts
 import { API } from "contexts/API";
+import { Data } from "contexts/Data";
+import { Socket } from "contexts/Socket";
 
 export default function Navbar({ prevPage, onBackButtonClicked }) {
     // Print Render
@@ -17,6 +19,8 @@ export default function Navbar({ prevPage, onBackButtonClicked }) {
 
     // Contexts
     const { logout } = useContext(API);
+    const { setRoomUsers, setRoomID } = useContext(Data);
+    const { emit } = useContext(Socket);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
@@ -48,8 +52,22 @@ export default function Navbar({ prevPage, onBackButtonClicked }) {
         timeline.fromTo(".navbar", { minHeight: "6.5rem" }, { minHeight: "3rem", duration: 0.2 }, "-=0.5");
     };
 
+    // Leave the room
+    const leaveRoom = (inform) => {
+        // Delete the room code
+        setRoomID(null);
+
+        // Clear the room users array
+        setRoomUsers([]);
+
+        // Inform others in the room
+        if (inform) emit("leaveRoom", {});
+    };
+
     // Log out
     const onLogout = () => {
+        // Leave Room
+        leaveRoom(true);
         setRedirectTo("/");
         logout();
     };
