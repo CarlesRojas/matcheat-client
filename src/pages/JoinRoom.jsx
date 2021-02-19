@@ -16,8 +16,8 @@ export default function JoinRoom() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Join Room", "color: grey; font-size: 11px");
 
     // Contexts
-    const { setRoomID, setBackgroundGradient, landingDone, image, username, socketError } = useContext(Data);
-    const { emit, sub, unsub } = useContext(Socket);
+    const { setRoomID, setRoomUsers, setBackgroundGradient, landingDone, image, username, socketError } = useContext(Data);
+    const { emit, sub, subOnce, unsub } = useContext(Socket);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
@@ -45,13 +45,20 @@ export default function JoinRoom() {
     //   ROOM
     // #################################################
 
+    // When we recieve the current users in the room
+    const onRoomUsers = (users) => {
+        setRoomUsers(users);
+    };
+
     // On a user joining the room
     const onUserJoinedRoom = ({ simplifiedUser, room }) => {
+        setRoomUsers((oldArray) => [...oldArray, simplifiedUser]);
         console.log(`${simplifiedUser.username} joined the room ${room.roomID}.`);
     };
 
     // On a user leaving the room
     const onUserLeftRoom = ({ simplifiedUser, room }) => {
+        setRoomUsers((oldArray) => oldArray.filter(({ username }) => username !== simplifiedUser.username));
         console.log(`${simplifiedUser.username} left the room ${room.roomID}.`);
     };
 
@@ -67,14 +74,17 @@ export default function JoinRoom() {
     const onCodeEnter = (event) => {
         event.preventDefault();
 
-        // Create amd join the room
-        emit("joinRoom", { roomID: codeForm, username: username.current });
+        // Get room users
+        subOnce("roomUsers", onRoomUsers);
 
         // Subscribe to a user joining the room
         sub("userJoinedRoom", onUserJoinedRoom);
 
         // Subscribe to a user leaving the room
         sub("userLeftRoom", onUserLeftRoom);
+
+        // Create amd join the room
+        emit("joinRoom", { roomID: codeForm, username: username.current });
 
         // Set room id
         setRoomID(codeForm);
@@ -120,8 +130,9 @@ export default function JoinRoom() {
 
         // Unsubscribe on unmount
         return () => {
-            unsub("userJoinedRoom", onUserJoinedRoom);
-            unsub("userLeftRoom", onUserLeftRoom);
+            unsub("roomUsers");
+            unsub("userJoinedRoom");
+            unsub("userLeftRoom");
 
             // Unsubscribe to error and disconnext events
             window.PubSub.unsub("onSocketError", onSocketError);

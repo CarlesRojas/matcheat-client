@@ -964,6 +964,10 @@ body {
         @include box-shadow(0.1em 0.1em 10px rgba(0, 0, 0, 0.1));
         @include transition(transform 0.2s ease-in-out);
 
+        &.inverted {
+            margin: -0.8em -0.8em -0.8em 0.5em;
+        }
+
         &.clickable {
             &:active {
                 transform: scale(1.05);
@@ -1003,7 +1007,7 @@ body {
 
     .name {
         width: fit-content;
-        color: white;
+        color: rgba(0, 0, 0, 0.6);
         padding: 0.2em;
         font-size: 1em;
         font-weight: 700;

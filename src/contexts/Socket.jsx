@@ -55,12 +55,21 @@ const SocketProvider = (props) => {
         socket.current.on(eventName, callback);
     };
 
-    // Unsubscribe to an event
-    const unsub = (eventName, callback) => {
+    // Subscribe to an event only once
+    const subOnce = (eventName, callback) => {
         if (!socket.current) return;
 
         // Subscribe to event
-        socket.current.off(eventName, callback);
+        socket.current.once(eventName, callback);
+    };
+
+    // Unsubscribe to an event
+    const unsub = (eventName) => {
+        if (!socket.current) return;
+
+        // Subscribe to event
+        console.log(`Unsub from ${eventName}`);
+        socket.current.removeAllListeners(eventName);
     };
 
     // #################################################
@@ -99,6 +108,7 @@ const SocketProvider = (props) => {
 
                 // SUBSCRIBE TO EVENTS
                 sub,
+                subOnce,
                 unsub,
 
                 // EMIT EVENTS

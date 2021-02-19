@@ -1,51 +1,18 @@
-import React, { useRef, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 
 // Components
 import ProfileList from "components/ProfileList";
 
+// Contexts
+import { Data } from "contexts/Data";
+
 export default function Room() {
-    const data = useRef([
-        {
-            username: "carles",
-            image: "https://matcheat.s3.amazonaws.com/2021-02-10T20:17:51.705Z_Pinya.png",
-        },
-        {
-            username: "carles",
-            image: "https://matcheat.s3.amazonaws.com/2021-02-10T20:17:51.705Z_Pinya.png",
-        },
-        {
-            username: "carles",
-            image: "https://matcheat.s3.amazonaws.com/2021-02-10T20:17:51.705Z_Pinya.png",
-        },
-        {
-            username: "carles",
-            image: "https://matcheat.s3.amazonaws.com/2021-02-10T20:17:51.705Z_Pinya.png",
-        },
-        {
-            username: "carles",
-            image: "https://matcheat.s3.amazonaws.com/2021-02-10T20:17:51.705Z_Pinya.png",
-        },
-        {
-            username: "carles",
-            image: "https://matcheat.s3.amazonaws.com/2021-02-10T20:17:51.705Z_Pinya.png",
-        },
-        {
-            username: "carles",
-            image: "https://matcheat.s3.amazonaws.com/2021-02-10T20:17:51.705Z_Pinya.png",
-        },
-        {
-            username: "carles",
-            image: "https://matcheat.s3.amazonaws.com/2021-02-10T20:17:51.705Z_Pinya.png",
-        },
-        {
-            username: "carles",
-            image: "https://matcheat.s3.amazonaws.com/2021-02-10T20:17:51.705Z_Pinya.png",
-        },
-        {
-            username: "carles",
-            image: "https://matcheat.s3.amazonaws.com/2021-02-10T20:17:51.705Z_Pinya.png",
-        },
-    ]);
+    // Print Render
+    if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Profile List", "color: grey; font-size: 11px");
+
+    // Contexts
+    const { roomUsers } = useContext(Data);
+
     // #################################################
     //   COMPONENT MOUNT
     // #################################################
@@ -61,7 +28,7 @@ export default function Room() {
     //   RENDER
     // #################################################
 
-    const users = data.current.map(({ username, image }, i) => <ProfileList key={i} image={image} text={username} clickable={false} />);
+    const users = roomUsers.map(({ username, image }, i) => <ProfileList key={i} image={image} text={username} clickable={false} inverted={i % 2 === 1} />);
 
     return (
         <div id="room" className="room">
