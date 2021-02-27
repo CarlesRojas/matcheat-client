@@ -143,6 +143,9 @@ export default function JoinRoom() {
     const onCodeEnter = (event) => {
         event.preventDefault();
 
+        // Focus the input
+        inputRef.current.blur();
+
         // Get room users
         subOnce("roomUsers", onRoomUsers);
 
