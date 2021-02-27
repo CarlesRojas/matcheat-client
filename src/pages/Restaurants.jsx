@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useRef } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { Redirect } from "react-router-dom";
 
 // Components
@@ -14,7 +14,7 @@ export default function Restaurants() {
 
     // Contexts
     const { setRoomID, setRoomUsers, isBoss, setBackgroundGradient, landingDone, socketError } = useContext(Data);
-    const { emit, sub, subOnce, unsub } = useContext(Socket);
+    const { emit /*, sub, subOnce, unsub*/ } = useContext(Socket);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
