@@ -185,6 +185,12 @@ export default function JoinRoom() {
         if (errorCode === 610) {
             setFormError(error);
             showJoinScreen(false, false);
+
+            // Unsub from sotket events
+            unsub("roomUsers");
+            unsub("userJoinedRoom");
+            unsub("userLeftRoom");
+            unsub("roomHasStarted");
         }
 
         // On other errors
