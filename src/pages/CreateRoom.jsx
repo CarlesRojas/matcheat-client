@@ -22,7 +22,7 @@ export default function CreateRoom() {
 
     // Contexts
     const { createUniqueID, copy } = useContext(Utils);
-    const { roomID, setRoomID, setRoomUsers, setBackgroundGradient, landingDone, username, socketError } = useContext(Data);
+    const { roomID, setRoomID, setRoomUsers, isBoss, setBackgroundGradient, landingDone, username, socketError } = useContext(Data);
     const { emit, sub, subOnce, unsub } = useContext(Socket);
 
     // Redirect state
@@ -52,8 +52,17 @@ export default function CreateRoom() {
         console.log(`${simplifiedUser.username} left the room ${room.roomID}.`);
     };
 
+    // On the room starting
+    const onRoomHasStarted = () => {
+        // Redirect to restaurants
+        setRedirectTo("/restaurants");
+    };
+
     // Leave the room
     const leaveRoom = (inform) => {
+        // Set boss to false
+        isBoss.current = false;
+
         // Delete the room code
         setRoomID(null);
 
@@ -68,6 +77,15 @@ export default function CreateRoom() {
     const onBackButtonClicked = () => {
         // Leave room
         leaveRoom(true);
+    };
+
+    // On room start
+    const onRoomStart = () => {
+        // Set as boss
+        isBoss.current = true;
+
+        // Emit start event ROJAS handle in server
+        emit("startRoom", { roomID });
     };
 
     // #################################################
@@ -147,6 +165,9 @@ export default function CreateRoom() {
             // Subscribe to a user leaving the room
             sub("userLeftRoom", onUserLeftRoom);
 
+            // Subscribe to the room start event
+            sub("roomHasStarted", onRoomHasStarted);
+
             // Subscribe to error and disconnext events
             window.PubSub.sub("onSocketError", onSocketError);
             window.PubSub.sub("onSocketDisconnected", onSocketDisconnected);
@@ -157,6 +178,7 @@ export default function CreateRoom() {
             unsub("roomUsers");
             unsub("userJoinedRoom");
             unsub("userLeftRoom");
+            unsub("roomHasStarted");
 
             // Unsubscribe to error and disconnext events
             window.PubSub.unsub("onSocketError", onSocketError);
@@ -199,7 +221,7 @@ export default function CreateRoom() {
                     <SVG className="copyIcon" src={CopyIcon} />
                 </Glass>
 
-                <div className="button last" style={{ width: "90%", minHeight: "2.7em" }}>
+                <div className="button last" style={{ width: "90%", minHeight: "2.7em" }} onClick={onRoomStart}>
                     START
                 </div>
             </div>

@@ -24,6 +24,7 @@ const DataProvider = (props) => {
     const [roomID, setRoomID] = useState(null);
     const [roomUsers, setRoomUsers] = useState([]);
     const socketError = useRef(null);
+    const isBoss = useRef(false);
 
     // BACKGROUND POSITION
     const positionRef = useRef({ x: 0, y: 0 });
@@ -71,6 +72,7 @@ const DataProvider = (props) => {
                 roomUsers,
                 setRoomUsers,
                 socketError,
+                isBoss,
 
                 // BACKGROUND POSITION
                 positionRef,

@@ -19,7 +19,7 @@ export default function Navbar({ prevPage, onBackButtonClicked, onLogoClicked })
 
     // Contexts
     const { logout } = useContext(API);
-    const { setRoomUsers, setRoomID } = useContext(Data);
+    const { setRoomUsers, setRoomID, isBoss } = useContext(Data);
     const { emit } = useContext(Socket);
 
     // Redirect state
@@ -57,6 +57,9 @@ export default function Navbar({ prevPage, onBackButtonClicked, onLogoClicked })
 
     // Leave the room
     const leaveRoom = (inform) => {
+        // Set boss to false
+        isBoss.current = false;
+
         // Delete the room code
         setRoomID(null);
 

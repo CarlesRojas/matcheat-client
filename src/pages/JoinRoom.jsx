@@ -21,7 +21,7 @@ export default function JoinRoom() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Join Room", "color: grey; font-size: 11px");
 
     // Contexts
-    const { setRoomID, setRoomUsers, setBackgroundGradient, landingDone, image, username, socketError } = useContext(Data);
+    const { setRoomID, setRoomUsers, isBoss, setBackgroundGradient, landingDone, image, username, socketError } = useContext(Data);
     const { emit, sub, subOnce, unsub } = useContext(Socket);
 
     // Redirect state
@@ -119,8 +119,17 @@ export default function JoinRoom() {
         console.log(`${simplifiedUser.username} left the room ${room.roomID}.`);
     };
 
+    // On the room starting
+    const onRoomHasStarted = () => {
+        // Redirect to restaurants
+        setRedirectTo("/restaurants");
+    };
+
     // Leave the room
     const leaveRoom = (inform) => {
+        // Set boss to false
+        isBoss.current = false;
+
         // Delete the room code
         setRoomID(null);
 
@@ -135,6 +144,7 @@ export default function JoinRoom() {
     const onBackButtonClicked = () => {
         if (currPageRef.current === "join") setRedirectTo("/home");
         else showJoinScreen(false);
+
         // Leave room
         leaveRoom(true);
     };
@@ -154,6 +164,9 @@ export default function JoinRoom() {
 
         // Subscribe to a user leaving the room
         sub("userLeftRoom", onUserLeftRoom);
+
+        // Subscribe to the room start event
+        sub("roomHasStarted", onRoomHasStarted);
 
         // Create amd join the room
         emit("joinRoom", { roomID: codeForm, username: username.current });
@@ -225,6 +238,7 @@ export default function JoinRoom() {
             unsub("roomUsers");
             unsub("userJoinedRoom");
             unsub("userLeftRoom");
+            unsub("roomHasStarted");
 
             // Unsubscribe to error and disconnext events
             window.PubSub.unsub("onSocketError", onSocketError);

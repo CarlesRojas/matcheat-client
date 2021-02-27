@@ -24,7 +24,7 @@ export default function Home() {
 
     // Contexts
     const { useForceUpdate } = useContext(Utils);
-    const { setRoomID, setRoomUsers, setBackgroundGradient, username, image, landingDone, socketError } = useContext(Data);
+    const { setRoomID, setRoomUsers, isBoss, setBackgroundGradient, username, image, landingDone, socketError } = useContext(Data);
     const { connect, emit } = useContext(Socket);
 
     // Redirect state
@@ -42,6 +42,9 @@ export default function Home() {
 
     // Leave the room
     const leaveRoom = (inform) => {
+        // Set boss to false
+        isBoss.current = false;
+
         // Delete the room code
         setRoomID(null);
 
