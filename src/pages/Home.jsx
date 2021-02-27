@@ -24,8 +24,8 @@ export default function Home() {
 
     // Contexts
     const { useForceUpdate } = useContext(Utils);
-    const { setBackgroundGradient, username, image, landingDone, socketError } = useContext(Data);
-    const { connect } = useContext(Socket);
+    const { setRoomID, setRoomUsers, setBackgroundGradient, username, image, landingDone, socketError } = useContext(Data);
+    const { connect, emit } = useContext(Socket);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
@@ -35,6 +35,22 @@ export default function Home() {
 
     // Force update
     const forceUpdate = useForceUpdate();
+
+    // #################################################
+    //   ROOM
+    // #################################################
+
+    // Leave the room
+    const leaveRoom = (inform) => {
+        // Delete the room code
+        setRoomID(null);
+
+        // Clear the room users array
+        setRoomUsers([]);
+
+        // Inform others in the room
+        if (inform) emit("leaveRoom", {});
+    };
 
     // #################################################
     //   OPTION CLICKED
@@ -86,6 +102,9 @@ export default function Home() {
 
     // On componente mount
     useEffect(() => {
+        // Leave room
+        leaveRoom(true);
+
         // Connect to socket
         connect();
 
