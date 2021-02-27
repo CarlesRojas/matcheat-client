@@ -239,11 +239,22 @@ export default function JoinRoom() {
     if (redirectTo) return <Redirect to={redirectTo} push={true} />;
 
     // Style for the glass
-    const glassStyle = {
+    const joinGlassStyle = {
         minHeight: "8vh",
         padding: "2%",
         display: "flex",
         flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+    };
+
+    // Style for the glass
+    const roomGlassStyle = {
+        minHeight: "8vh",
+        margin: "0 0 5%",
+        padding: "2%",
+        display: "flex",
+        flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
     };
@@ -255,7 +266,7 @@ export default function JoinRoom() {
             <div style={{ pointerEvents: "none", flexGrow: "1" }}></div>
 
             <animated.div className="section join" style={{ x: pagePositions.joinX }}>
-                <Glass style={glassStyle} onClick={() => {}} classes="">
+                <Glass style={joinGlassStyle} onClick={() => {}} classes="">
                     <Profile image={image.current} text={username.current} size={"1.5rem"} clickable={false}></Profile>
 
                     <form autoComplete="off" noValidate spellCheck="false" onSubmit={onCodeEnter}>
@@ -283,6 +294,9 @@ export default function JoinRoom() {
             <animated.div className="section room" style={{ x: pagePositions.roomX }}>
                 <div className="marginContainer" style={{ marginTop: roomMargin }}>
                     <Room />
+                    <Glass style={roomGlassStyle} classes="waiting">
+                        <p>Waiting to Start...</p>
+                    </Glass>
                 </div>
             </animated.div>
         </div>
