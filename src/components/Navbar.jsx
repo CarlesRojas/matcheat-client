@@ -13,7 +13,7 @@ import { API } from "contexts/API";
 import { Data } from "contexts/Data";
 import { Socket } from "contexts/Socket";
 
-export default function Navbar({ prevPage, onBackButtonClicked }) {
+export default function Navbar({ prevPage, onBackButtonClicked, onLogoClicked }) {
     // Print Render
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Navbar", "color: grey; font-size: 11px");
 
@@ -33,7 +33,9 @@ export default function Navbar({ prevPage, onBackButtonClicked }) {
 
     // Show log out button
     const onShowLogout = () => {
+        if (onLogoClicked) onLogoClicked(true);
         setLogoutActive(true);
+
         const timeline = gsap.timeline({ defaults: { ease: "power1" } });
         timeline.fromTo(".buttonContainer", { height: "0rem" }, { height: "3.5rem", duration: 0.2 });
         timeline.fromTo(".navbar", { minHeight: "3rem" }, { minHeight: "6.5rem", duration: 0.2 }, "-=0.2");
@@ -43,6 +45,7 @@ export default function Navbar({ prevPage, onBackButtonClicked }) {
 
     // Hide log out button
     const onHideLogout = () => {
+        if (onLogoClicked) onLogoClicked(false);
         setLogoutActive(false);
 
         const timeline = gsap.timeline({ defaults: { ease: "power1" } });
@@ -68,7 +71,11 @@ export default function Navbar({ prevPage, onBackButtonClicked }) {
     const onLogout = () => {
         // Leave Room
         leaveRoom(true);
+
+        // Redirect
         setRedirectTo("/");
+
+        // Logout
         logout();
     };
 
@@ -80,17 +87,16 @@ export default function Navbar({ prevPage, onBackButtonClicked }) {
     if (redirectTo) return <Redirect to={redirectTo} push={true} />;
 
     // Back button if necessary
-    var backButton =
-        prevPage && onBackButtonClicked ? (
-            <SVG
-                className="backButton"
-                src={BackIcon}
-                onClick={() => {
-                    onBackButtonClicked();
-                    setRedirectTo(prevPage);
-                }}
-            />
-        ) : null;
+    var backButton = onBackButtonClicked ? (
+        <SVG
+            className="backButton"
+            src={BackIcon}
+            onClick={() => {
+                onBackButtonClicked();
+                if (prevPage) setRedirectTo(prevPage);
+            }}
+        />
+    ) : null;
 
     return (
         <div className="navbar">

@@ -3,7 +3,7 @@
 // #######################################
 
 $background: rgb(220, 220, 220);
-$text: rgb(58, 58, 58);
+$text: rgba(0, 0, 0, 0.7);
 
 $font-size: 18px;
 $line-height: 22px;
@@ -356,7 +356,7 @@ body {
                 color: rgb(146, 0, 0);
                 margin-bottom: 5%;
                 font-size: 0.8em;
-                font-weight: 500;
+                font-weight: 600;
                 text-align: center;
             }
         }
@@ -540,7 +540,9 @@ body {
     height: 100%;
     width: 100%;
 
-    .container {
+    .section {
+        position: absolute;
+        height: 100%; // ROJAS
         display: flex;
         flex-direction: column;
         flex-grow: 1;
@@ -586,19 +588,27 @@ body {
                     }
                 }
             }
+        }
 
-            .error {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 2.7em;
-                width: 85%;
-                color: rgb(146, 0, 0);
-                margin-bottom: 5%;
-                font-size: 0.8em;
-                font-weight: 500;
-                text-align: center;
-            }
+        .marginContainer {
+            @include transition(margin 0.2s ease-in-out) display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+        }
+
+        .error {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 2.7em;
+            width: 85%;
+            color: rgb(146, 0, 0);
+            font-size: 0.8em;
+            font-weight: 600;
+            text-align: center;
         }
     }
 }
@@ -711,7 +721,7 @@ body {
     cursor: pointer;
     background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.5) 75%);
     background-position: 50px -150px;
-    color: rgba(0, 0, 0, 0.6);
+    color: $text;
     margin-bottom: 8%;
     border: solid 2px transparent;
     border: 0;
@@ -746,6 +756,10 @@ body {
         padding: 3% 4%;
         font-size: 0.9rem;
         @include box-shadow(5px 5px 10px rgba(0, 0, 0, 0.1));
+    }
+
+    &.inactive {
+        pointer-events: none;
     }
 }
 
@@ -961,7 +975,7 @@ body {
         color: transparent;
         margin: -0.8em 0.5em -0.8em -0.8em;
         @include border-radius(100vh);
-        @include box-shadow(0 0 20px rgba(0, 0, 0, 0.2));
+        @include box-shadow(0 0 25px rgba(0, 0, 0, 0.4));
         @include transition(transform 0.2s ease-in-out);
 
         &.inverted {
@@ -1007,7 +1021,7 @@ body {
 
     .name {
         width: fit-content;
-        color: rgba(0, 0, 0, 0.6);
+        color: $text;
         padding: 0.2em;
         font-size: 1em;
         font-weight: 700;
@@ -1043,20 +1057,51 @@ body {
 // #######################################
 
 .room {
-    position: relative;
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
-    width: 90%;
-    overflow-y: scroll;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
-    background-position: 50px -150px;
-    margin: 1em 0;
-    border: solid 1px rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(5px);
-    @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
-    @include border-radius(20px);
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    z-index: 1;
 
-    .profileContainer {
-        width: 100%;
-        padding-top: 1em;
+    .roomContainer {
+        position: relative;
+        flex-grow: 1;
+        width: 90%;
+        overflow-y: scroll;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
+        background-position: 50px -150px;
+        margin: 1em 0 0 0;
+        border: solid 1px rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(5px);
+        @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+        @include border-radius(20px);
+
+        .profileContainer {
+            width: 100%;
+            padding-top: 1em;
+        }
+    }
+
+    .numUsers {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transform: translateY(-50%);
+        min-width: 20%;
+        bottom: 0;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
+        background-position: 50px -150px;
+        border: solid 1px rgba(255, 255, 255, 0.15);
+        padding: 5px 20px;
+        font-size: 0.75rem;
+        font-weight: 800;
+        text-align: center;
+        text-transform: uppercase;
+        backdrop-filter: blur(5px);
+        @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+        @include border-radius(20px);
     }
 }

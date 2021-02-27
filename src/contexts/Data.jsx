@@ -36,8 +36,8 @@ const DataProvider = (props) => {
         red: ["#ff8a5f", "#be4242"],
         pink: ["#ff74d4", "#ff8a5f"],
         purple: ["#8374ff", "#ff74d4"],
-        blue: ["#232b62", "#78d3ff"],
-        green: ["#2d903a", "#78d3ff"],
+        blue: ["#232b62", "#69acff"],
+        green: ["#2d903a", "#69acff"],
         blaugrana: ["#ff5f7d", "#5542be"],
     };
     const currGradient = useRef(getCookie("matchEat_token") ? "blaugrana" : "pink");

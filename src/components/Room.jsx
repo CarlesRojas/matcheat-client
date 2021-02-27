@@ -28,11 +28,18 @@ export default function Room() {
     //   RENDER
     // #################################################
 
+    // Users
     const users = roomUsers.map(({ username, image }, i) => <ProfileList key={i} image={image} text={username} clickable={false} inverted={i % 2 === 1} />);
+
+    // Num users text
+    const numUsers = users.length > 1 ? `${users.length} people` : "only you";
 
     return (
         <div id="room" className="room">
-            <div className="profileContainer">{users}</div>
+            <div className="roomContainer">
+                <div className="profileContainer">{users}</div>
+            </div>
+            <div className="numUsers">{numUsers}</div>
         </div>
     );
 }

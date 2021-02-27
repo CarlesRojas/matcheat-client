@@ -1,15 +1,20 @@
 import React, { useEffect, useContext, useState, useRef } from "react";
 import { Redirect } from "react-router-dom";
+import { useSpring, animated } from "react-spring";
 import gsap from "gsap";
 
 // Components
 import Navbar from "components/Navbar";
 import Glass from "components/Glass";
 import Profile from "components/Profile";
+import Room from "components/Room";
 
 // Contexts
 import { Data } from "contexts/Data";
 import { Socket } from "contexts/Socket";
+
+// Constants
+const SCREEN_WIDTH = window.innerWidth;
 
 export default function JoinRoom() {
     // Print Render
@@ -35,10 +40,62 @@ export default function JoinRoom() {
     // Form states
     const [codeForm, setCodeForm] = useState("");
 
+    // Form Error
+    const [formError, setFormError] = useState(null);
+
     // When the login form changes
     const onCodeFormChange = (event) => {
         const { value } = event.target;
         setCodeForm(value);
+    };
+
+    // #################################################
+    //   PAGE NAVIGATION
+    // #################################################
+
+    // Current page: "join" "room"
+    const currPageRef = useRef("join");
+    const [, setCurrPage] = useState("join");
+
+    // Page positions
+    const [pagePositions, setPagePositions] = useSpring(() => ({ joinX: 0, roomX: SCREEN_WIDTH }));
+
+    // Room margin for navbar
+    const [roomMargin, setRoomMargin] = useState("3rem");
+
+    // Show the join screen
+    const showJoinScreen = (first, reset = true) => {
+        // Fade in if it is the first time
+        if (first) {
+            const timeline = gsap.timeline({ defaults: { ease: "power1" } });
+            timeline.fromTo(".join > .glass", { opacity: 0 }, { opacity: 1, duration: 1 }, "+=0.25");
+        }
+
+        if (reset) resetForms();
+
+        //setBackgroundGradient("pink");
+        setPagePositions({ joinX: 0, roomX: SCREEN_WIDTH });
+        currPageRef.current = "join";
+        setCurrPage("join");
+    };
+
+    // Show the room screen
+    const showRoomScreen = () => {
+        //setBackgroundGradient("red");
+        setPagePositions({ joinX: -SCREEN_WIDTH, roomX: 0 });
+        currPageRef.current = "room";
+        setCurrPage("room");
+    };
+
+    // Reset all form fields and errors
+    const resetForms = () => {
+        setFormError(null);
+        setCodeForm("");
+    };
+
+    // On navbar logo clicked
+    const onLogoClicked = (open) => {
+        setRoomMargin(open ? "6.5rem" : "3rem");
     };
 
     // #################################################
@@ -76,6 +133,8 @@ export default function JoinRoom() {
 
     // Delete room if user leaves this page
     const onBackButtonClicked = () => {
+        if (currPageRef.current === "join") setRedirectTo("/home");
+        else showJoinScreen(false);
         // Leave room
         leaveRoom(true);
     };
@@ -105,15 +164,24 @@ export default function JoinRoom() {
     // #################################################
 
     // On socket error
-    const onSocketError = ({ error }) => {
-        // Set error
-        socketError.current = error;
+    const onSocketError = ({ error, errorCode }) => {
+        // If user inputs a wrong room code
+        if (errorCode === 610) {
+            setFormError(error);
+            showJoinScreen(false, false);
+        }
 
-        // Leave room
-        leaveRoom(false);
+        // On other errors
+        else if (errorCode !== 621) {
+            // Set error
+            socketError.current = error;
 
-        // Redirect to home
-        setRedirectTo("/home");
+            // Leave room
+            leaveRoom(false);
+
+            // Redirect to home
+            setRedirectTo("/home");
+        }
     };
 
     // On socket disconnection
@@ -138,9 +206,8 @@ export default function JoinRoom() {
         setBackgroundGradient("blue");
 
         if (landingDone.current) {
-            // Animate
-            const timeline = gsap.timeline({ defaults: { ease: "power1" } });
-            timeline.fromTo(".joinRoom > .container > .glass", { opacity: 0 }, { opacity: 1, duration: 0.2 }, "+=0.25");
+            // Show the join screen
+            showJoinScreen(true);
 
             // Subscribe to error and disconnext events
             window.PubSub.sub("onSocketError", onSocketError);
@@ -183,8 +250,11 @@ export default function JoinRoom() {
 
     return (
         <div className="joinRoom">
-            <Navbar prevPage="/home" onBackButtonClicked={onBackButtonClicked}></Navbar>
-            <div className="container">
+            <Navbar onBackButtonClicked={onBackButtonClicked} onLogoClicked={onLogoClicked}></Navbar>
+
+            <div style={{ pointerEvents: "none", flexGrow: "1" }}></div>
+
+            <animated.div className="section join" style={{ x: pagePositions.joinX }}>
                 <Glass style={glassStyle} onClick={() => {}} classes="">
                     <Profile image={image.current} text={username.current} size={"1.5rem"} clickable={false}></Profile>
 
@@ -201,12 +271,20 @@ export default function JoinRoom() {
                             ></input>
                         </div>
 
-                        <button type="submit" className="button last">
+                        <button type="submit" className="button last" onClick={showRoomScreen}>
                             JOIN ROOM
                         </button>
                     </form>
+
+                    <div className="error">{formError}</div>
                 </Glass>
-            </div>
+            </animated.div>
+
+            <animated.div className="section room" style={{ x: pagePositions.roomX }}>
+                <div className="marginContainer" style={{ marginTop: roomMargin }}>
+                    <Room />
+                </div>
+            </animated.div>
         </div>
     );
 }

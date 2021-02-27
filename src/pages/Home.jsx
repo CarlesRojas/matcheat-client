@@ -66,7 +66,7 @@ export default function Home() {
         }
 
         // Other errors
-        else if (socketError.current !== error) {
+        else if (socketError.current !== error && errorCode !== 621) {
             socketError.current = error;
             forceUpdate();
         }
