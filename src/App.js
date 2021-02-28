@@ -3,6 +3,7 @@ import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
 // Pages
 import Restaurants from "pages/Restaurants";
+import Loading from "pages/Loading";
 import JoinRoom from "pages/JoinRoom";
 import CreateRoom from "pages/CreateRoom";
 import Home from "pages/Home";
@@ -23,6 +24,11 @@ export default function App() {
                     {/*   RESTAURANTS                     */}
                     {/* ################################# */}
                     <Route path="/restaurants" component={Restaurants} exact></Route>
+
+                    {/* ################################# */}
+                    {/*   LOADING                         */}
+                    {/* ################################# */}
+                    <Route path="/loading" component={Loading} exact></Route>
 
                     {/* ################################# */}
                     {/*   JOIN ROOM                       */}

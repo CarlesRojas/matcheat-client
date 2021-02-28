@@ -73,8 +73,8 @@ export default function Home() {
     //   ERRORS
     // #################################################
 
-    // On socket error
-    const onSocketError = ({ error, errorCode }) => {
+    // Throw an error and go home
+    const throwError = ({ error, errorCode }) => {
         // Server reconected
         if (errorCode === 601) {
             // Only update if socketError was not null
@@ -91,22 +91,14 @@ export default function Home() {
         }
     };
 
-    // On socket disconnection
-    const onSocketDisconnected = () => {
-        if (!socketError.current) {
-            socketError.current = "Disconnected from the server";
-            forceUpdate();
-        }
-    };
-
     // #################################################
     //   COMPONENT MOUNT
     // #################################################
 
     // On componente mount
     useEffect(() => {
-        // Leave room
-        leaveRoom(true);
+        // Leave room ROJAS change again to true?
+        leaveRoom(false);
 
         // Connect to socket
         connect();
@@ -121,8 +113,7 @@ export default function Home() {
         }
 
         // Subscribe to error and disconnext events
-        window.PubSub.sub("onSocketError", onSocketError);
-        window.PubSub.sub("onSocketDisconnected", onSocketDisconnected);
+        window.PubSub.sub("onSocketError", throwError);
 
         // Info about the landing
         const landingDoneConst = landingDone.current;
@@ -132,8 +123,7 @@ export default function Home() {
             if (landingDoneConst) socketError.current = null;
 
             // Unsubscribe to error and disconnext events
-            window.PubSub.unsub("onSocketError", onSocketError);
-            window.PubSub.unsub("onSocketDisconnected", onSocketDisconnected);
+            window.PubSub.unsub("onSocketError", throwError);
         };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

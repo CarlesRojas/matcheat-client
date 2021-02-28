@@ -638,6 +638,64 @@ body {
     }
 }
 
+// #######################################
+//      LOADING
+// #######################################
+
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+
+        .loadingIcon {
+            width: 25%;
+            z-index: 1;
+            @include animation(heartbeat 2s linear infinite);
+
+            @keyframes heartbeat {
+                10% {
+                    transform: scale(1);
+                }
+                20% {
+                    transform: scale(1.1);
+                }
+                30% {
+                    transform: scale(1);
+                }
+                35% {
+                    transform: scale(1);
+                }
+                45% {
+                    transform: scale(1.1);
+                }
+                55% {
+                    transform: scale(1);
+                }
+            }
+        }
+
+        .loadingText {
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            text-align: center;
+            text-transform: uppercase;
+            margin: 1rem 0 0 0;
+        }
+    }
+}
+
 // ##############################################################################
 // ##############################################################################
 //      COMPONENTS

@@ -40,6 +40,7 @@ const DataProvider = (props) => {
         blue: ["#232b62", "#69acff"],
         green: ["#2d903a", "#69acff"],
         blaugrana: ["#ff5f7d", "#5542be"],
+        grey: ["#808080", "#515151"],
     };
     const currGradient = useRef(getCookie("matchEat_token") ? "blaugrana" : "pink");
     const [{ gradient }, setGradient] = useSpring(() => ({

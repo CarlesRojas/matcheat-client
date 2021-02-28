@@ -51,22 +51,10 @@ export default function Restaurants() {
     //   ERRORS
     // #################################################
 
-    // On socket error
-    const onSocketError = ({ error }) => {
+    // Throw an error and go home
+    const throwError = ({ error }) => {
         // Set error
         socketError.current = error;
-
-        // Leave room
-        leaveRoom(false);
-
-        // Redirect to home
-        setRedirectTo("/home");
-    };
-
-    // On socket disconnection
-    const onSocketDisconnected = () => {
-        // Set error
-        socketError.current = "Disconnected from the server";
 
         // Leave room
         leaveRoom(false);
@@ -82,19 +70,17 @@ export default function Restaurants() {
     // On componente mount
     useEffect(() => {
         // Change Color
-        setBackgroundGradient("red");
+        setBackgroundGradient("grey");
 
         if (landingDone.current) {
             // Subscribe to error and disconnext events
-            window.PubSub.sub("onSocketError", onSocketError);
-            window.PubSub.sub("onSocketDisconnected", onSocketDisconnected);
+            window.PubSub.sub("onSocketError", throwError);
         }
 
         // Unsubscribe on unmount
         return () => {
             // Unsubscribe to error and disconnext events
-            window.PubSub.unsub("onSocketError", onSocketError);
-            window.PubSub.unsub("onSocketDisconnected", onSocketDisconnected);
+            window.PubSub.unsub("onSocketError", throwError);
         };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

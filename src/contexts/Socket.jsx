@@ -34,7 +34,7 @@ const SocketProvider = (props) => {
         socket.current.on("disconnect", () => {
             console.log("Disconnected from server");
             // Inform about the disconnection
-            window.PubSub.emit("onSocketDisconnected");
+            window.PubSub.emit("onSocketError", { error: "Disconnected from server", errorCode: 602 });
         });
     };
 

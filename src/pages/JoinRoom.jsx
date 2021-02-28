@@ -121,8 +121,8 @@ export default function JoinRoom() {
 
     // On the room starting
     const onRoomHasStarted = () => {
-        // Redirect to restaurants
-        setRedirectTo("/restaurants");
+        // Redirect to loading
+        setRedirectTo("/loading");
     };
 
     // Leave the room
@@ -179,8 +179,8 @@ export default function JoinRoom() {
     //   ERRORS
     // #################################################
 
-    // On socket error
-    const onSocketError = ({ error, errorCode }) => {
+    // Throw an error and go home
+    const throwError = ({ error, errorCode }) => {
         // If user inputs a wrong room code
         if (errorCode === 610) {
             setFormError(error);
@@ -206,18 +206,6 @@ export default function JoinRoom() {
         }
     };
 
-    // On socket disconnection
-    const onSocketDisconnected = () => {
-        // Set error
-        socketError.current = "Disconnected from the server";
-
-        // Leave room
-        leaveRoom(false);
-
-        // Redirect to home
-        setRedirectTo("/home");
-    };
-
     // #################################################
     //   COMPONENT MOUNT
     // #################################################
@@ -232,8 +220,7 @@ export default function JoinRoom() {
             showJoinScreen(true);
 
             // Subscribe to error and disconnext events
-            window.PubSub.sub("onSocketError", onSocketError);
-            window.PubSub.sub("onSocketDisconnected", onSocketDisconnected);
+            window.PubSub.sub("onSocketError", throwError);
 
             // Focus the input
             inputRef.current.focus();
@@ -247,8 +234,7 @@ export default function JoinRoom() {
             unsub("roomHasStarted");
 
             // Unsubscribe to error and disconnext events
-            window.PubSub.unsub("onSocketError", onSocketError);
-            window.PubSub.unsub("onSocketDisconnected", onSocketDisconnected);
+            window.PubSub.unsub("onSocketError", throwError);
         };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -294,15 +280,7 @@ export default function JoinRoom() {
 
                     <form autoComplete="off" noValidate spellCheck="false" onSubmit={onCodeEnter}>
                         <div className="inputContainer">
-                            <input
-                                className="input"
-                                type="text"
-                                placeholder=" enter room code"
-                                value={codeForm}
-                                onChange={onCodeFormChange}
-                                autoComplete="off"
-                                ref={inputRef}
-                            ></input>
+                            <input className="input" type="text" placeholder=" enter room code" value={codeForm} onChange={onCodeFormChange} autoComplete="off" ref={inputRef}></input>
                         </div>
 
                         <button type="submit" className="button last" onClick={showRoomScreen}>

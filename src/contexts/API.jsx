@@ -7,6 +7,9 @@ import { Data } from "contexts/Data";
 // API Context
 export const API = createContext();
 
+// API version
+const apiVersion = "api_v1";
+
 const APIProvider = (props) => {
     // Contexts
     const { setCookie, getCookie, clearCookies, urltoFile } = useContext(Utils);
@@ -35,7 +38,7 @@ const APIProvider = (props) => {
 
         try {
             // Fetch S3 url configuration
-            var rawResponse = await fetch(apiURL + "api_v1/aws/getS3URL", {
+            var rawResponse = await fetch(`${apiURL}${apiVersion}/aws/getS3URL`, {
                 method: "post",
                 headers: {
                     Accept: "application/json, text/plain, */*",
@@ -52,6 +55,7 @@ const APIProvider = (props) => {
         } catch (error) {
             return error;
         }
+
         // #################################################
         //   UPLOAD THE IMAGE
         // #################################################
@@ -85,7 +89,7 @@ const APIProvider = (props) => {
 
         try {
             // Fetch
-            rawResponse = await fetch(apiURL + "api_v1/user/register", {
+            rawResponse = await fetch(`${apiURL}${apiVersion}/user/register`, {
                 method: "post",
                 headers: {
                     Accept: "application/json, text/plain, */*",
@@ -115,7 +119,7 @@ const APIProvider = (props) => {
 
         try {
             // Fetch
-            var rawResponse = await fetch(apiURL + "api_v1/user/login", {
+            var rawResponse = await fetch(`${apiURL}${apiVersion}/user/login`, {
                 method: "post",
                 headers: {
                     Accept: "application/json, text/plain, */*",
@@ -184,6 +188,38 @@ const APIProvider = (props) => {
         return false;
     };
 
+    // Get the restaurants from the Google Places API
+    const getPlaces = async (roomID, lat, lon) => {
+        // Post data
+        var postData = {
+            roomID,
+            lat,
+            lon,
+        };
+
+        try {
+            // Fetch
+            var rawResponse = await fetch(`${apiURL}${apiVersion}/getPlaces`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            // Get data from response
+            const response = await rawResponse.json();
+
+            // Return response
+            return response;
+        } catch (error) {
+            return error;
+        }
+    };
+
     // Return the context
     return (
         <API.Provider
@@ -193,6 +229,7 @@ const APIProvider = (props) => {
                 login,
                 logout,
                 isLoggedIn,
+                getPlaces,
             }}
         >
             {props.children}

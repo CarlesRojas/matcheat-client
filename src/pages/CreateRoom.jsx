@@ -54,8 +54,8 @@ export default function CreateRoom() {
 
     // On the room starting
     const onRoomHasStarted = () => {
-        // Redirect to restaurants
-        setRedirectTo("/restaurants");
+        // Redirect to loading
+        setRedirectTo("/loading");
     };
 
     // Leave the room
@@ -84,30 +84,18 @@ export default function CreateRoom() {
         // Set as boss
         isBoss.current = true;
 
-        // Emit start event ROJAS handle in server
-        emit("startRoom", { roomID });
+        // Inform that the room starts
+        emit("broadcastMessageToRoom", { message: "roomHasStarted", roomID });
     };
 
     // #################################################
     //   ERRORS
     // #################################################
 
-    // On socket error
-    const onSocketError = ({ error }) => {
+    // Throw an error and go home
+    const throwError = ({ error }) => {
         // Set error
         socketError.current = error;
-
-        // Leave room
-        leaveRoom(false);
-
-        // Redirect to home
-        setRedirectTo("/home");
-    };
-
-    // On socket disconnection
-    const onSocketDisconnected = () => {
-        // Set error
-        socketError.current = "Disconnected from the server";
 
         // Leave room
         leaveRoom(false);
@@ -169,8 +157,7 @@ export default function CreateRoom() {
             sub("roomHasStarted", onRoomHasStarted);
 
             // Subscribe to error and disconnext events
-            window.PubSub.sub("onSocketError", onSocketError);
-            window.PubSub.sub("onSocketDisconnected", onSocketDisconnected);
+            window.PubSub.sub("onSocketError", throwError);
         }
 
         // Unsubscribe on unmount
@@ -181,8 +168,7 @@ export default function CreateRoom() {
             unsub("roomHasStarted");
 
             // Unsubscribe to error and disconnext events
-            window.PubSub.unsub("onSocketError", onSocketError);
-            window.PubSub.unsub("onSocketDisconnected", onSocketDisconnected);
+            window.PubSub.unsub("onSocketError", throwError);
         };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

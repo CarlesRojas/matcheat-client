@@ -35,10 +35,4 @@ export default class EventsPubSub {
         error:          The error message
         errorCode:      The error code
     },
-
-    {
-        event:          onSocketDisconnected
-        desciption:     Called when the socket disconnects
-        parameters:     { }
-    },
 */
