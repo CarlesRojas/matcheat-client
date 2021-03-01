@@ -53,7 +53,7 @@ const APIProvider = (props) => {
             var signedRequest = response.signedRequest;
             var url = response.url;
         } catch (error) {
-            return error;
+            return { error: "Sign Up Error" };
         }
 
         // #################################################
@@ -72,7 +72,7 @@ const APIProvider = (props) => {
                 body: imageFile,
             });
         } catch (error) {
-            return error;
+            return { error: "Sign Up Error" };
         }
 
         // #################################################
@@ -105,7 +105,7 @@ const APIProvider = (props) => {
             // Return response
             return response;
         } catch (error) {
-            return error;
+            return { error: "Sign Up Error" };
         }
     };
 
@@ -150,7 +150,7 @@ const APIProvider = (props) => {
             // Return response
             return response;
         } catch (error) {
-            return error;
+            return { error: "Login Error" };
         }
     };
 
@@ -216,7 +216,7 @@ const APIProvider = (props) => {
             // Return response
             return response;
         } catch (error) {
-            return error;
+            return { error: "Error getting Restaurants" };
         }
     };
 

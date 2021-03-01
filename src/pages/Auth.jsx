@@ -73,7 +73,6 @@ export default function Auth() {
             setLoginError(loginResult.error);
             showLoginScreen(true);
         } else {
-            console.log(`LOGIN SUCCESSFUL ${loginResult.username}`);
             setRedirectTo("/home");
         }
     };
@@ -305,15 +304,7 @@ export default function Auth() {
                     <form autoComplete="off" noValidate spellCheck="false" onSubmit={onLogin}>
                         <div className="inputContainer">
                             <SVG className="inputIcon email" src={EmailIcon} />
-                            <input
-                                className="input email"
-                                type="email"
-                                placeholder=" email"
-                                name="email"
-                                value={loginForm.email}
-                                onChange={onLoginFormChange}
-                                autoComplete="off"
-                            ></input>
+                            <input className="input email" type="email" placeholder=" email" name="email" value={loginForm.email} onChange={onLoginFormChange} autoComplete="off"></input>
                         </div>
 
                         <div className="inputContainer">
@@ -360,15 +351,7 @@ export default function Auth() {
 
                         <div className="inputContainer">
                             <SVG className="inputIcon email" src={EmailIcon} />
-                            <input
-                                className="input email"
-                                type="email"
-                                placeholder=" email"
-                                name="email"
-                                value={signupForm.email}
-                                onChange={onSingupFormChange}
-                                autoComplete="off"
-                            ></input>
+                            <input className="input email" type="email" placeholder=" email" name="email" value={signupForm.email} onChange={onSingupFormChange} autoComplete="off"></input>
                         </div>
 
                         <div className="inputContainer">
