@@ -19,9 +19,9 @@ export default function Loading() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Loading", "color: grey; font-size: 11px");
 
     // Contexts
-    const { roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, socketError } = useContext(Data);
+    const { username, roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, socketError } = useContext(Data);
     const { emit, sub, unsub } = useContext(Socket);
-    const { getPlaces } = useContext(API);
+    const { getPlaces, getRoomRestaurants } = useContext(API);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
@@ -44,8 +44,8 @@ export default function Loading() {
         // Clear the room users array
         setRoomUsers([]);
 
-        // Clear the restaurants
-        restaurants.current = [];
+        // Clear the restaurants  ROJAS UNCOMMENT
+        //restaurants.current = [];
 
         // Inform others in the room
         if (inform) emit("leaveRoom", {});
@@ -58,7 +58,12 @@ export default function Loading() {
     };
 
     // On the restaurants loaded
-    const onRestaurantsLoaded = () => {
+    const onRestaurantsLoaded = async () => {
+        // Get the restaurants
+        await getRoomRestaurants(roomID);
+
+        console.log(JSON.stringify(restaurants.current));
+
         // Redirect to restaurants
         setRedirectTo("/restaurants");
     };
@@ -113,8 +118,8 @@ export default function Loading() {
                     try {
                         // Get Places
                         // ROJAS replace with this line
-                        //const placesResponse = await getPlaces(roomID, latitude, longitude);
-                        const placesResponse = await getPlaces(roomID, 41.390564, 2.162579);
+                        //const placesResponse = await getPlaces(roomID, latitude, longitude, username);
+                        const placesResponse = await getPlaces(roomID, 41.390564, 2.162579, username);
 
                         if ("error" in placesResponse) return throwError({ error: placesResponse.error });
 
@@ -131,7 +136,11 @@ export default function Loading() {
                     else return throwError({ error: "Geolocation not supported" });
                 };
 
-                getLocation();
+                // ROJAS UNCOMMENT
+                //getLocation();
+
+                // ROJAS DELETE
+                setRedirectTo("/restaurants");
             }
         }
 

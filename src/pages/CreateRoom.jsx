@@ -69,8 +69,8 @@ export default function CreateRoom() {
         // Clear the room users array
         setRoomUsers([]);
 
-        // Clear the restaurants
-        restaurants.current = [];
+        // Clear the restaurants ROJAS UNCOMMENT
+        //restaurants.current = [];
 
         // Inform others in the room
         if (inform) emit("leaveRoom", {});

@@ -707,6 +707,40 @@ body {
     }
 }
 
+// #######################################
+//      RESTAURANTS
+// #######################################
+
+.restaurants {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+
+        .restaurantContainer {
+            position: relative;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        .controlsContainer {
+            height: 10%;
+            width: 100%;
+            background-color: rgb(255, 206, 206);
+        }
+    }
+}
+
 // ##############################################################################
 // ##############################################################################
 //      COMPONENTS
@@ -1216,5 +1250,145 @@ body {
         backdrop-filter: blur(5px);
         @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
         @include border-radius(20px);
+    }
+}
+
+// #######################################
+//      RESTAURANT
+// #######################################
+
+.restaurant {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+
+    .imageContainer {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 80vw;
+        width: 80vw;
+        margin: 5vw;
+        @include border-radius(10px);
+
+        .picture {
+            pointer-events: none;
+            position: absolute;
+            height: 80vw;
+            max-height: 80vw;
+            min-height: 80vw;
+            width: 80vw;
+            max-width: 80vw;
+            min-width: 80vw;
+            background-position: center;
+            background-size: cover;
+            @include transition(opacity 0.2s ease-in-out);
+        }
+
+        .leftHalf {
+            height: 100%;
+            width: 50%;
+            z-index: 5;
+        }
+
+        .rightHalf {
+            height: 100%;
+            width: 50%;
+            z-index: 5;
+        }
+    }
+
+    .name {
+        padding: 0 5vw;
+        width: 100%;
+        overflow: hidden;
+        color: white;
+        margin-bottom: 2vw;
+        font-size: 1.2em;
+        font-weight: 700;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .adress {
+        opacity: 0.4;
+        padding: 0 5vw;
+        width: 100%;
+        overflow: hidden;
+        color: white;
+        margin-bottom: 5vw;
+        font-size: 0.7em;
+        font-weight: 600;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .ratingContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.7;
+        margin-bottom: 5vw;
+
+        .rating {
+            padding-right: 3vw;
+            width: 100%;
+            color: white;
+            font-size: 1em;
+            font-weight: 700;
+        }
+
+        .heart {
+            height: 2rem;
+            max-height: 2rem;
+            min-height: 2rem;
+            width: 2rem;
+            max-width: 2rem;
+            min-width: 2rem;
+            color: white;
+        }
+    }
+
+    .priceContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 5vw;
+
+        .dollar {
+            opacity: 0.2;
+            height: 1rem;
+            max-height: 1rem;
+            min-height: 1rem;
+            width: 1rem;
+            max-width: 1rem;
+            min-width: 1rem;
+            color: white;
+            margin: 0 -2px;
+
+            &.active {
+                opacity: 0.9;
+            }
+        }
+    }
+
+    .distance {
+        opacity: 0.7;
+        padding: 0 5vw;
+        width: 100%;
+        overflow: hidden;
+        color: text;
+        margin-bottom: 2vw;
+        font-size: 0.8em;
+        font-weight: 600;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }

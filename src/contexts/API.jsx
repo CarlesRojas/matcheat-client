@@ -189,9 +189,10 @@ const APIProvider = (props) => {
     };
 
     // Get the restaurants from the Google Places API
-    const getPlaces = async (roomID, lat, lon) => {
+    const getPlaces = async (roomID, lat, lon, bossName) => {
         // Post data
         var postData = {
+            bossName,
             roomID,
             lat,
             lon,
