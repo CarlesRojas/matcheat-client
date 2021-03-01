@@ -19,7 +19,7 @@ export default function Loading() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Loading", "color: grey; font-size: 11px");
 
     // Contexts
-    const { roomID, setRoomID, setRoomUsers, isBoss, setBackgroundGradient, landingDone, socketError } = useContext(Data);
+    const { roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, socketError } = useContext(Data);
     const { emit, sub, unsub } = useContext(Socket);
     const { getPlaces } = useContext(API);
 
@@ -43,6 +43,9 @@ export default function Loading() {
 
         // Clear the room users array
         setRoomUsers([]);
+
+        // Clear the restaurants
+        restaurants.current = [];
 
         // Inform others in the room
         if (inform) emit("leaveRoom", {});

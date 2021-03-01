@@ -7,14 +7,16 @@ import Navbar from "components/Navbar";
 // Contexts
 import { Data } from "contexts/Data";
 import { Socket } from "contexts/Socket";
+import { API } from "contexts/API";
 
 export default function Restaurants() {
     // Print Render
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Restaurants", "color: grey; font-size: 11px");
 
     // Contexts
-    const { setRoomID, setRoomUsers, isBoss, setBackgroundGradient, landingDone, socketError } = useContext(Data);
+    const { roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, socketError } = useContext(Data);
     const { emit /*, sub, subOnce, unsub*/ } = useContext(Socket);
+    const { getRoomRestaurants } = useContext(API);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
@@ -36,6 +38,9 @@ export default function Restaurants() {
 
         // Clear the room users array
         setRoomUsers([]);
+
+        // Clear the restaurants
+        restaurants.current = [];
 
         // Inform others in the room
         if (inform) emit("leaveRoom", {});
@@ -75,6 +80,16 @@ export default function Restaurants() {
         if (landingDone.current) {
             // Subscribe to error and disconnext events
             window.PubSub.sub("onSocketError", throwError);
+
+            const init = async () => {
+                // Get the restaurants
+                await getRoomRestaurants(roomID);
+
+                // Show first restaurant
+                console.log(restaurants.current);
+            };
+
+            init();
         }
 
         // Unsubscribe on unmount

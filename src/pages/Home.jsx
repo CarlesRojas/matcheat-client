@@ -24,7 +24,7 @@ export default function Home() {
 
     // Contexts
     const { useForceUpdate } = useContext(Utils);
-    const { setRoomID, setRoomUsers, isBoss, setBackgroundGradient, username, image, landingDone, socketError } = useContext(Data);
+    const { setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, username, image, landingDone, socketError } = useContext(Data);
     const { connect, emit } = useContext(Socket);
 
     // Redirect state
@@ -50,6 +50,9 @@ export default function Home() {
 
         // Clear the room users array
         setRoomUsers([]);
+
+        // Clear the restaurants
+        restaurants.current = [];
 
         // Inform others in the room
         if (inform) emit("leaveRoom", {});

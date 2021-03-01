@@ -26,6 +26,9 @@ const DataProvider = (props) => {
     const socketError = useRef(null);
     const isBoss = useRef(false);
 
+    // RESTAURANTS
+    const restaurants = useRef([]);
+
     // BACKGROUND POSITION
     const positionRef = useRef({ x: 0, y: 0 });
     const speedRef = useRef({ x: 0, y: 0 });
@@ -74,6 +77,9 @@ const DataProvider = (props) => {
                 setRoomUsers,
                 socketError,
                 isBoss,
+
+                // RESTAURANTS
+                restaurants,
 
                 // BACKGROUND POSITION
                 positionRef,

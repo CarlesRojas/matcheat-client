@@ -22,7 +22,7 @@ export default function CreateRoom() {
 
     // Contexts
     const { createUniqueID, copy } = useContext(Utils);
-    const { roomID, setRoomID, setRoomUsers, isBoss, setBackgroundGradient, landingDone, username, socketError } = useContext(Data);
+    const { roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, username, socketError } = useContext(Data);
     const { emit, sub, subOnce, unsub } = useContext(Socket);
 
     // Redirect state
@@ -68,6 +68,9 @@ export default function CreateRoom() {
 
         // Clear the room users array
         setRoomUsers([]);
+
+        // Clear the restaurants
+        restaurants.current = [];
 
         // Inform others in the room
         if (inform) emit("leaveRoom", {});

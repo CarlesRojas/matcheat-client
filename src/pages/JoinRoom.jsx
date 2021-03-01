@@ -21,7 +21,7 @@ export default function JoinRoom() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Join Room", "color: grey; font-size: 11px");
 
     // Contexts
-    const { setRoomID, setRoomUsers, isBoss, setBackgroundGradient, landingDone, image, username, socketError } = useContext(Data);
+    const { setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, image, username, socketError } = useContext(Data);
     const { emit, sub, subOnce, unsub } = useContext(Socket);
 
     // Redirect state
@@ -135,6 +135,9 @@ export default function JoinRoom() {
 
         // Clear the room users array
         setRoomUsers([]);
+
+        // Clear the restaurants
+        restaurants.current = [];
 
         // Inform others in the room
         if (inform) emit("leaveRoom", {});

@@ -13,7 +13,7 @@ const apiVersion = "api_v1";
 const APIProvider = (props) => {
     // Contexts
     const { setCookie, getCookie, clearCookies, urltoFile } = useContext(Utils);
-    const { token, username, userID, image } = useContext(Data);
+    const { token, username, userID, image, restaurants } = useContext(Data);
 
     const apiURL = process.env.NODE_ENV === "production" ? "https://matcheat.herokuapp.com/" : "http://localhost:3100/";
 
@@ -216,6 +216,34 @@ const APIProvider = (props) => {
             // Return response
             return response;
         } catch (error) {
+            return { error: "Error getting Places" };
+        }
+    };
+
+    // Get the restaurants from the Google Places API
+    const getRoomRestaurants = async (roomID) => {
+        // Post data
+        var postData = { roomID };
+
+        try {
+            // Fetch
+            var rawResponse = await fetch(`${apiURL}${apiVersion}/getRoomRestaurants`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            // Get data from response
+            const response = await rawResponse.json();
+
+            // Return response
+            restaurants.current = response;
+        } catch (error) {
             return { error: "Error getting Restaurants" };
         }
     };
@@ -230,6 +258,7 @@ const APIProvider = (props) => {
                 logout,
                 isLoggedIn,
                 getPlaces,
+                getRoomRestaurants,
             }}
         >
             {props.children}
