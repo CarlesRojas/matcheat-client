@@ -141,7 +141,7 @@ export default function Home() {
 
     return (
         <div className="home">
-            <Navbar></Navbar>
+            <Navbar settings></Navbar>
 
             <div className="container">
                 <Profile image={image.current} text={`Hi, ${username.current}!`} size={"2rem"} clickable={false}></Profile>

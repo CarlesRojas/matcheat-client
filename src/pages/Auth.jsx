@@ -12,7 +12,7 @@ import Glass from "components/Glass";
 // Icons
 import LogoIcon from "resources/logo_white.svg";
 import BackIcon from "resources/icons/arrow.svg";
-import NameIcon from "resources/icons/name.svg";
+import UserIcon from "resources/icons/user.svg";
 import EmailIcon from "resources/icons/email.svg";
 import PasswordIcon from "resources/icons/password.svg";
 import CameraIcon from "resources/icons/cam.svg";
@@ -337,7 +337,7 @@ export default function Auth() {
 
                     <form autoComplete="off" noValidate spellCheck="false" onSubmit={onSignUp}>
                         <div className="inputContainer">
-                            <SVG className="inputIcon email" src={NameIcon} />
+                            <SVG className="inputIcon email" src={UserIcon} />
                             <input
                                 className="input name"
                                 type="text"

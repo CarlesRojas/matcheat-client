@@ -540,100 +540,111 @@ body {
     height: 100%;
     width: 100%;
 
-    .section {
-        position: absolute;
-        height: 100%;
+    .container {
+        position: relative;
         display: flex;
         flex-direction: column;
         flex-grow: 1;
         align-items: center;
         justify-content: center;
+        height: 100%;
         width: 100%;
-        z-index: 1;
 
-        form {
+        .section {
+            position: absolute;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-
-            .inputContainer {
-                display: flex;
-                align-items: center;
-                width: 85%;
-                background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 75%);
-                background-position: 50px -150px;
-                margin: 0 5% 8%;
-                border: solid 2px transparent;
-                padding: 4%;
-                backdrop-filter: blur(6px);
-                @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
-                @include border-radius(500px);
-
-                .input {
-                    display: flex;
-                    align-items: center;
-                    width: 100%;
-                    background: none;
-                    color: white;
-                    border: 0;
-                    outline: none;
-                    font-size: 1rem;
-                    font-weight: 600;
-
-                    @include inputPlaceholder() {
-                        color: white;
-                        opacity: 0.4;
-                    }
-                }
-            }
-        }
-
-        .marginContainer {
-            @include transition(margin 0.2s ease-in-out);
-            display: flex;
-            flex-direction: column;
+            flex-grow: 1;
             align-items: center;
             justify-content: center;
             height: 100%;
             width: 100%;
+            z-index: 1;
 
-            p {
-                color: white;
-                font-size: 1rem;
-                font-weight: 700;
-                text-align: center;
-                text-transform: uppercase;
-            }
+            form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
 
-            .waiting {
-                @include animation(waiting 2s linear infinite);
+                .inputContainer {
+                    display: flex;
+                    align-items: center;
+                    width: 85%;
+                    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 75%);
+                    background-position: 50px -150px;
+                    margin: 0 5% 8%;
+                    border: solid 2px transparent;
+                    padding: 4%;
+                    backdrop-filter: blur(6px);
+                    @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+                    @include border-radius(500px);
 
-                @keyframes waiting {
-                    0% {
-                        opacity: 0.5;
-                    }
-                    50% {
-                        opacity: 1;
-                    }
-                    100% {
-                        opacity: 0.5;
+                    .input {
+                        display: flex;
+                        align-items: center;
+                        width: 100%;
+                        background: none;
+                        color: white;
+                        border: 0;
+                        outline: none;
+                        font-size: 1rem;
+                        font-weight: 600;
+
+                        @include inputPlaceholder() {
+                            color: white;
+                            opacity: 0.4;
+                        }
                     }
                 }
             }
-        }
 
-        .error {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 2.7em;
-            width: 85%;
-            color: rgb(146, 0, 0);
-            font-size: 0.8em;
-            font-weight: 600;
-            text-align: center;
+            .marginContainer {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                width: 100%;
+                @include transition(margin 0.2s ease-in-out);
+
+                p {
+                    color: white;
+                    font-size: 1rem;
+                    font-weight: 700;
+                    text-align: center;
+                    text-transform: uppercase;
+                }
+
+                .waiting {
+                    @include animation(waiting 2s linear infinite);
+
+                    @keyframes waiting {
+                        0% {
+                            opacity: 0.5;
+                        }
+                        50% {
+                            opacity: 1;
+                        }
+                        100% {
+                            opacity: 0.5;
+                        }
+                    }
+                }
+            }
+
+            .error {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 2.7em;
+                width: 85%;
+                color: rgb(146, 0, 0);
+                font-size: 0.8em;
+                font-weight: 600;
+                text-align: center;
+            }
         }
     }
 }
@@ -687,11 +698,11 @@ body {
 
         .loadingText {
             color: white;
+            margin: 1rem 0 0 0;
             font-size: 1rem;
             font-weight: 700;
             text-align: center;
             text-transform: uppercase;
-            margin: 1rem 0 0 0;
         }
     }
 }
@@ -739,7 +750,7 @@ body {
         }
     }
 
-    .buttonContainer {
+    .navbarButton {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -860,6 +871,25 @@ body {
     min-width: 3rem;
     top: 0;
     left: 0;
+    color: white;
+    opacity: 0.7;
+    padding: 0.8rem;
+}
+
+// #######################################
+//      SETTINGS BUTTON
+// #######################################
+
+.settingsButton {
+    position: absolute;
+    height: 3rem;
+    max-height: 3rem;
+    min-height: 3rem;
+    width: 3rem;
+    max-width: 3rem;
+    min-width: 3rem;
+    top: 0;
+    right: 0;
     color: white;
     opacity: 0.7;
     padding: 0.8rem;

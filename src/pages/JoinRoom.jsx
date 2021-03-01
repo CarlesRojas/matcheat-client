@@ -60,9 +60,6 @@ export default function JoinRoom() {
     // Page positions
     const [pagePositions, setPagePositions] = useSpring(() => ({ joinX: 0, roomX: SCREEN_WIDTH }));
 
-    // Room margin for navbar
-    const [roomMargin, setRoomMargin] = useState("3rem");
-
     // Show the join screen
     const showJoinScreen = (first, reset = true) => {
         // Fade in if it is the first time
@@ -91,11 +88,6 @@ export default function JoinRoom() {
     const resetForms = () => {
         setFormError(null);
         setCodeForm("");
-    };
-
-    // On navbar logo clicked
-    const onLogoClicked = (open) => {
-        setRoomMargin(open ? "6.5rem" : "3rem");
     };
 
     // #################################################
@@ -273,36 +265,36 @@ export default function JoinRoom() {
 
     return (
         <div className="joinRoom">
-            <Navbar onBackButtonClicked={onBackButtonClicked} onLogoClicked={onLogoClicked}></Navbar>
+            <Navbar onBackButtonClicked={onBackButtonClicked}></Navbar>
 
-            <div style={{ pointerEvents: "none", flexGrow: "1" }}></div>
+            <div className="container">
+                <animated.div className="section join" style={{ x: pagePositions.joinX }}>
+                    <Glass style={joinGlassStyle} onClick={() => {}} classes="">
+                        <Profile image={image.current} text={username.current} size={"1.5rem"} clickable={false}></Profile>
 
-            <animated.div className="section join" style={{ x: pagePositions.joinX }}>
-                <Glass style={joinGlassStyle} onClick={() => {}} classes="">
-                    <Profile image={image.current} text={username.current} size={"1.5rem"} clickable={false}></Profile>
+                        <form autoComplete="off" noValidate spellCheck="false" onSubmit={onCodeEnter}>
+                            <div className="inputContainer">
+                                <input className="input" type="text" placeholder=" enter room code" value={codeForm} onChange={onCodeFormChange} autoComplete="off" ref={inputRef}></input>
+                            </div>
 
-                    <form autoComplete="off" noValidate spellCheck="false" onSubmit={onCodeEnter}>
-                        <div className="inputContainer">
-                            <input className="input" type="text" placeholder=" enter room code" value={codeForm} onChange={onCodeFormChange} autoComplete="off" ref={inputRef}></input>
-                        </div>
+                            <button type="submit" className="button last" onClick={showRoomScreen}>
+                                JOIN ROOM
+                            </button>
+                        </form>
 
-                        <button type="submit" className="button last" onClick={showRoomScreen}>
-                            JOIN ROOM
-                        </button>
-                    </form>
-
-                    <div className="error">{formError}</div>
-                </Glass>
-            </animated.div>
-
-            <animated.div className="section room" style={{ x: pagePositions.roomX }}>
-                <div className="marginContainer" style={{ marginTop: roomMargin }}>
-                    <Room />
-                    <Glass style={roomGlassStyle} classes="waiting">
-                        <p>Waiting to Start...</p>
+                        <div className="error">{formError}</div>
                     </Glass>
-                </div>
-            </animated.div>
+                </animated.div>
+
+                <animated.div className="section room" style={{ x: pagePositions.roomX }}>
+                    <div className="marginContainer">
+                        <Room />
+                        <Glass style={roomGlassStyle} classes="waiting">
+                            <p>Waiting to Start...</p>
+                        </Glass>
+                    </div>
+                </animated.div>
+            </div>
         </div>
     );
 }
