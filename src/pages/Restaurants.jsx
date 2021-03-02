@@ -6,10 +6,20 @@ import { useDrag } from "react-use-gesture";
 // Components
 import Navbar from "components/Navbar";
 import Restaurant from "components/Restaurant";
+import Glass from "components/Glass";
 
 // Contexts
 import { Data } from "contexts/Data";
 import { Socket } from "contexts/Socket";
+
+// Constants
+const GRADIENT_DELAY = 300;
+const GRADIENTS = {
+    neutral: ["#484848", "#747474"],
+    red: ["#ff8a5f", "#be4242"],
+    blue: ["#232b62", "#69acff"],
+    green: ["#335e23", "#a4c73a"],
+};
 
 export default function Restaurants() {
     // Print Render
@@ -26,11 +36,45 @@ export default function Restaurants() {
     if (!redirectTo && !landingDone.current) setRedirectTo("/");
 
     // #################################################
+    //   GESTURE ACTIONS
+    // #################################################
+
+    // When the user likes a restaurant
+    const onLike = () => {
+        console.log("LIKE");
+    };
+
+    // When the user nopes a restaurant
+    const onNope = () => {
+        console.log("NOPE");
+    };
+
+    // When the user loves a restaurant
+    const onLove = () => {
+        console.log("LOVE");
+    };
+
+    // #################################################
     //   GESTURES
     // #################################################
 
     // Currently shown restaurant
     const currRestaurant = useRef(0);
+
+    // Current action
+    const [currAction, setCurrAction] = useState("");
+    const currActionTimeout = useRef(null);
+
+    // Reset current action
+    const resetCurrentAction = (onlyClear = true) => {
+        clearTimeout(currActionTimeout.current);
+
+        if (!onlyClear) {
+            currActionTimeout.current = setTimeout(() => {
+                setCurrAction("");
+            }, GRADIENT_DELAY);
+        }
+    };
 
     // Restaurants movement spring
     const [springProps, setSprings] = useSprings(restaurants.current.length, (i) => ({
@@ -43,14 +87,55 @@ export default function Restaurants() {
         delay: 250,
     }));
 
+    // Current horizontal direction
+    const swipingRight = useRef(true);
+
+    // Text popup spring
+    const [popupSpring, setPopupSpring] = useSpring(() => ({ scale: 0, config: { friction: 30 } }));
+
+    // Gradient timeout
+    const gradientTimeout = useRef(null);
+
     // Horizontal gesture
     const horizontalGestureBind = useDrag(
-        ({ args: [index], down, vxvy: [vx], movement: [xDelta], direction: [xDir] }) => {
+        ({ args: [index], first, down, vxvy: [vx], movement: [xDelta], direction: [xDir] }) => {
             // Get the direction
             const dir = xDir < 0 ? -1 : 1;
 
+            // Set gesture direction
+            if (first) swipingRight.current = dir >= 0;
+
             // If the gesture is over and it had high velocity -> Flag the restaurant to fly away
-            const throwAway = !down && Math.abs(vx) > 0.3;
+            const throwAway = !down && ((swipingRight.current && vx > 0.3) || (!swipingRight.current && vx < -0.3));
+
+            // Set the background gradient & popup when LIKE or NOPE
+            setPopupSpring({ scale: 1 });
+            if (swipingRight.current) {
+                resetCurrentAction();
+                setCurrAction("LIKE");
+                setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["green"][0]} 0%, ${GRADIENTS["green"][1]} 100%)` });
+            } else {
+                resetCurrentAction();
+                setCurrAction("NOPE");
+                setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["red"][0]} 0%, ${GRADIENTS["red"][1]} 100%)` });
+            }
+
+            // Set gradient & popup back to normal if gesture is canceled
+            if (!throwAway && !down) {
+                resetCurrentAction(false);
+                setPopupSpring({ scale: 0 });
+                setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["neutral"][0]} 0%, ${GRADIENTS["neutral"][1]} 100%)` });
+            }
+
+            // When thrown, turn backgraund gradient & popup back to normal after a delay
+            if (throwAway) {
+                clearTimeout(gradientTimeout.current);
+                gradientTimeout.current = setTimeout(() => {
+                    resetCurrentAction(false);
+                    setPopupSpring({ scale: 0 });
+                    setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["neutral"][0]} 0%, ${GRADIENTS["neutral"][1]} 100%)` });
+                }, GRADIENT_DELAY);
+            }
 
             // Set the springs the current card
             setSprings((i) => {
@@ -61,18 +146,25 @@ export default function Restaurants() {
                     else return;
                 }
 
-                // When a card is gone it flys out left or right, otherwise goes back to zero
-                const x = throwAway ? (200 + window.innerWidth) * dir : down ? xDelta : 0;
+                // When a restaurant is gone it fles out left or right, otherwise goes back to zero
+                if (swipingRight.current) var x = Math.max(0, throwAway ? (200 + window.innerWidth) * dir : down ? xDelta : 0);
+                else x = Math.min(0, throwAway ? (200 + window.innerWidth) * dir : down ? xDelta : 0);
 
                 // Rotate while flying away -> Scales with velocity
-                const rotateZ = down || throwAway ? xDelta / 100 + (throwAway ? dir * 10 * Math.abs(vx) : 0) : 0;
+                if (swipingRight.current) var rotateZ = Math.max(0, down || throwAway ? xDelta / 100 + (throwAway ? dir * 10 * Math.abs(vx) : 0) : 0);
+                else rotateZ = Math.min(0, down || throwAway ? xDelta / 100 + (throwAway ? dir * 10 * Math.abs(vx) : 0) : 0);
 
                 // Set the spring
                 return { x, y: 0, rotateZ, scale: 1, pointerEvents: throwAway ? "none" : "all" };
             });
 
             // Show next picture
-            if (throwAway) currRestaurant.current++;
+            if (throwAway) {
+                currRestaurant.current++;
+
+                if (swipingRight.current) onLike();
+                else onNope();
+            }
         },
         { filterTaps: true, axis: "x" }
     );
@@ -83,6 +175,29 @@ export default function Restaurants() {
             // If the gesture is over and it had high velocity -> Flag the restaurant to fly away
             const throwAway = !down && vy < -0.3;
 
+            // Set the background gradient & popup when LOVE
+            resetCurrentAction();
+            setCurrAction("LOVE");
+            setPopupSpring({ scale: 1 });
+            setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["blue"][0]} 0%, ${GRADIENTS["blue"][1]} 100%)` });
+
+            // Set gradient & popup back to normal if gesture is canceled
+            if (!throwAway && !down) {
+                resetCurrentAction(false);
+                setPopupSpring({ scale: 0 });
+                setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["neutral"][0]} 0%, ${GRADIENTS["neutral"][1]} 100%)` });
+            }
+
+            // When thrown, turn backgraund gradient to neutral after a delay
+            if (throwAway) {
+                clearTimeout(gradientTimeout.current);
+                gradientTimeout.current = setTimeout(() => {
+                    resetCurrentAction(false);
+                    setPopupSpring({ scale: 0 });
+                    setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["neutral"][0]} 0%, ${GRADIENTS["neutral"][1]} 100%)` });
+                }, GRADIENT_DELAY);
+            }
+
             // Set the springs the current card
             setSprings((i) => {
                 // Don't afect the otherr restaurants
@@ -92,7 +207,7 @@ export default function Restaurants() {
                     else return;
                 }
 
-                // When a card is gone it flys out left or right, otherwise goes back to zero
+                // When a restaurant is gone it fles out left or right, otherwise goes back to zero
                 const y = Math.min(0, throwAway ? -200 - window.innerHeight : down ? yDelta : 0);
 
                 // Set the spring
@@ -100,7 +215,10 @@ export default function Restaurants() {
             });
 
             // Show next picture
-            if (throwAway) currRestaurant.current++;
+            if (throwAway) {
+                currRestaurant.current++;
+                onLove();
+            }
         },
         { filterTaps: true, axis: "y" }
     );
@@ -184,7 +302,11 @@ export default function Restaurants() {
                         </a.div>
                     );
                 })}
-                <div className="controlsContainer"></div>
+                <a.div className="controlsContainer" style={{ scale: popupSpring.scale }}>
+                    <Glass style={{ width: "fit-content" }}>
+                        <p className="text">{currAction}</p>
+                    </Glass>
+                </a.div>
             </div>
         </div>
     );

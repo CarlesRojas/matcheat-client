@@ -738,7 +738,17 @@ body {
         .controlsContainer {
             height: 15%;
             width: 100%;
-            background-color: rgba(255, 0, 0, 0.075);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .text {
+                color: white;
+                padding: 0.5em 1.5em;
+                font-size: 1.4em;
+                font-weight: 700;
+                opacity: 0.6;
+            }
         }
     }
 }
