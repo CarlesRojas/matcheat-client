@@ -6,7 +6,7 @@ import SVG from "react-inlinesvg";
 import LogoIcon from "resources/logo_white.svg";
 import BackIcon from "resources/icons/arrow.svg";
 
-export default function Navbar({ prevPage, onBackButtonClicked, settings = false }) {
+export default function Navbar({ prevPage, onBackButtonClicked, style, settings = false }) {
     // Print Render
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Navbar", "color: grey; font-size: 11px");
 
@@ -46,7 +46,7 @@ export default function Navbar({ prevPage, onBackButtonClicked, settings = false
     //var settingsButton = settings ? <SVG className="settingsButton" src={SettingsIcon} onClick={onSettingsButtonClicked} /> : null;
 
     return (
-        <div className="navbar">
+        <div className="navbar" style={style}>
             {backButton}
             <SVG className="navbarLogo" src={LogoIcon} onClick={onSettingsButtonClicked} />
             {/* {settingsButton} */}

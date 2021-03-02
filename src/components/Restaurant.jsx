@@ -9,7 +9,7 @@ import DollarIcon from "resources/icons/dollar.svg";
 // Components
 import Glass from "components/Glass";
 
-export default function Restaurant({ data }) {
+export default function Restaurant({ data, verticalGestureBind, horizontalGestureBind }) {
     // Deconstruct data
     const { adress, /*lat, latBoss, lon, lonBoss,*/ bossName, name, photos, price, rating } = data;
 
@@ -48,31 +48,41 @@ export default function Restaurant({ data }) {
     // Photos
     var pictures = photos.map((url, i) => <img key={i} src={url} alt="" className="picture" style={{ opacity: i === currPhoto ? 1 : 0 }} />);
 
+    // Heart icons
+    var hearts = [];
+    for (let i = 0; i < 5; i++) hearts.push(<SVG key={i} className="heart" src={LogoIcon} />);
+
     // Expensive icons
     var expansive = [];
     for (let i = 0; i < 5; i++) expansive.push(<SVG key={i} className={classnames("dollar", { active: i <= price })} src={DollarIcon} />);
 
     return (
-        <div className="restaurant">
-            <Glass>
+        <div className="restaurant" {...horizontalGestureBind}>
+            <div className="gestureDiv" {...verticalGestureBind}>
                 <div className="imageContainer">
                     {pictures}
                     <div className="leftHalf" onClick={onPrevPhoto}></div>
                     <div className="rightHalf" onClick={onNextPhoto}></div>
                 </div>
+                <Glass style={{ marginTop: "-45vw", paddingTop: "45vw" }}>
+                    <p className="name">{name}</p>
+                    <p className="adress">{adress}</p>
 
-                <p className="name">{name}</p>
-                <p className="adress">{adress}</p>
+                    <div className="ratingContainer">
+                        <div className="filled" style={{ clipPath: `inset(0 ${100 - (rating / 5) * 100}% 0 0)` }}>
+                            {hearts}
+                        </div>
 
-                <div className="ratingContainer">
-                    <p className="rating">{rating} / 5</p>
-                    <SVG className="heart" src={LogoIcon} />
-                </div>
+                        <div className="empty" style={{ clipPath: `inset(0 0 0 ${(rating / 5) * 100}%)` }}>
+                            {hearts}
+                        </div>
+                    </div>
 
-                <div className="priceContainer">{expansive}</div>
+                    <div className="priceContainer">{expansive}</div>
+                </Glass>
 
-                <p className="distance">300m away from {bossName}.</p>
-            </Glass>
+                <p className="distance">300m away from {bossName}</p>
+            </div>
         </div>
     );
 }

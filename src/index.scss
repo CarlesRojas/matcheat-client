@@ -712,6 +712,7 @@ body {
 // #######################################
 
 .restaurants {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -724,19 +725,20 @@ body {
         flex-direction: column;
         flex-grow: 1;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-end;
         width: 100%;
 
         .restaurantContainer {
-            position: relative;
+            position: absolute;
             flex-grow: 1;
             width: 100%;
+            height: 100%;
         }
 
         .controlsContainer {
-            height: 10%;
+            height: 15%;
             width: 100%;
-            background-color: rgb(255, 206, 206);
+            background-color: rgba(255, 0, 0, 0.075);
         }
     }
 }
@@ -1258,137 +1260,178 @@ body {
 // #######################################
 
 .restaurant {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     height: 100%;
     width: 100%;
+    z-index: 10;
 
-    .imageContainer {
-        position: relative;
+    .gestureDiv {
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 80vw;
-        width: 80vw;
-        margin: 5vw;
-        @include border-radius(10px);
+        height: 100%;
+        width: 100%;
+        z-index: 10;
 
-        .picture {
-            pointer-events: none;
-            position: absolute;
+        .imageContainer {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             height: 80vw;
-            max-height: 80vw;
-            min-height: 80vw;
             width: 80vw;
-            max-width: 80vw;
-            min-width: 80vw;
-            background-position: center;
-            background-size: cover;
-            @include transition(opacity 0.2s ease-in-out);
-        }
+            margin: 5vw;
+            @include border-radius(20px);
 
-        .leftHalf {
-            height: 100%;
-            width: 50%;
-            z-index: 5;
-        }
+            .picture {
+                pointer-events: none;
+                position: absolute;
+                height: 80vw;
+                max-height: 80vw;
+                min-height: 80vw;
+                width: 80vw;
+                max-width: 80vw;
+                min-width: 80vw;
+                z-index: 20;
+                background-position: center;
+                background-size: cover;
+                @include transition(opacity 0.2s ease-in-out);
+            }
 
-        .rightHalf {
-            height: 100%;
-            width: 50%;
-            z-index: 5;
-        }
-    }
+            .leftHalf {
+                height: 100%;
+                width: 50%;
+                z-index: 50;
+            }
 
-    .name {
-        padding: 0 5vw;
-        width: 100%;
-        overflow: hidden;
-        color: white;
-        margin-bottom: 2vw;
-        font-size: 1.2em;
-        font-weight: 700;
-        text-align: center;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .adress {
-        opacity: 0.4;
-        padding: 0 5vw;
-        width: 100%;
-        overflow: hidden;
-        color: white;
-        margin-bottom: 5vw;
-        font-size: 0.7em;
-        font-weight: 600;
-        text-align: center;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .ratingContainer {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0.7;
-        margin-bottom: 5vw;
-
-        .rating {
-            padding-right: 3vw;
-            width: 100%;
-            color: white;
-            font-size: 1em;
-            font-weight: 700;
-        }
-
-        .heart {
-            height: 2rem;
-            max-height: 2rem;
-            min-height: 2rem;
-            width: 2rem;
-            max-width: 2rem;
-            min-width: 2rem;
-            color: white;
-        }
-    }
-
-    .priceContainer {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 5vw;
-
-        .dollar {
-            opacity: 0.2;
-            height: 1rem;
-            max-height: 1rem;
-            min-height: 1rem;
-            width: 1rem;
-            max-width: 1rem;
-            min-width: 1rem;
-            color: white;
-            margin: 0 -2px;
-
-            &.active {
-                opacity: 0.9;
+            .rightHalf {
+                height: 100%;
+                width: 50%;
+                z-index: 50;
             }
         }
-    }
 
-    .distance {
-        opacity: 0.7;
-        padding: 0 5vw;
-        width: 100%;
-        overflow: hidden;
-        color: text;
-        margin-bottom: 2vw;
-        font-size: 0.8em;
-        font-weight: 600;
-        text-align: center;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        .name {
+            width: 100%;
+            overflow: hidden;
+            color: white;
+            margin-bottom: 2vw;
+            padding: 0 5vw;
+            font-size: 1.2em;
+            font-weight: 700;
+            text-align: center;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .adress {
+            width: 100%;
+            overflow: hidden;
+            color: white;
+            opacity: 0.4;
+            margin-bottom: 5vw;
+            padding: 0 5vw;
+            font-size: 0.7em;
+            font-weight: 600;
+            text-align: center;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .ratingContainer {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 1.6rem;
+            width: 70%;
+            margin-bottom: 5vw;
+
+            .filled {
+                position: absolute;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                width: fit-content;
+
+                .heart {
+                    height: 1.6rem;
+                    max-height: 1.6rem;
+                    min-height: 1.6rem;
+                    width: 1.6rem;
+                    max-width: 1.6rem;
+                    min-width: 1.6rem;
+                    color: white;
+                    opacity: 0.9;
+                    padding: 0.15rem;
+                }
+            }
+
+            .empty {
+                position: absolute;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                width: fit-content;
+
+                .heart {
+                    height: 1.6rem;
+                    max-height: 1.6rem;
+                    min-height: 1.6rem;
+                    width: 1.6rem;
+                    max-width: 1.6rem;
+                    min-width: 1.6rem;
+                    color: white;
+                    opacity: 0.2;
+                    padding: 0.15rem;
+                }
+            }
+        }
+
+        .priceContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8vw;
+
+            .dollar {
+                height: 1rem;
+                max-height: 1rem;
+                min-height: 1rem;
+                width: 1rem;
+                max-width: 1rem;
+                min-width: 1rem;
+                color: $text;
+                opacity: 0.2;
+                margin: 0 -2px;
+
+                &.active {
+                    opacity: 0.9;
+                }
+            }
+        }
+
+        .distance {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(-50%);
+            min-width: 20%;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
+            background-position: 50px -150px;
+            border: solid 1px rgba(255, 255, 255, 0.15);
+            padding: 5px 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-align: center;
+            text-transform: uppercase;
+            backdrop-filter: blur(5px);
+            @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+            @include border-radius(20px);
+        }
     }
 }

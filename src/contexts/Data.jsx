@@ -145,12 +145,15 @@ const DataProvider = (props) => {
         green: ["#2d903a", "#69acff"],
         blaugrana: ["#ff5f7d", "#5542be"],
         grey: ["#5b5b5b", "#2e2e2e"],
+        neutral: ["#808080", "#808080"],
     };
     const currGradient = useRef(getCookie("matchEat_token") ? "blaugrana" : "pink");
     const [{ gradient }, setGradient] = useSpring(() => ({
         gradient: `linear-gradient(60deg, ${gradients[currGradient.current][0]} 0%, ${gradients[currGradient.current][1]} 100%)`,
         config: { friction: 30 },
     }));
+
+    // Set te background gradient by one of its presets
     const setBackgroundGradient = (gradientName) => {
         if (!(gradientName in gradients)) return;
 
@@ -158,6 +161,8 @@ const DataProvider = (props) => {
         setGradient({ gradient: `linear-gradient(60deg, ${gradients[gradientName][0]} 0%, ${gradients[gradientName][1]} 100%)` });
         currGradient.current = gradientName;
     };
+
+    // Set te background gradient directly
 
     return (
         <Data.Provider
@@ -190,6 +195,8 @@ const DataProvider = (props) => {
 
                 //BACKGROUND GRADIENT
                 gradient,
+                currGradient,
+                setGradient,
                 setBackgroundGradient,
             }}
         >
