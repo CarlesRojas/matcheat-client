@@ -110,11 +110,11 @@ export default function Restaurants() {
 
             // Set the background gradient & popup when LIKE or NOPE
             setPopupSpring({ scale: 1 });
-            if (swipingRight.current) {
+            if (first && swipingRight.current) {
                 resetCurrentAction();
                 setCurrAction("LIKE");
                 setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["green"][0]} 0%, ${GRADIENTS["green"][1]} 100%)` });
-            } else {
+            } else if (first) {
                 resetCurrentAction();
                 setCurrAction("NOPE");
                 setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["red"][0]} 0%, ${GRADIENTS["red"][1]} 100%)` });
@@ -171,15 +171,17 @@ export default function Restaurants() {
 
     // Vertical gesture
     const verticalGestureBind = useDrag(
-        ({ args: [index], down, vxvy: [, vy], movement: [, yDelta] }) => {
+        ({ args: [index], first, down, vxvy: [, vy], movement: [, yDelta] }) => {
             // If the gesture is over and it had high velocity -> Flag the restaurant to fly away
             const throwAway = !down && vy < -0.3;
 
             // Set the background gradient & popup when LOVE
-            resetCurrentAction();
-            setCurrAction("LOVE");
-            setPopupSpring({ scale: 1 });
-            setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["blue"][0]} 0%, ${GRADIENTS["blue"][1]} 100%)` });
+            if (first && yDelta < 0) {
+                resetCurrentAction();
+                setCurrAction("LOVE");
+                setPopupSpring({ scale: 1 });
+                setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["blue"][0]} 0%, ${GRADIENTS["blue"][1]} 100%)` });
+            }
 
             // Set gradient & popup back to normal if gesture is canceled
             if (!throwAway && !down) {
