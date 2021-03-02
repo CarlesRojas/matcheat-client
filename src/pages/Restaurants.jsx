@@ -42,16 +42,19 @@ export default function Restaurants() {
     // When the user likes a restaurant
     const onLike = () => {
         console.log("LIKE");
+        currRestaurant.current++;
     };
 
     // When the user nopes a restaurant
     const onNope = () => {
         console.log("NOPE");
+        currRestaurant.current++;
     };
 
     // When the user loves a restaurant
     const onLove = () => {
         console.log("LOVE");
+        currRestaurant.current++;
     };
 
     // #################################################
@@ -160,8 +163,6 @@ export default function Restaurants() {
 
             // Show next picture
             if (throwAway) {
-                currRestaurant.current++;
-
                 if (swipingRight.current) onLike();
                 else onNope();
             }
@@ -217,10 +218,7 @@ export default function Restaurants() {
             });
 
             // Show next picture
-            if (throwAway) {
-                currRestaurant.current++;
-                onLove();
-            }
+            if (throwAway) onLove();
         },
         { filterTaps: true, axis: "y" }
     );
