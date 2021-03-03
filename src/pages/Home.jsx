@@ -51,8 +51,8 @@ export default function Home() {
         // Clear the room users array
         setRoomUsers([]);
 
-        // Clear the restaurants  ROJAS UNCOMMENT
-        //restaurants.current = [];
+        // Clear the restaurants
+        restaurants.current = [];
 
         // Inform others in the room
         if (inform) emit("leaveRoom", {});
@@ -100,7 +100,7 @@ export default function Home() {
 
     // On componente mount
     useEffect(() => {
-        // Leave room ROJAS change again to true?
+        // Leave room
         leaveRoom(false);
 
         // Connect to socket

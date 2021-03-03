@@ -128,8 +128,8 @@ export default function JoinRoom() {
         // Clear the room users array
         setRoomUsers([]);
 
-        // Clear the restaurants ROJAS UNCOMMENT
-        //restaurants.current = [];
+        // Clear the restaurants
+        restaurants.current = [];
 
         // Inform others in the room
         if (inform) emit("leaveRoom", {});
@@ -274,7 +274,15 @@ export default function JoinRoom() {
 
                         <form autoComplete="off" noValidate spellCheck="false" onSubmit={onCodeEnter}>
                             <div className="inputContainer">
-                                <input className="input" type="text" placeholder=" enter room code" value={codeForm} onChange={onCodeFormChange} autoComplete="off" ref={inputRef}></input>
+                                <input
+                                    className="input"
+                                    type="text"
+                                    placeholder=" enter room code"
+                                    value={codeForm}
+                                    onChange={onCodeFormChange}
+                                    autoComplete="off"
+                                    ref={inputRef}
+                                ></input>
                             </div>
 
                             <button type="submit" className="button last" onClick={showRoomScreen}>

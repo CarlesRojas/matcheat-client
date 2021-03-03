@@ -242,10 +242,41 @@ const APIProvider = (props) => {
             // Get data from response
             const response = await rawResponse.json();
 
-            // Return response
+            console.log("GET REST RESP");
+            console.log(response);
+
+            // Save the restaurants
             restaurants.current = response;
         } catch (error) {
             return { error: "Error getting Restaurants" };
+        }
+    };
+
+    // Add to the score of a restaurant
+    const addToRestaurantScore = async (username, roomID, restaurantID, score) => {
+        // Post data
+        var postData = { username, roomID, restaurantID, score };
+
+        try {
+            // Fetch
+            var rawResponse = await fetch(`${apiURL}${apiVersion}/addToRestaurantScore`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            // Get data from response
+            const response = await rawResponse.json();
+
+            // Return response
+            return response;
+        } catch (error) {
+            return { error: "Error saving the score." };
         }
     };
 
@@ -260,6 +291,7 @@ const APIProvider = (props) => {
                 isLoggedIn,
                 getPlaces,
                 getRoomRestaurants,
+                addToRestaurantScore,
             }}
         >
             {props.children}

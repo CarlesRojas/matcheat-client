@@ -11,6 +11,7 @@ import Glass from "components/Glass";
 // Contexts
 import { Data } from "contexts/Data";
 import { Socket } from "contexts/Socket";
+import { API } from "contexts/API";
 
 // Constants
 const COUNTDOWN = 10000;
@@ -28,8 +29,9 @@ export default function Restaurants() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Restaurants", "color: grey; font-size: 11px");
 
     // Contexts
-    const { setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, socketError, currGradient, setGradient } = useContext(Data);
+    const { username, roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, socketError, currGradient, setGradient } = useContext(Data);
     const { emit /*, sub, subOnce, unsub*/ } = useContext(Socket);
+    const { addToRestaurantScore } = useContext(API);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
@@ -44,6 +46,7 @@ export default function Restaurants() {
     // When the user likes a restaurant
     const onLike = () => {
         console.log("LIKE");
+        addToRestaurantScore(username.current, roomID, restaurants.current[currRestaurant.current].restaurantID, 1);
         currRestaurant.current++;
     };
 
@@ -56,6 +59,7 @@ export default function Restaurants() {
     // When the user loves a restaurant
     const onLove = () => {
         console.log("LOVE");
+        addToRestaurantScore(username.current, roomID, restaurants.current[currRestaurant.current].restaurantID, 2);
         currRestaurant.current++;
     };
 
@@ -364,8 +368,8 @@ export default function Restaurants() {
         // Clear the room users array
         setRoomUsers([]);
 
-        // Clear the restaurants ROJAS UNCOMMENT
-        //restaurants.current = [];
+        // Clear the restaurants
+        restaurants.current = [];
 
         // Inform others in the room
         if (inform) emit("leaveRoom", {});

@@ -44,8 +44,8 @@ export default function Loading() {
         // Clear the room users array
         setRoomUsers([]);
 
-        // Clear the restaurants  ROJAS UNCOMMENT
-        //restaurants.current = [];
+        // Clear the restaurants
+        restaurants.current = [];
 
         // Inform others in the room
         if (inform) emit("leaveRoom", {});
@@ -118,11 +118,11 @@ export default function Loading() {
                     try {
                         // Get Places
                         // ROJAS replace with this line
-                        //const placesResponse = await getPlaces(roomID, latitude, longitude, username);
-                        const placesResponse = await getPlaces(roomID, 41.390564, 2.162579, username);
+                        //const placesResponse = await getPlaces(roomID, latitude, longitude, username.current);
+                        const placesResponse = await getPlaces(roomID, 41.390564, 2.162579, username.current);
 
                         if ("error" in placesResponse) return throwError({ error: placesResponse.error });
-
+                        // ROJAS check bug when google API key is not correct
                         // Inform that the restaurans have been found
                         emit("broadcastMessageToRoom", { message: "restaurantsLoaded", roomID });
                     } catch (error) {
@@ -136,11 +136,7 @@ export default function Loading() {
                     else return throwError({ error: "Geolocation not supported" });
                 };
 
-                // ROJAS UNCOMMENT
-                //getLocation();
-
-                // ROJAS DELETE
-                setRedirectTo("/restaurants");
+                getLocation();
             }
         }
 
