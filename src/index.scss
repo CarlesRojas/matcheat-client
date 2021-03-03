@@ -76,6 +76,14 @@ $line-height: 22px;
     animation-delay: $delay;
 }
 
+@mixin touch-action($value) {
+    -webkit-touch-action: $value;
+    -moz-touch-action: $value;
+    -ms-touch-action: $value;
+    -o-touch-action: $value;
+    touch-action: $value;
+}
+
 @mixin inputPlaceholder() {
     $selector: "";
     $prefixes: (
@@ -129,6 +137,7 @@ body {
     width: 100%;
     position: relative;
     overflow: hidden;
+    @include touch-action(none);
 
     font-family: "Montserrat", "Helvetica", "Verdana", "Arial", sans-serif;
     -webkit-font-smoothing: antialiased;
