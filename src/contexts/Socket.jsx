@@ -68,7 +68,6 @@ const SocketProvider = (props) => {
         if (!socket.current) return;
 
         // Subscribe to event
-        console.log(`Unsub from ${eventName}`);
         socket.current.removeAllListeners(eventName);
     };
 

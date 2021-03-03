@@ -14,14 +14,14 @@ import { Data } from "contexts/Data";
 import { Socket } from "contexts/Socket";
 import { API } from "contexts/API";
 
-export default function Loading() {
+export default function Wait() {
     // Print Render
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Loading", "color: grey; font-size: 11px");
 
     // Contexts
     const { username, roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, socketError } = useContext(Data);
-    const { emit, sub, unsub } = useContext(Socket);
-    const { getPlaces, getRoomRestaurants } = useContext(API);
+    const { emit, subOnce, unsub } = useContext(Socket);
+    const { getRoomRestaurants } = useContext(API);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
@@ -58,12 +58,12 @@ export default function Loading() {
     };
 
     // On the restaurants loaded
-    const onRestaurantsLoaded = async () => {
+    const onEveryoneFinished = async () => {
         // Get the restaurants
         await getRoomRestaurants(roomID);
 
-        // Redirect to restaurants
-        setRedirectTo("/restaurants");
+        // ROJAS continue here
+        console.log(restaurants.current);
     };
 
     // #################################################
@@ -89,58 +89,22 @@ export default function Loading() {
     // On componente mount
     useEffect(() => {
         // Change Color
-        setBackgroundGradient("red");
+        setBackgroundGradient("blue");
 
         if (landingDone.current) {
             // Subscribe to error and disconnext events
             window.PubSub.sub("onSocketError", throwError);
 
             // Subscribe to the restaurants loaded event
-            sub("restaurantsLoaded", onRestaurantsLoaded);
+            subOnce("everyoneFinished", onEveryoneFinished);
 
-            // Get the restaurants if it is the boss
-            if (isBoss.current) {
-                // Get the restaurants
-                const getRestaurants = async (position) => {
-                    const { coords } = await position;
-
-                    // Throw error if coords are not present
-                    if (!coords) return throwError({ error: "Invalid location" });
-
-                    // Deconstruct
-                    const { latitude, longitude } = coords;
-
-                    // If the location is wrong -> throw error
-                    if (!latitude || !longitude) return throwError({ error: "Invalid location" });
-
-                    try {
-                        // Get Places
-                        // ROJAS replace with this line
-                        //const placesResponse = await getPlaces(roomID, latitude, longitude, username.current);
-                        const placesResponse = await getPlaces(roomID, 41.390564, 2.162579, username.current);
-
-                        if ("error" in placesResponse) return throwError({ error: "Error getting restaurants" });
-
-                        // Inform that the restaurans have been found
-                        emit("broadcastMessageToRoom", { message: "restaurantsLoaded", roomID });
-                    } catch (error) {
-                        return throwError({ error: "Access denied" });
-                    }
-                };
-
-                // Get the boss location
-                const getLocation = async () => {
-                    if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getRestaurants, () => throwError({ error: "Geolocation not permitted" }));
-                    else return throwError({ error: "Geolocation not supported" });
-                };
-
-                getLocation();
-            }
+            // Inform that this user has finished scoring restaurants
+            emit("finishScoringRestaurants", { roomID, username: username.current });
         }
 
         // Unsubscribe on unmount
         return () => {
-            unsub("restaurantsLoaded");
+            unsub("everyoneFinished");
 
             // Unsubscribe to error and disconnext events
             window.PubSub.unsub("onSocketError", throwError);
@@ -166,13 +130,14 @@ export default function Loading() {
         justifyContent: "center",
     };
 
+    // ROJAS change loading to wait
     return (
         <div className="loading">
             <Navbar prevPage="/home" onBackButtonClicked={onBackButtonClicked}></Navbar>
             <div className="container">
                 <Glass style={glassStyle}>
                     <SVG className="loadingIcon" src={LogoIcon} />
-                    <p className="loadingText">Finding restaurants...</p>
+                    <p className="loadingText">Waiting on all to finish...</p>
                 </Glass>
             </div>
         </div>

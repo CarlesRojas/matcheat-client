@@ -132,7 +132,7 @@ export default function CreateRoom() {
     // On componente mount
     useEffect(() => {
         // Change Color
-        setBackgroundGradient("green");
+        setBackgroundGradient("lime");
 
         if (landingDone.current) {
             // Animate

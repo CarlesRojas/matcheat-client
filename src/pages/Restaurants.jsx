@@ -15,21 +15,14 @@ import { API } from "contexts/API";
 
 // Constants
 const COUNTDOWN = 10000;
-const GRADIENT_DELAY = 300;
-const GRADIENTS = {
-    // ROJAS PUT IN DATA
-    neutral: ["#484848", "#747474"],
-    red: ["#ff8a5f", "#be4242"],
-    blue: ["#232b62", "#69acff"],
-    green: ["#335e23", "#a4c73a"],
-};
+const NEXT_RESTAURANT_DELAY = 300;
 
 export default function Restaurants() {
     // Print Render
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Restaurants", "color: grey; font-size: 11px");
 
     // Contexts
-    const { username, roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, socketError, currGradient, setGradient } = useContext(Data);
+    const { username, roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, socketError } = useContext(Data);
     const { emit /*, sub, subOnce, unsub*/ } = useContext(Socket);
     const { addToRestaurantScore } = useContext(API);
 
@@ -45,20 +38,17 @@ export default function Restaurants() {
 
     // When the user likes a restaurant
     const onLike = () => {
-        console.log("LIKE");
         addToRestaurantScore(username.current, roomID, restaurants.current[currRestaurant.current].restaurantID, 1);
         currRestaurant.current++;
     };
 
     // When the user nopes a restaurant
     const onNope = () => {
-        console.log("NOPE");
         currRestaurant.current++;
     };
 
     // When the user loves a restaurant
     const onLove = () => {
-        console.log("LOVE");
         addToRestaurantScore(username.current, roomID, restaurants.current[currRestaurant.current].restaurantID, 2);
         currRestaurant.current++;
     };
@@ -83,7 +73,6 @@ export default function Restaurants() {
     const startCountdown = () => {
         // Clear the timeout
         clearTimeout(countdownTimeout.current);
-        console.log("START?");
 
         // Reactivate the countdown animation
         countdownSlider.current.classList.remove("countdownAnim");
@@ -98,15 +87,15 @@ export default function Restaurants() {
             // Set gradient & action
             resetCurrentAction();
             setCurrAction("NOPE");
-            setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["red"][0]} 0%, ${GRADIENTS["red"][1]} 100%)` });
+            setBackgroundGradient("red");
 
             // Reset gradient & action after a delay
             clearTimeout(gradientTimeout.current);
             gradientTimeout.current = setTimeout(() => {
                 resetCurrentAction(false);
                 setPopupSpring({ scale: 0 });
-                setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["neutral"][0]} 0%, ${GRADIENTS["neutral"][1]} 100%)` });
-            }, GRADIENT_DELAY);
+                setBackgroundGradient("neutral");
+            }, NEXT_RESTAURANT_DELAY);
 
             // Set the springs the current card
             setSprings((i) => {
@@ -141,7 +130,9 @@ export default function Restaurants() {
         // Don't restart if there is more restaurants
         if (currRestaurant.current >= restaurants.current.length) {
             countdownSlider.current.classList.remove("countdownAnim");
-            console.log("NO MORE RESTAURANTS");
+
+            // Go to a waiting screen
+            setRedirectTo("wait");
             return;
         }
 
@@ -149,7 +140,7 @@ export default function Restaurants() {
         restartCountdownTimeout.current = setTimeout(() => {
             tooLate.current = false;
             startCountdown();
-        }, GRADIENT_DELAY);
+        }, NEXT_RESTAURANT_DELAY);
     };
 
     // #################################################
@@ -170,7 +161,7 @@ export default function Restaurants() {
         if (!onlyClear) {
             currActionTimeout.current = setTimeout(() => {
                 setCurrAction("");
-            }, GRADIENT_DELAY);
+            }, NEXT_RESTAURANT_DELAY);
         }
     };
 
@@ -226,18 +217,18 @@ export default function Restaurants() {
             if (first && swipingRight.current) {
                 resetCurrentAction();
                 setCurrAction("LIKE");
-                setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["green"][0]} 0%, ${GRADIENTS["green"][1]} 100%)` });
+                setBackgroundGradient("green");
             } else if (first) {
                 resetCurrentAction();
                 setCurrAction("NOPE");
-                setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["red"][0]} 0%, ${GRADIENTS["red"][1]} 100%)` });
+                setBackgroundGradient("red");
             }
 
             // Set gradient & popup back to normal if gesture is canceled
             if (!throwAway && !down) {
                 resetCurrentAction(false);
                 setPopupSpring({ scale: 0 });
-                setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["neutral"][0]} 0%, ${GRADIENTS["neutral"][1]} 100%)` });
+                setBackgroundGradient("neutral");
             }
 
             // When thrown, turn backgraund gradient & popup back to normal after a delay and restart the countdown
@@ -246,8 +237,8 @@ export default function Restaurants() {
                 gradientTimeout.current = setTimeout(() => {
                     resetCurrentAction(false);
                     setPopupSpring({ scale: 0 });
-                    setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["neutral"][0]} 0%, ${GRADIENTS["neutral"][1]} 100%)` });
-                }, GRADIENT_DELAY);
+                    setBackgroundGradient("neutral");
+                }, NEXT_RESTAURANT_DELAY);
             }
 
             // Set the springs the current card
@@ -306,14 +297,14 @@ export default function Restaurants() {
                 resetCurrentAction();
                 setCurrAction("LOVE");
                 setPopupSpring({ scale: 1 });
-                setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["blue"][0]} 0%, ${GRADIENTS["blue"][1]} 100%)` });
+                setBackgroundGradient("blue");
             }
 
             // Set gradient & popup back to normal if gesture is canceled
             if (!throwAway && !down) {
                 resetCurrentAction(false);
                 setPopupSpring({ scale: 0 });
-                setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["neutral"][0]} 0%, ${GRADIENTS["neutral"][1]} 100%)` });
+                setBackgroundGradient("neutral");
             }
 
             // When thrown, turn backgraund gradient to neutral after a delay
@@ -322,8 +313,8 @@ export default function Restaurants() {
                 gradientTimeout.current = setTimeout(() => {
                     resetCurrentAction(false);
                     setPopupSpring({ scale: 0 });
-                    setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["neutral"][0]} 0%, ${GRADIENTS["neutral"][1]} 100%)` });
-                }, GRADIENT_DELAY);
+                    setBackgroundGradient("neutral");
+                }, NEXT_RESTAURANT_DELAY);
             }
 
             // Set the springs the current card

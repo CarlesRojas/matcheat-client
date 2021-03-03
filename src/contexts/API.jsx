@@ -242,9 +242,6 @@ const APIProvider = (props) => {
             // Get data from response
             const response = await rawResponse.json();
 
-            console.log("GET REST RESP");
-            console.log(response);
-
             // Save the restaurants
             restaurants.current = response;
         } catch (error) {

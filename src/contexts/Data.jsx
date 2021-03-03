@@ -41,10 +41,11 @@ const DataProvider = (props) => {
         pink: ["#ff74d4", "#ff8a5f"],
         purple: ["#8374ff", "#ff74d4"],
         blue: ["#232b62", "#69acff"],
-        green: ["#2d903a", "#69acff"],
+        lime: ["#2d903a", "#69acff"],
         blaugrana: ["#ff5f7d", "#5542be"],
         grey: ["#5b5b5b", "#2e2e2e"],
-        neutral: ["#484848 ", "#747474"],
+        neutral: ["#484848", "#747474"],
+        green: ["#335e23", "#a4c73a"],
     };
     const currGradient = useRef(getCookie("matchEat_token") ? "blaugrana" : "pink");
     const [{ gradient }, setGradient] = useSpring(() => ({

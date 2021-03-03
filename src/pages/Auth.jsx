@@ -157,7 +157,7 @@ export default function Auth() {
 
     // Show the camera screen
     const showCameraScreen = () => {
-        setBackgroundGradient("green");
+        setBackgroundGradient("lime");
         setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: -SCREEN_WIDTH, loadingX: SCREEN_WIDTH, cameraX: 0 });
         currPageRef.current = "camera";
         setCurrPage("camera");

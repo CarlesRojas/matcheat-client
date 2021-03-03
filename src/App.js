@@ -2,6 +2,7 @@ import React from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
 // Pages
+import Wait from "pages/Wait";
 import Restaurants from "pages/Restaurants";
 import Loading from "pages/Loading";
 import JoinRoom from "pages/JoinRoom";
@@ -20,6 +21,11 @@ export default function App() {
 
             <Router>
                 <Switch>
+                    {/* ################################# */}
+                    {/*   WAIT                            */}
+                    {/* ################################# */}
+                    <Route path="/wait" component={Wait} exact></Route>
+
                     {/* ################################# */}
                     {/*   RESTAURANTS                     */}
                     {/* ################################# */}
