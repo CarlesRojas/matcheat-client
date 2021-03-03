@@ -51,12 +51,6 @@ export default function Loading() {
         if (inform) emit("leaveRoom", {});
     };
 
-    // Delete room if user leaves this page
-    const onBackButtonClicked = () => {
-        // Leave room
-        leaveRoom(true);
-    };
-
     // On the restaurants loaded
     const onRestaurantsLoaded = async () => {
         // Get the restaurants
@@ -115,9 +109,8 @@ export default function Loading() {
 
                     try {
                         // Get Places
-                        // ROJAS replace with this line
-                        //const placesResponse = await getPlaces(roomID, latitude, longitude, username.current);
-                        const placesResponse = await getPlaces(roomID, 41.390564, 2.162579, username.current);
+                        const placesResponse = await getPlaces(roomID, latitude, longitude, username.current);
+                        //const placesResponse = await getPlaces(roomID, 41.390564, 2.162579, username.current);
 
                         if ("error" in placesResponse) return throwError({ error: "Error getting restaurants" });
 
@@ -168,7 +161,7 @@ export default function Loading() {
 
     return (
         <div className="loading">
-            <Navbar prevPage="/home" onBackButtonClicked={onBackButtonClicked}></Navbar>
+            <Navbar></Navbar>
             <div className="container">
                 <Glass style={glassStyle}>
                     <SVG className="loadingIcon" src={LogoIcon} />

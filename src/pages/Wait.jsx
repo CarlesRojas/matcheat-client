@@ -70,12 +70,6 @@ export default function Wait() {
         if (inform) emit("leaveRoom", {});
     };
 
-    // Delete room if user leaves this page
-    const onBackButtonClicked = () => {
-        // Leave room
-        leaveRoom(true);
-    };
-
     // On the restaurants loaded
     const onEveryoneFinished = async () => {
         // Go to the ranking
@@ -97,6 +91,8 @@ export default function Wait() {
         // Redirect to home
         setRedirectTo("/home");
     };
+
+    // ROJAS Prevent back button in loading, restaurants & waiting
 
     // #################################################
     //   COMPONENT MOUNT
@@ -155,7 +151,7 @@ export default function Wait() {
 
     return (
         <div className="wait">
-            <Navbar prevPage="/home" onBackButtonClicked={onBackButtonClicked}></Navbar>
+            <Navbar></Navbar>
             <div className="container">
                 <Glass style={glassStyle}>
                     <CountdownCircleTimer {...timerProps} colors={[["#ffffff"]]} duration={countDownDuration.current}>

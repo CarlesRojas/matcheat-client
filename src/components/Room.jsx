@@ -34,6 +34,7 @@ export default function Room() {
     // Num users text
     const numUsers = users.length > 1 ? `${users.length} people` : "only you";
 
+    // ROJAS improve animation when a user enters the room
     return (
         <div id="room" className="room">
             <div className="roomContainer">

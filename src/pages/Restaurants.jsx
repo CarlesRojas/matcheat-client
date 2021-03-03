@@ -23,7 +23,7 @@ export default function Restaurants() {
 
     // Contexts
     const { username, roomID, setRoomID, roomUsers, setRoomUsers, isBoss, restaurants, timeStart, setBackgroundGradient, landingDone, socketError } = useContext(Data);
-    const { emit /*, sub, subOnce, unsub*/ } = useContext(Socket);
+    const { emit } = useContext(Socket);
     const { addToRestaurantScore } = useContext(API);
 
     // Redirect state
@@ -69,7 +69,7 @@ export default function Restaurants() {
     // Too late
     const tooLate = useRef(false);
 
-    /// Start the countdown
+    // Start the countdown
     const startCountdown = () => {
         // Clear the timeout
         clearTimeout(countdownTimeout.current);
