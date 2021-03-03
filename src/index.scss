@@ -118,6 +118,8 @@ $line-height: 22px;
 html {
     height: 100%;
     width: 100%;
+    position: relative;
+    overflow: hidden;
     font-size: $font-size;
 }
 
@@ -125,7 +127,7 @@ body {
     user-select: none;
     height: 100%;
     width: 100%;
-
+    position: relative;
     overflow: hidden;
 
     font-family: "Montserrat", "Helvetica", "Verdana", "Arial", sans-serif;
