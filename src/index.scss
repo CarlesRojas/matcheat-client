@@ -735,8 +735,8 @@ body {
             height: 100%;
         }
 
-        .controlsContainer {
-            height: 15%;
+        .actionContainer {
+            height: 5rem;
             width: 100%;
             display: flex;
             align-items: center;
@@ -748,6 +748,59 @@ body {
                 font-size: 1.4em;
                 font-weight: 700;
                 opacity: 0.6;
+            }
+        }
+
+        .countdownContainer {
+            position: relative;
+            height: 0.5rem;
+            width: 80%;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 75%);
+            background-position: 50px -150px;
+            border: solid 1px rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+            @include border-radius(100vw);
+
+            .countdown {
+                width: 100%;
+                height: 100%;
+
+                border: solid 1px rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(5px);
+                @include border-radius(100vw);
+
+                &.countdownAnim {
+                    @include animation(countdown 10s linear);
+
+                    @keyframes countdown {
+                        0% {
+                            background-color: rgba(255, 255, 255, 0.7);
+                            width: 100%;
+                        }
+                        65% {
+                            background-color: rgba(255, 255, 255, 0.7);
+                        }
+                        70% {
+                            background-color: rgba(194, 23, 0, 1);
+                            @include filter(brightness(1));
+                        }
+                        80% {
+                            @include filter(brightness(0.6));
+                        }
+                        90% {
+                            @include filter(brightness(1));
+                        }
+                        100% {
+                            width: 0%;
+                            @include filter(brightness(0.6));
+                        }
+                    }
+                }
             }
         }
     }

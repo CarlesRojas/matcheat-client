@@ -13,8 +13,10 @@ import { Data } from "contexts/Data";
 import { Socket } from "contexts/Socket";
 
 // Constants
+const COUNTDOWN = 10000;
 const GRADIENT_DELAY = 300;
 const GRADIENTS = {
+    // ROJAS PUT IN DATA
     neutral: ["#484848", "#747474"],
     red: ["#ff8a5f", "#be4242"],
     blue: ["#232b62", "#69acff"],
@@ -55,6 +57,93 @@ export default function Restaurants() {
     const onLove = () => {
         console.log("LOVE");
         currRestaurant.current++;
+    };
+
+    // #################################################
+    //   COUNTDOWN
+    // #################################################
+
+    // Countdown slider
+    const countdownSlider = useRef(null);
+
+    // Countdown Timeouts
+    const countdownTimeout = useRef(null);
+
+    // Restart Countdown Timeouts
+    const restartCountdownTimeout = useRef(null);
+
+    // Too late
+    const tooLate = useRef(false);
+
+    /// Start the countdown
+    const startCountdown = () => {
+        // Clear the timeout
+        clearTimeout(countdownTimeout.current);
+
+        // Reactivate the countdown animation
+        countdownSlider.current.classList.remove("countdownAnim");
+        void countdownSlider.current.offsetWidth;
+        countdownSlider.current.classList.add("countdownAnim");
+
+        // Next restaurant
+        countdownTimeout.current = setTimeout(() => {
+            // To late to like
+            tooLate.current = true;
+
+            // Set gradient & action
+            resetCurrentAction();
+            setCurrAction("NOPE");
+            setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["red"][0]} 0%, ${GRADIENTS["red"][1]} 100%)` });
+
+            // Reset gradient & action after a delay
+            clearTimeout(gradientTimeout.current);
+            gradientTimeout.current = setTimeout(() => {
+                resetCurrentAction(false);
+                setPopupSpring({ scale: 0 });
+                setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["neutral"][0]} 0%, ${GRADIENTS["neutral"][1]} 100%)` });
+            }, GRADIENT_DELAY);
+
+            // Set the springs the current card
+            setSprings((i) => {
+                // Don't afect the otherr restaurants
+                if (currRestaurant.current !== i) {
+                    // Show next restaurant
+                    if (i === currRestaurant.current + 1) return { x: 0, y: 0, rotateZ: 0, scale: 1, pointerEvents: "all", delay: 250 };
+                    else return;
+                }
+
+                // When a restaurant is gone it fles out left or right, otherwise goes back to zero
+                var x = (200 + window.innerWidth) * -1;
+
+                // Set the spring
+                return { x, y: 0, rotateZ: -20, scale: 1, pointerEvents: "none" };
+            });
+
+            // Discard restaurant
+            onNope();
+
+            // Restart countdown
+            restartCountdown();
+        }, COUNTDOWN);
+    };
+
+    /// Restart the countdown
+    const restartCountdown = () => {
+        // Clear the timeouts
+        clearTimeout(countdownTimeout.current);
+        clearTimeout(restartCountdownTimeout.current);
+
+        // Don't restart if there is more restaurants
+        if (currRestaurant.current >= restaurants.current.length) {
+            console.log("NO MORE RESTAURANTS");
+            return;
+        }
+
+        // Start it again after a delay
+        restartCountdownTimeout.current = setTimeout(() => {
+            tooLate.current = false;
+            startCountdown();
+        }, GRADIENT_DELAY);
     };
 
     // #################################################
@@ -99,14 +188,29 @@ export default function Restaurants() {
     // Gradient timeout
     const gradientTimeout = useRef(null);
 
+    // Index of the restaurant where a gesture is being aplied
+    const currIndexGesture = useRef(currRestaurant.current);
+
     // Horizontal gesture
     const horizontalGestureBind = useDrag(
-        ({ args: [index], first, down, vxvy: [vx], movement: [xDelta], direction: [xDir] }) => {
+        ({ args: [index], first, down, vxvy: [vx], movement: [xDelta], direction: [xDir], cancel, canceled }) => {
             // Get the direction
             const dir = xDir < 0 ? -1 : 1;
 
-            // Set gesture direction
-            if (first) swipingRight.current = dir >= 0;
+            // Set gesture direction & index
+            if (first) {
+                swipingRight.current = dir >= 0;
+                currIndexGesture.current = currRestaurant.current;
+            }
+
+            // To late
+            if (tooLate.current || currIndexGesture.current !== currRestaurant.current) {
+                cancel();
+                return;
+            }
+
+            // Don't continue if canceled
+            if (canceled) return;
 
             // If the gesture is over and it had high velocity -> Flag the restaurant to fly away
             const throwAway = !down && ((swipingRight.current && vx > 0.3) || (!swipingRight.current && vx < -0.3));
@@ -130,7 +234,7 @@ export default function Restaurants() {
                 setGradient({ gradient: `linear-gradient(60deg, ${GRADIENTS["neutral"][0]} 0%, ${GRADIENTS["neutral"][1]} 100%)` });
             }
 
-            // When thrown, turn backgraund gradient & popup back to normal after a delay
+            // When thrown, turn backgraund gradient & popup back to normal after a delay and restart the countdown
             if (throwAway) {
                 clearTimeout(gradientTimeout.current);
                 gradientTimeout.current = setTimeout(() => {
@@ -165,6 +269,9 @@ export default function Restaurants() {
             if (throwAway) {
                 if (swipingRight.current) onLike();
                 else onNope();
+
+                // Restart countdown
+                restartCountdown();
             }
         },
         { filterTaps: true, axis: "x" }
@@ -172,7 +279,19 @@ export default function Restaurants() {
 
     // Vertical gesture
     const verticalGestureBind = useDrag(
-        ({ args: [index], first, down, vxvy: [, vy], movement: [, yDelta] }) => {
+        ({ args: [index], first, down, vxvy: [, vy], movement: [, yDelta], cancel, canceled }) => {
+            // Set gesture index
+            if (first) currIndexGesture.current = currRestaurant.current;
+
+            // To late
+            if (tooLate.current || currIndexGesture.current !== currRestaurant.current) {
+                cancel();
+                return;
+            }
+
+            // Don't continue if canceled
+            if (canceled) return;
+
             // If the gesture is over and it had high velocity -> Flag the restaurant to fly away
             const throwAway = !down && vy < -0.3;
 
@@ -218,7 +337,12 @@ export default function Restaurants() {
             });
 
             // Show next picture
-            if (throwAway) onLove();
+            if (throwAway) {
+                onLove();
+
+                // Restart countdown
+                restartCountdown();
+            }
         },
         { filterTaps: true, axis: "y" }
     );
@@ -273,12 +397,21 @@ export default function Restaurants() {
         if (landingDone.current) {
             // Subscribe to error and disconnext events
             window.PubSub.sub("onSocketError", throwError);
+
+            // Start the first countdown
+            startCountdown();
         }
 
         // Unsubscribe on unmount
         return () => {
             // Unsubscribe to error and disconnext events
             window.PubSub.unsub("onSocketError", throwError);
+
+            // Clear timeouts
+            clearTimeout(gradientTimeout.current);
+            clearTimeout(currActionTimeout.current);
+            clearTimeout(countdownTimeout.current);
+            clearTimeout(restartCountdownTimeout.current);
         };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -302,11 +435,15 @@ export default function Restaurants() {
                         </a.div>
                     );
                 })}
-                <a.div className="controlsContainer" style={{ scale: popupSpring.scale }}>
+                <a.div className="actionContainer" style={{ scale: popupSpring.scale }}>
                     <Glass style={{ width: "fit-content" }}>
                         <p className="text">{currAction}</p>
                     </Glass>
                 </a.div>
+
+                <div className="countdownContainer">
+                    <div className="countdown" ref={countdownSlider}></div>
+                </div>
             </div>
         </div>
     );
