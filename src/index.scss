@@ -796,6 +796,7 @@ body {
                             @include filter(brightness(1));
                         }
                         100% {
+                            background-color: rgba(194, 23, 0, 1);
                             width: 0%;
                             @include filter(brightness(0.6));
                         }

@@ -79,6 +79,7 @@ export default function Restaurants() {
     const startCountdown = () => {
         // Clear the timeout
         clearTimeout(countdownTimeout.current);
+        console.log("START?");
 
         // Reactivate the countdown animation
         countdownSlider.current.classList.remove("countdownAnim");
@@ -135,6 +136,7 @@ export default function Restaurants() {
 
         // Don't restart if there is more restaurants
         if (currRestaurant.current >= restaurants.current.length) {
+            countdownSlider.current.classList.remove("countdownAnim");
             console.log("NO MORE RESTAURANTS");
             return;
         }
