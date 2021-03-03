@@ -22,7 +22,7 @@ export default function Restaurants() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Restaurants", "color: grey; font-size: 11px");
 
     // Contexts
-    const { username, roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, socketError } = useContext(Data);
+    const { username, roomID, setRoomID, roomUsers, setRoomUsers, isBoss, restaurants, timeStart, setBackgroundGradient, landingDone, socketError } = useContext(Data);
     const { emit /*, sub, subOnce, unsub*/ } = useContext(Socket);
     const { addToRestaurantScore } = useContext(API);
 
@@ -131,8 +131,11 @@ export default function Restaurants() {
         if (currRestaurant.current >= restaurants.current.length) {
             countdownSlider.current.classList.remove("countdownAnim");
 
-            // Go to a waiting screen
-            setRedirectTo("wait");
+            // If there is only one user -> Go directly to ranking
+            if (roomUsers.length <= 1) setRedirectTo("ranking");
+            // Otherwise -> Go to a waiting screen
+            else setRedirectTo("wait");
+
             return;
         }
 
@@ -394,6 +397,9 @@ export default function Restaurants() {
         if (landingDone.current) {
             // Subscribe to error and disconnext events
             window.PubSub.sub("onSocketError", throwError);
+
+            // Set the time when the room started
+            timeStart.current = new Date();
 
             // Start the first countdown
             startCountdown();

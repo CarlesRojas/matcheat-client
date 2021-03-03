@@ -2,6 +2,7 @@ import React from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
 // Pages
+import Ranking from "pages/Ranking";
 import Wait from "pages/Wait";
 import Restaurants from "pages/Restaurants";
 import Loading from "pages/Loading";
@@ -21,6 +22,11 @@ export default function App() {
 
             <Router>
                 <Switch>
+                    {/* ################################# */}
+                    {/*   WAIT                            */}
+                    {/* ################################# */}
+                    <Route path="/ranking" component={Ranking} exact></Route>
+
                     {/* ################################# */}
                     {/*   WAIT                            */}
                     {/* ################################# */}
