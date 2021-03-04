@@ -146,12 +146,12 @@ export default function Home() {
             <div className="container">
                 <Profile image={image.current} text={`Hi, ${username.current}!`} size={"2rem"} clickable={false}></Profile>
 
-                <Glass style={{ minHeight: "20vh", margin: "7% 0 7% 0", padding: "10%" }} onClick={onCreateRoomClicked} classes="clickable">
+                <Glass style={{ minHeight: "20vh", margin: "7% 0 7% 0" }} onClick={onCreateRoomClicked} classes="clickable">
                     <SVG className="icon" src={CreateIcon} />
                     <p className="text">Create Room</p>
                 </Glass>
 
-                <Glass style={{ minHeight: "20vh", marginBottom: "15%", padding: "10%" }} onClick={onJoinRoomClicked} classes="clickable">
+                <Glass style={{ minHeight: "20vh", marginBottom: "15%" }} onClick={onJoinRoomClicked} classes="clickable">
                     <SVG className="icon" src={JoinIcon} />
                     <p className="text">Join Room</p>
                 </Glass>

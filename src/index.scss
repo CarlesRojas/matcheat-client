@@ -432,7 +432,7 @@ body {
             max-width: 3rem;
             min-width: 3rem;
             color: white;
-            margin-bottom: 0.8rem;
+            margin: 0.8rem 0;
         }
 
         .text {
@@ -440,6 +440,7 @@ body {
             font-size: 1.3rem;
             font-weight: 800;
             text-transform: uppercase;
+            margin-bottom: 0.8rem;
         }
 
         .errorMessage {

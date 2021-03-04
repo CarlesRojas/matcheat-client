@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useState, useRef } from "react";
 import { Redirect } from "react-router-dom";
 import { useSpring, animated } from "react-spring";
+import { isIOS } from "react-device-detect";
 import gsap from "gsap";
 
 // Components
@@ -148,7 +149,7 @@ export default function JoinRoom() {
     const onCodeEnter = (event) => {
         event.preventDefault();
 
-        // Focus the input
+        // Blur the input
         inputRef.current.blur();
 
         // Get room users
@@ -217,8 +218,8 @@ export default function JoinRoom() {
             // Subscribe to error and disconnext events
             window.PubSub.sub("onSocketError", throwError);
 
-            // Focus the input
-            inputRef.current.focus();
+            // Focus the input if it is not ios
+            if (!isIOS) inputRef.current.focus();
         }
 
         // Unsubscribe on unmount
