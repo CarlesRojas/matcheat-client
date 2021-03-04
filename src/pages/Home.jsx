@@ -151,7 +151,7 @@ export default function Home() {
                     <p className="text">Create Room</p>
                 </Glass>
 
-                <Glass style={{ minHeight: "20vh", marginBottom: "15%" }} onClick={onJoinRoomClicked} classes="clickable">
+                <Glass style={{ minHeight: "20vh" }} onClick={onJoinRoomClicked} classes="clickable">
                     <SVG className="icon" src={JoinIcon} />
                     <p className="text">Join Room</p>
                 </Glass>
