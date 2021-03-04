@@ -122,6 +122,7 @@ $line-height: 22px;
     margin: 0;
     padding: 0;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    overscroll-behavior: none;
 }
 
 html {
@@ -130,11 +131,12 @@ html {
     width: 100%;
     overflow: hidden;
     font-size: $font-size;
+    @include touch-action(none);
 }
 
 body {
     user-select: none;
-    position: relative;
+    position: fixed;
     height: 100%;
     width: 100%;
     overflow: hidden;
