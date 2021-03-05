@@ -11,6 +11,7 @@ import Profile from "components/Profile";
 import Room from "components/Room";
 
 // Contexts
+import { Utils } from "contexts/Utils";
 import { Data } from "contexts/Data";
 import { Socket } from "contexts/Socket";
 
@@ -22,6 +23,7 @@ export default function JoinRoom() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Join Room", "color: grey; font-size: 11px");
 
     // Contexts
+    const { vibrate } = useContext(Utils);
     const { setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, image, username, socketError } = useContext(Data);
     const { emit, sub, subOnce, unsub } = useContext(Socket);
 
@@ -79,7 +81,9 @@ export default function JoinRoom() {
 
     // Show the room screen
     const showRoomScreen = () => {
-        //setBackgroundGradient("red");
+        // Vibrate
+        vibrate(50);
+
         setPagePositions({ joinX: -SCREEN_WIDTH, roomX: 0 });
         currPageRef.current = "room";
         setCurrPage("room");
@@ -138,6 +142,9 @@ export default function JoinRoom() {
 
     // Delete room if user leaves this page
     const onBackButtonClicked = () => {
+        // Vibrate
+        vibrate(50);
+
         if (currPageRef.current === "join") setRedirectTo("/home");
         else showJoinScreen(false);
 

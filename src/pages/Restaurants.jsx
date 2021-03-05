@@ -9,6 +9,7 @@ import Restaurant from "components/Restaurant";
 import Glass from "components/Glass";
 
 // Contexts
+import { Utils } from "contexts/Utils";
 import { Data } from "contexts/Data";
 import { Socket } from "contexts/Socket";
 import { API } from "contexts/API";
@@ -22,6 +23,7 @@ export default function Restaurants() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Restaurants", "color: grey; font-size: 11px");
 
     // Contexts
+    const { vibrate } = useContext(Utils);
     const { username, roomID, setRoomID, roomUsers, setRoomUsers, isBoss, restaurants, timeStart, setBackgroundGradient, landingDone, socketError } = useContext(Data);
     const { emit } = useContext(Socket);
     const { addToRestaurantScore } = useContext(API);
@@ -38,17 +40,29 @@ export default function Restaurants() {
 
     // When the user likes a restaurant
     const onLike = () => {
+        // Vibrate
+        vibrate(50);
+
+        // Score
         addToRestaurantScore(username.current, roomID, restaurants.current[currRestaurant.current].restaurantID, 1);
         currRestaurant.current++;
     };
 
     // When the user nopes a restaurant
     const onNope = () => {
+        // Vibrate
+        vibrate(50);
+
+        // Next
         currRestaurant.current++;
     };
 
     // When the user loves a restaurant
     const onLove = () => {
+        // Vibrate
+        vibrate(50);
+
+        // Score
         addToRestaurantScore(username.current, roomID, restaurants.current[currRestaurant.current].restaurantID, 2);
         currRestaurant.current++;
     };
@@ -65,6 +79,7 @@ export default function Restaurants() {
 
     // Restart Countdown Timeouts
     const restartCountdownTimeout = useRef(null);
+    const vibrateTimeout = useRef(null);
 
     // Too late
     const tooLate = useRef(false);
@@ -126,6 +141,7 @@ export default function Restaurants() {
         // Clear the timeouts
         clearTimeout(countdownTimeout.current);
         clearTimeout(restartCountdownTimeout.current);
+        clearTimeout(vibrateTimeout.current);
 
         // Don't restart if there is more restaurants
         if (currRestaurant.current >= restaurants.current.length) {
@@ -138,6 +154,13 @@ export default function Restaurants() {
 
             return;
         }
+
+        // Vibrate when is near the end of countdown
+        vibrateTimeout.current = setTimeout(() => {
+            // Vibrate
+            var vibrationTime = (NEXT_RESTAURANT_DELAY * 0.3) / 5;
+            vibrate([vibrationTime, vibrationTime, vibrationTime, vibrationTime, vibrationTime]);
+        }, NEXT_RESTAURANT_DELAY * 0.7);
 
         // Start it again after a delay
         restartCountdownTimeout.current = setTimeout(() => {
@@ -415,6 +438,7 @@ export default function Restaurants() {
             clearTimeout(currActionTimeout.current);
             clearTimeout(countdownTimeout.current);
             clearTimeout(restartCountdownTimeout.current);
+            clearTimeout(vibrateTimeout.current);
         };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -289,14 +289,6 @@ const UtilsProvider = (props) => {
         if (navigator.vibrate) navigator.vibrate(miliseconds);
     };
 
-    // Vibrate with a pattern [vibrate, pause, vibrate, pause...] each value in miliseconds
-    const vibratePattern = (pattern) => {
-        // Check for support
-        navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
-
-        if (navigator.vibrate) navigator.vibrate(pattern);
-    };
-
     return (
         <Utils.Provider
             value={{
@@ -335,7 +327,6 @@ const UtilsProvider = (props) => {
 
                 // VIBRATE
                 vibrate,
-                vibratePattern,
             }}
         >
             {props.children}

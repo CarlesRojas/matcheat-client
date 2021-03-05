@@ -21,7 +21,7 @@ export default function CreateRoom() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Create Room", "color: grey; font-size: 11px");
 
     // Contexts
-    const { createUniqueID, copy } = useContext(Utils);
+    const { createUniqueID, copy, vibrate } = useContext(Utils);
     const { roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, username, socketError } = useContext(Data);
     const { emit, sub, subOnce, unsub } = useContext(Socket);
 
@@ -78,12 +78,18 @@ export default function CreateRoom() {
 
     // Delete room if user leaves this page
     const onBackButtonClicked = () => {
+        // Vibrate
+        vibrate(50);
+
         // Leave room
         leaveRoom(true);
     };
 
     // On room start
     const onRoomStart = () => {
+        // Vibrate
+        vibrate(50);
+
         // Set as boss
         isBoss.current = true;
 
@@ -116,6 +122,9 @@ export default function CreateRoom() {
 
     // On Code copied
     const onCopyCode = () => {
+        // Vibrate
+        vibrate(50);
+
         // Show the copied message for a second
         codeCopiedRef.current.classList.remove("fadeOut");
         void codeCopiedRef.current.offsetWidth;

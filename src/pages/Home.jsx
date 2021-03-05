@@ -64,13 +64,19 @@ export default function Home() {
 
     // When the users creates a room
     const onCreateRoomClicked = () => {
-        vibrate(100);
+        // Vibrate
+        vibrate(50);
+
+        // Redirect
         setRedirectTo("/createRoom");
     };
 
     // When the user wants to join a room
     const onJoinRoomClicked = () => {
-        vibrate(200);
+        // Vibrate
+        vibrate(50);
+
+        // Redirect
         setRedirectTo("/joinRoom");
     };
 
