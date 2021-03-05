@@ -18,6 +18,7 @@ import PasswordIcon from "resources/icons/password.svg";
 import CameraIcon from "resources/icons/cam.svg";
 
 // Contexts
+import { Utils } from "contexts/Utils";
 import { API } from "contexts/API";
 import { Data } from "contexts/Data";
 
@@ -29,6 +30,7 @@ export default function Auth() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Auth", "color: grey; font-size: 11px");
 
     // Contexts
+    const { vibrate } = useContext(Utils);
     const { register, login, isLoggedIn } = useContext(API);
     const { setBackgroundGradient } = useContext(Data);
 
@@ -62,6 +64,9 @@ export default function Auth() {
     const onLogin = async (event) => {
         event.preventDefault();
 
+        // Vibrate
+        vibrate(50);
+
         // Show loading screen
         showLoadingScreen();
 
@@ -80,6 +85,9 @@ export default function Auth() {
     // When the users tries to sign up
     const onSignUp = async (event) => {
         event.preventDefault();
+
+        // Vibrate
+        vibrate(50);
 
         // Show loading screen
         showLoadingScreen();
@@ -128,6 +136,9 @@ export default function Auth() {
         if (first) {
             const timeline = gsap.timeline({ defaults: { ease: "power1" } });
             timeline.fromTo(".welcome > .glass", { opacity: 0 }, { opacity: 1, duration: 1 }, "+=0.25");
+        } else {
+            // Vibrate
+            vibrate(50);
         }
 
         setBackgroundGradient("pink");
@@ -139,6 +150,9 @@ export default function Auth() {
 
     // Show the login screen
     const showLoginScreen = (keepForm) => {
+        // Vibrate
+        vibrate(50);
+
         setBackgroundGradient("red");
         if (!keepForm) resetForms();
         setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: 0, signupX: SCREEN_WIDTH, loadingX: SCREEN_WIDTH, cameraX: SCREEN_WIDTH });
@@ -148,6 +162,9 @@ export default function Auth() {
 
     // Show the signup screen
     const showSignupScreen = (keepForm) => {
+        // Vibrate
+        vibrate(50);
+
         setBackgroundGradient("purple");
         if (!keepForm) resetForms();
         setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: 0, loadingX: SCREEN_WIDTH, cameraX: SCREEN_WIDTH });
@@ -157,6 +174,9 @@ export default function Auth() {
 
     // Show the camera screen
     const showCameraScreen = () => {
+        // Vibrate
+        vibrate(50);
+
         setBackgroundGradient("lime");
         setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: -SCREEN_WIDTH, loadingX: SCREEN_WIDTH, cameraX: 0 });
         currPageRef.current = "camera";

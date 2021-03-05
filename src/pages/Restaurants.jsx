@@ -88,11 +88,19 @@ export default function Restaurants() {
     const startCountdown = () => {
         // Clear the timeout
         clearTimeout(countdownTimeout.current);
+        clearTimeout(vibrateTimeout.current);
 
         // Reactivate the countdown animation
         countdownSlider.current.classList.remove("countdownAnim");
         void countdownSlider.current.offsetWidth;
         countdownSlider.current.classList.add("countdownAnim");
+
+        // Vibrate when is near the end of countdown
+        vibrateTimeout.current = setTimeout(() => {
+            // Vibrate
+            var vibrationTime = (COUNTDOWN * 0.3) / 5;
+            vibrate([vibrationTime, vibrationTime, vibrationTime, vibrationTime, vibrationTime]);
+        }, COUNTDOWN * 0.7);
 
         // Next restaurant
         countdownTimeout.current = setTimeout(() => {
@@ -140,8 +148,8 @@ export default function Restaurants() {
     const restartCountdown = () => {
         // Clear the timeouts
         clearTimeout(countdownTimeout.current);
-        clearTimeout(restartCountdownTimeout.current);
         clearTimeout(vibrateTimeout.current);
+        clearTimeout(restartCountdownTimeout.current);
 
         // Don't restart if there is more restaurants
         if (currRestaurant.current >= restaurants.current.length) {
@@ -154,13 +162,6 @@ export default function Restaurants() {
 
             return;
         }
-
-        // Vibrate when is near the end of countdown
-        vibrateTimeout.current = setTimeout(() => {
-            // Vibrate
-            var vibrationTime = (NEXT_RESTAURANT_DELAY * 0.3) / 5;
-            vibrate([vibrationTime, vibrationTime, vibrationTime, vibrationTime, vibrationTime]);
-        }, NEXT_RESTAURANT_DELAY * 0.7);
 
         // Start it again after a delay
         restartCountdownTimeout.current = setTimeout(() => {
