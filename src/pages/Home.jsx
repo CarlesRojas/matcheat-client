@@ -23,7 +23,7 @@ export default function Home() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Home", "color: grey; font-size: 11px");
 
     // Contexts
-    const { useForceUpdate } = useContext(Utils);
+    const { useForceUpdate, vibrate } = useContext(Utils);
     const { setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, username, image, landingDone, socketError } = useContext(Data);
     const { connect, emit } = useContext(Socket);
 
@@ -64,11 +64,13 @@ export default function Home() {
 
     // When the users creates a room
     const onCreateRoomClicked = () => {
+        vibrate(100);
         setRedirectTo("/createRoom");
     };
 
     // When the user wants to join a room
     const onJoinRoomClicked = () => {
+        vibrate(200);
         setRedirectTo("/joinRoom");
     };
 
