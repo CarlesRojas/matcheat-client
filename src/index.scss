@@ -254,10 +254,10 @@ body {
 
         .text {
             color: white;
+            margin-bottom: 0.8rem;
             font-size: 1.3rem;
             font-weight: 800;
             text-transform: uppercase;
-            margin-bottom: 0.8rem;
         }
 
         .errorMessage {
@@ -270,10 +270,10 @@ body {
             background-position: 50px -150px;
             color: rgb(129, 14, 14);
             opacity: 1;
+            margin: 8vw 0;
             border: solid 1px rgba(255, 255, 255, 0.15);
             padding: 0.2em 2em;
             font-size: 0.9rem;
-            margin: 8vw 0;
             font-weight: 700;
             backdrop-filter: blur(5px);
             @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
@@ -408,7 +408,7 @@ body {
                     background-position: 50px -150px;
                     margin: 0 5% 8%;
                     border: solid 2px transparent;
-                    padding: 4%;
+                    padding: 14px;
                     backdrop-filter: blur(6px);
                     @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
                     @include border-radius(500px);
@@ -732,16 +732,16 @@ body {
     width: 100%;
 
     .container {
-        flex-grow: 1;
         position: relative;
+        flex-grow: 1;
         height: 100%;
         width: 100%;
 
         .settingsIcon {
             width: 25%;
-            margin: 4% 0 10% 0;
             z-index: 1;
             color: white;
+            margin: 4% 0 10% 0;
         }
     }
 }
@@ -812,12 +812,12 @@ body {
     }
 
     .camControls {
-        height: 100%;
-        width: 100%;
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
+        height: 100%;
+        width: 100%;
         margin-bottom: 1rem;
         padding: 0.5rem;
 
@@ -863,8 +863,8 @@ body {
             min-width: 3.5rem;
             color: white;
             opacity: 0.8;
-            padding: 1rem;
             margin: 0 10%;
+            padding: 1rem;
             @include transition(transform 0.2s ease-in-out);
 
             &:active {
@@ -872,8 +872,8 @@ body {
             }
 
             &.disabled {
-                opacity: 0;
                 pointer-events: none;
+                opacity: 0;
             }
         }
 
@@ -898,7 +898,7 @@ body {
             margin: 0 5%;
             margin-bottom: 8%;
             border: solid 2px transparent;
-            padding: 4%;
+            padding: 14px;
             backdrop-filter: blur(6px);
             @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
             @include border-radius(500px);
@@ -948,6 +948,19 @@ body {
         height: 2.7em;
         width: 85%;
         color: rgb(146, 0, 0);
+        margin-bottom: 5%;
+        font-size: 0.8em;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .success {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 2.7em;
+        width: 85%;
+        color: rgb(255, 255, 255);
         margin-bottom: 5%;
         font-size: 0.8em;
         font-weight: 600;
@@ -1090,7 +1103,7 @@ body {
     border: solid 2px transparent;
     border: 0;
     outline: none;
-    padding: 4%;
+    padding: 14px;
     font-size: 1rem;
     font-weight: 700;
     text-align: center;
@@ -1668,5 +1681,57 @@ body {
             @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
             @include border-radius(20px);
         }
+    }
+}
+
+// #######################################
+//      SETTING
+// #######################################
+
+.setting {
+    position: relative;
+    height: fit-content;
+    width: 85%;
+    margin-bottom: 4%;
+    @include box-shadow(5px 5px 15px rgba(0, 0, 0, 0.1));
+    @include border-radius(500px);
+    @include transition(transform 0.2s ease-in-out);
+
+    .backGradient {
+        height: 100%;
+        width: 100%;
+        //background: radial-gradient(circle, #1eff00b3 0%, #00c53180 75%);
+        //background: radial-gradient(circle, #ff3300b3 0%, #c51e0080 75%);
+        color: transparent;
+        padding: 14px;
+        font-size: 1rem;
+        pointer-events: none;
+        backdrop-filter: blur(6px);
+        @include border-radius(500px);
+    }
+
+    .slider {
+        position: absolute;
+        width: 80%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        cursor: pointer;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.3) 75%);
+        background-position: 50px -150px;
+        color: $text;
+        border: solid 2px transparent;
+        border: 0;
+        outline: none;
+        padding: 14px;
+        font-size: 1rem;
+        font-weight: 700;
+        pointer-events: all;
+        text-align: center;
+        text-transform: uppercase;
+        backdrop-filter: blur(6px);
+        -webkit-tap-highlight-color: transparent;
+        @include box-shadow(0 0 15px rgba(0, 0, 0, 0.1));
+        @include border-radius(500px);
     }
 }

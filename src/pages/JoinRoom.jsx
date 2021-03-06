@@ -24,7 +24,7 @@ export default function JoinRoom() {
 
     // Contexts
     const { vibrate } = useContext(Utils);
-    const { setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, image, username, socketError } = useContext(Data);
+    const { setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, image, username, socketError, vibrationSetting } = useContext(Data);
     const { emit, sub, subOnce, unsub } = useContext(Socket);
 
     // Redirect state
@@ -82,7 +82,7 @@ export default function JoinRoom() {
     // Show the room screen
     const showRoomScreen = () => {
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         setPagePositions({ joinX: -SCREEN_WIDTH, roomX: 0 });
         currPageRef.current = "room";
@@ -143,7 +143,7 @@ export default function JoinRoom() {
     // Delete room if user leaves this page
     const onBackButtonClicked = () => {
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         if (currPageRef.current === "join") setRedirectTo("/home");
         else showJoinScreen(false);

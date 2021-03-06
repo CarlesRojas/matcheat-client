@@ -10,10 +10,10 @@ import classnames from "classnames";
 // Components
 import Navbar from "components/Navbar";
 import Glass from "components/Glass";
+import Setting from "components/Setting";
 
 // Contexts
 import { Utils } from "contexts/Utils";
-import { API } from "contexts/API";
 import { Data } from "contexts/Data";
 
 // Icons
@@ -35,8 +35,7 @@ export default function Settings() {
 
     // Contexts
     const { vibrate, cropAndResizeImage } = useContext(Utils);
-    const { register, login, isLoggedIn } = useContext(API);
-    const { setBackgroundGradient, landingDone } = useContext(Data);
+    const { setBackgroundGradient, landingDone, vibrationSetting } = useContext(Data);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
@@ -93,7 +92,7 @@ export default function Settings() {
         event.preventDefault();
 
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         // Login
         // ROJAS ADD API CALL
@@ -113,7 +112,7 @@ export default function Settings() {
         event.preventDefault();
 
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         // Login
         // ROJAS ADD API CALL
@@ -133,7 +132,7 @@ export default function Settings() {
         event.preventDefault();
 
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         // Login
         // ROJAS ADD API CALL
@@ -153,7 +152,7 @@ export default function Settings() {
         event.preventDefault();
 
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         // Login
         // ROJAS ADD API CALL
@@ -166,6 +165,13 @@ export default function Settings() {
             setSuccessMessage("Image changed successfully");
             showMainScreen(false);
         }
+    };
+
+    // When the user changes the vibration setting
+    const onVibrationSettingChange = (newValue) => {
+        console.log(`Vibrate ${newValue}`);
+
+        // ROJAS ADD API CALL
     };
 
     // #################################################
@@ -189,7 +195,7 @@ export default function Settings() {
     // Show the main screen
     const showMainScreen = (first) => {
         // Vibrate
-        if (!first) vibrate(50);
+        if (!first && vibrationSetting.current) vibrate(25);
 
         setBackgroundGradient("purple");
         resetForms();
@@ -201,10 +207,11 @@ export default function Settings() {
     // Show the change username screen
     const showChangeUsernameScreen = (keepForm) => {
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         setBackgroundGradient("pink");
         if (!keepForm) resetForms();
+        setSuccessMessage();
         setPagePositions({ mainX: -SCREEN_WIDTH, changeUsernameX: 0, changeEmailX: SCREEN_WIDTH, changePasswordX: SCREEN_WIDTH, changeImageX: SCREEN_WIDTH, cameraX: SCREEN_WIDTH });
         currPageRef.current = "changeUsername";
         setCurrPage("changeUsername");
@@ -213,10 +220,11 @@ export default function Settings() {
     // Show the change email screen
     const showChangeEmailScreen = (keepForm) => {
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         setBackgroundGradient("pink");
         if (!keepForm) resetForms();
+        setSuccessMessage();
         setPagePositions({ mainX: -SCREEN_WIDTH, changeUsernameX: SCREEN_WIDTH, changeEmailX: 0, changePasswordX: SCREEN_WIDTH, changeImageX: SCREEN_WIDTH, cameraX: SCREEN_WIDTH });
         currPageRef.current = "changeEmail";
         setCurrPage("changeEmail");
@@ -225,10 +233,11 @@ export default function Settings() {
     // Show the change password screen
     const showChangePasswordScreen = (keepForm) => {
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         setBackgroundGradient("pink");
         if (!keepForm) resetForms();
+        setSuccessMessage();
         setPagePositions({ mainX: -SCREEN_WIDTH, changeUsernameX: SCREEN_WIDTH, changeEmailX: SCREEN_WIDTH, changePasswordX: 0, changeImageX: SCREEN_WIDTH, cameraX: SCREEN_WIDTH });
         currPageRef.current = "changePassword";
         setCurrPage("changePassword");
@@ -237,10 +246,11 @@ export default function Settings() {
     // Show the change image screen
     const showChangeImageScreen = (keepForm) => {
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         setBackgroundGradient("pink");
         if (!keepForm) resetForms();
+        setSuccessMessage();
         setPagePositions({ mainX: -SCREEN_WIDTH, changeUsernameX: SCREEN_WIDTH, changeEmailX: SCREEN_WIDTH, changePasswordX: SCREEN_WIDTH, changeImageX: 0, cameraX: SCREEN_WIDTH });
         currPageRef.current = "changeImage";
         setCurrPage("changeImage");
@@ -249,7 +259,7 @@ export default function Settings() {
     // Show the camera screen
     const showCameraScreen = () => {
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         setBackgroundGradient("lime");
         setPagePositions({ mainX: -SCREEN_WIDTH, changeUsernameX: SCREEN_WIDTH, changeEmailX: SCREEN_WIDTH, changePasswordX: SCREEN_WIDTH, changeImageX: -SCREEN_WIDTH, cameraX: 0 });
@@ -290,7 +300,7 @@ export default function Settings() {
                 return;
             }
 
-            // Snap to the welcome screen or stay on te current page
+            // Snap to the welcome screen or stay on the current page
             if (!down) {
                 if (currPageRef.current === "camera" && (mx > 100 || vx > 1)) showChangeImageScreen(true);
                 else if (mx > 100 || vx > 1) showMainScreen(false);
@@ -502,6 +512,10 @@ export default function Settings() {
                         <div className="button lower closer" onClick={showChangeImageScreen}>
                             Change Image
                         </div>
+
+                        <Setting name="Vibration" action={onVibrationSettingChange} setting={vibrationSetting}></Setting>
+
+                        <div className="success">{successMessage}</div>
                     </Glass>
                 </animated.div>
 

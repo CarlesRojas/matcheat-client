@@ -4,6 +4,7 @@ import SVG from "react-inlinesvg";
 
 // Contexts
 import { Utils } from "contexts/Utils";
+import { Data } from "contexts/Data";
 
 // Icons
 import LogoIcon from "resources/logo_white.svg";
@@ -16,6 +17,7 @@ export default function Navbar({ prevPage, onBackButtonClicked, style, settings 
 
     // Contexts
     const { vibrate } = useContext(Utils);
+    const { vibrationSetting } = useContext(Data);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
@@ -29,7 +31,7 @@ export default function Navbar({ prevPage, onBackButtonClicked, style, settings 
         if (!settings) return;
 
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         // Redirect to settings
         setRedirectTo("/settings");

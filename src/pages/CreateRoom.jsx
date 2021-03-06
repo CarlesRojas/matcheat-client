@@ -22,7 +22,7 @@ export default function CreateRoom() {
 
     // Contexts
     const { createUniqueID, copy, vibrate } = useContext(Utils);
-    const { roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, username, socketError } = useContext(Data);
+    const { roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, username, socketError, vibrationSetting } = useContext(Data);
     const { emit, sub, subOnce, unsub } = useContext(Socket);
 
     // Redirect state
@@ -79,7 +79,7 @@ export default function CreateRoom() {
     // Delete room if user leaves this page
     const onBackButtonClicked = () => {
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         // Leave room
         leaveRoom(true);
@@ -88,7 +88,7 @@ export default function CreateRoom() {
     // On room start
     const onRoomStart = () => {
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         // Set as boss
         isBoss.current = true;
@@ -123,7 +123,7 @@ export default function CreateRoom() {
     // On Code copied
     const onCopyCode = () => {
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         // Show the copied message for a second
         codeCopiedRef.current.classList.remove("fadeOut");

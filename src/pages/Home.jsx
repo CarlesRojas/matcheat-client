@@ -24,7 +24,7 @@ export default function Home() {
 
     // Contexts
     const { useForceUpdate, vibrate } = useContext(Utils);
-    const { setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, username, image, landingDone, socketError } = useContext(Data);
+    const { setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, username, image, landingDone, socketError, vibrationSetting } = useContext(Data);
     const { connect, emit } = useContext(Socket);
 
     // Redirect state
@@ -65,7 +65,7 @@ export default function Home() {
     // When the users creates a room
     const onCreateRoomClicked = () => {
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         // Redirect
         setRedirectTo("/createRoom");
@@ -74,7 +74,7 @@ export default function Home() {
     // When the user wants to join a room
     const onJoinRoomClicked = () => {
         // Vibrate
-        vibrate(50);
+        if (vibrationSetting.current) vibrate(25);
 
         // Redirect
         setRedirectTo("/joinRoom");

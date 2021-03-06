@@ -64,7 +64,8 @@ const DataProvider = (props) => {
         currGradient.current = gradientName;
     };
 
-    // Set te background gradient directly
+    // SETTINGS
+    const vibrationSetting = useRef(true);
 
     return (
         <Data.Provider
@@ -101,6 +102,9 @@ const DataProvider = (props) => {
                 currGradient,
                 setGradient,
                 setBackgroundGradient,
+
+                // SETTINGS
+                vibrationSetting,
             }}
         >
             {props.children}
