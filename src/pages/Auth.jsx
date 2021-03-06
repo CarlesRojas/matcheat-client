@@ -4,6 +4,7 @@ import { useSpring, animated } from "react-spring";
 import { useDrag } from "react-use-gesture";
 import Webcam from "react-webcam";
 import SVG from "react-inlinesvg";
+import classnames from "classnames";
 import gsap from "gsap";
 
 // Components
@@ -16,6 +17,8 @@ import UserIcon from "resources/icons/user.svg";
 import EmailIcon from "resources/icons/email.svg";
 import PasswordIcon from "resources/icons/password.svg";
 import CameraIcon from "resources/icons/cam.svg";
+import ReverseIcon from "resources/icons/reverse.svg";
+import FolderIcon from "resources/icons/folder.svg";
 
 // Contexts
 import { Utils } from "contexts/Utils";
@@ -207,12 +210,21 @@ export default function Auth() {
     // Webcam reference
     const cameraRef = React.useRef(null);
 
+    // Facing mode: "user" or "environment"
+    const [facingMode, setFacingMode] = useState("user");
+    const [numCameras, setNumCameras] = useState(2);
+
     // Capture a screenshot and save it in the register form state
     const capturePhoto = () => {
         const imageSrc = cameraRef.current.getScreenshot({ width: 400, height: 400 });
 
         setSingupForm((prevState) => ({ ...prevState, image: imageSrc }));
         showSignupScreen(true);
+    };
+
+    // Reverse camera
+    const reverseCamera = () => {
+        setFacingMode((prevState) => (prevState === "user" ? "environment" : "user"));
     };
 
     // #################################################
@@ -265,6 +277,14 @@ export default function Auth() {
         // Change Color
         setBackgroundGradient("pink");
 
+        // Get number of cameras
+        const getNumCams = async () => {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const cameras = devices.filter(({ kind, label }) => kind === "videoinput" && !label.includes("OBS"));
+            setNumCameras(cameras.length);
+        };
+        getNumCams();
+
         // Go to welcome page
         if (!isLoggedInRef.current) showWelcomeScreen(true);
 
@@ -296,7 +316,14 @@ export default function Auth() {
     // Placeholder camera
     var webcam =
         currPageRef.current === "camera" ? (
-            <Webcam className="webcam" audio={false} videoConstraints={{ facingMode: "user", aspectRatio: 1 }} mirrored={true} ref={cameraRef} screenshotFormat="image/png" />
+            <Webcam
+                className="webcam"
+                audio={false}
+                videoConstraints={{ facingMode: facingMode, aspectRatio: 1 }}
+                mirrored={facingMode === "user"}
+                ref={cameraRef}
+                screenshotFormat="image/png"
+            />
         ) : null;
 
     return (
@@ -401,17 +428,15 @@ export default function Auth() {
                     <SVG className="backButton" src={BackIcon} onClick={() => showSignupScreen(true)} />
 
                     {webcam}
-                    {/* <Webcam
-                        className="webcam"
-                        audio={false}
-                        videoConstraints={{ facingMode: "user", aspectRatio: 1 }}
-                        mirrored={true}
-                        ref={cameraRef}
-                        screenshotFormat="image/png"
-                    /> */}
 
-                    <div className="camButton">
-                        <SVG className="camIcon" src={CameraIcon} onClick={capturePhoto} />
+                    <div className="camControls">
+                        <SVG className={classnames("camControlIcon", { disabled: numCameras < 2 })} src={ReverseIcon} onClick={reverseCamera} />
+
+                        <div className={classnames("camButton", { disabled: numCameras < 1 })}>
+                            <SVG className="camIcon" src={CameraIcon} onClick={capturePhoto} />
+                        </div>
+
+                        <SVG className="camControlIcon" src={FolderIcon} onClick={capturePhoto} />
                     </div>
                 </Glass>
             </animated.div>
