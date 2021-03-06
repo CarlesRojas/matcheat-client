@@ -429,8 +429,13 @@ export default function Settings() {
     // #################################################
 
     const onBackButtonClicked = () => {
-        if (currPageRef.current === "main") setRedirectTo("/home");
-        else if (currPageRef.current === "camera") showChangeImageScreen(false);
+        if (currPageRef.current === "main") {
+            // Vibrate
+            if (vibrationSetting.current) vibrate(25);
+
+            // Redirect to home
+            setRedirectTo("/home");
+        } else if (currPageRef.current === "camera") showChangeImageScreen(false);
         else showMainScreen(false);
     };
 

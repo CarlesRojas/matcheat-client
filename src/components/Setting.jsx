@@ -38,11 +38,12 @@ export default function Setting({ name, action, setting }) {
         setColorPos({ colorPos: 0 });
 
         if (execAction && setting.current) {
+            setting.current = false;
+
             // Vibrate
             if (vibrationSetting.current) vibrate(25);
 
             // Send the action with a value of false
-            setting.current = false;
             action(false);
         }
     };
@@ -54,11 +55,12 @@ export default function Setting({ name, action, setting }) {
         setColorPos({ colorPos: 1 });
 
         if (execAction && !setting.current) {
+            setting.current = true;
+
             // Vibrate
             if (vibrationSetting.current) vibrate(25);
 
             // Send the action with a value of true
-            setting.current = true;
             action(true);
         }
     };
