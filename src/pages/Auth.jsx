@@ -5,6 +5,7 @@ import { useDrag } from "react-use-gesture";
 import Webcam from "react-webcam";
 import SVG from "react-inlinesvg";
 import classnames from "classnames";
+import Resizer from "react-image-file-resizer";
 import gsap from "gsap";
 
 // Components
@@ -50,6 +51,7 @@ export default function Auth() {
     const [signupForm, setSingupForm] = useState({ username: "", email: "", password: "", image: "" });
     const [loginError, setLoginError] = useState(null);
     const [signUpError, setSignUpError] = useState(null);
+    const [camError, setCamError] = useState(null);
 
     // When the login form changes
     const onLoginFormChange = (event) => {
@@ -269,6 +271,155 @@ export default function Auth() {
     );
 
     // #################################################
+    //   IMAGE FILE
+    // #################################################
+
+    // Image input ref
+    const imageInputRef = useRef(null);
+    /*
+    // Image uri
+    const [dataUri, setDataUri] = useState("");
+
+    // File to Data URI
+    const fileToDataUri = (file) =>
+        new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                resolve(event.target.result);
+            };
+            reader.readAsDataURL(file);
+        });
+
+    // Resize file
+    const resizeFile = (file) =>
+        new Promise((resolve) => {
+            Resizer.imageFileResizer(file, 400, 400, "PNG", 100, 0, resolve);
+        });
+
+    // Resize the image to a desired size
+    function resizeImage(url, width, height) {
+        return new Promise((resolve) => {
+            // Create new image
+            const inputImage = new Image();
+
+            // Resize
+            inputImage.onload = () => {
+                // Create Canvas
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+
+                // Set to target dimensions
+                canvas.width = width;
+                canvas.height = height;
+
+                // Draw image on the canvas
+                ctx.drawImage(url, 0, 0, width, height);
+
+                // Encode image to data-uri with base64
+                const imageBase64 = canvas.toDataURL();
+
+                // Resolve
+                resolve(imageBase64);
+            };
+
+            // Load Image
+            inputImage.src = url;
+        });
+    }
+*/
+    // Crop the image to a desired aspect ratio
+    const cropImage = (url, aspectRatio) => {
+        return new Promise((resolve) => {
+            // Create new image
+            const inputImage = new Image();
+
+            // Crop
+            inputImage.onload = () => {
+                // Original width and height of our image
+                const inputWidth = inputImage.naturalWidth;
+                const inputHeight = inputImage.naturalHeight;
+
+                // Aspect ratio of the original image
+                const inputImageAspectRatio = inputWidth / inputHeight;
+
+                // Check original aspect ratio against the desired one
+                let outputWidth = inputWidth;
+                let outputHeight = inputHeight;
+                if (inputImageAspectRatio > aspectRatio) outputWidth = inputHeight * aspectRatio;
+                else if (inputImageAspectRatio < aspectRatio) outputHeight = inputWidth / aspectRatio;
+
+                // Get crop displacements
+                const outputX = (outputWidth - inputWidth) * 0.5;
+                const outputY = (outputHeight - inputHeight) * 0.5;
+                console.log(outputX, outputY);
+
+                // Create Canvas
+                const canvas = document.createElement("canvas");
+                canvas.width = outputWidth;
+                canvas.height = outputHeight;
+                console.log(outputWidth, outputHeight);
+
+                // Draw image on the canvas
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(inputImage, outputX, outputY);
+
+                // Encode image to data-uri with base64
+                const imageBase64 = canvas.toDataURL();
+
+                // Resolve
+                resolve(imageBase64);
+            };
+
+            // Load Image
+            inputImage.src = url;
+        });
+    };
+
+    // Validate that the file is an image
+    const validateFileType = async (event) => {
+        // Return if there is no file
+        if (!event.target.files || !event.target.files[0]) return;
+
+        // Get file type
+        var fileName = imageInputRef.current.value;
+        var extension = fileName.substr(fileName.lastIndexOf(".") + 1, fileName.length).toLowerCase();
+
+        // Crop and resize
+        if (extension === "png" || extension === "jpg" || extension === "jpeg") {
+            var croppedImage = await cropImage(URL.createObjectURL(event.target.files[0]), 1);
+            //var resiedImage = await resizeImage(croppedImage, 400, 400);
+
+            console.log(croppedImage);
+            setSingupForm((prevState) => ({ ...prevState, image: croppedImage }));
+            showSignupScreen(true);
+            return;
+
+            // try {
+            //     const file = event.target.files[0];
+            //     const imageResult = await resizeFile(file);
+            //     setSingupForm((prevState) => ({ ...prevState, image: imageResult }));
+            //     showSignupScreen(true);
+            //     console.log(imageResult);
+            // } catch (err) {
+            //     console.log(err);
+            // }
+            // return;
+            // Save URI
+            //var imageResult = await fileToDataUri(event.target.files[0]);
+            //console.log(imageResult);
+            //setSingupForm((prevState) => ({ ...prevState, image: imageResult }));
+            //showSignupScreen(true);
+        }
+        // Set error
+        else setCamError("Wrong file type");
+    };
+
+    // Get image file from the system files
+    const searchImageFile = () => {
+        imageInputRef.current.click();
+    };
+
+    // #################################################
     //   COMPONENT MOUNT
     // #################################################
 
@@ -436,8 +587,11 @@ export default function Auth() {
                             <SVG className="camIcon" src={CameraIcon} onClick={capturePhoto} />
                         </div>
 
-                        <SVG className="camControlIcon" src={FolderIcon} onClick={capturePhoto} />
+                        <SVG className="camControlIcon" src={FolderIcon} onClick={searchImageFile} />
+                        <input name="image" type="file" className="inputImage" accept=".jpg,.jpeg,.png" onChange={validateFileType} ref={imageInputRef} />
                     </div>
+
+                    <div className="error">{camError}</div>
                 </Glass>
             </animated.div>
 
