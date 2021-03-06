@@ -5,7 +5,6 @@ import { useDrag } from "react-use-gesture";
 import Webcam from "react-webcam";
 import SVG from "react-inlinesvg";
 import classnames from "classnames";
-import Resizer from "react-image-file-resizer";
 import gsap from "gsap";
 
 // Components
@@ -276,59 +275,11 @@ export default function Auth() {
 
     // Image input ref
     const imageInputRef = useRef(null);
-    /*
-    // Image uri
-    const [dataUri, setDataUri] = useState("");
 
-    // File to Data URI
-    const fileToDataUri = (file) =>
-        new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                resolve(event.target.result);
-            };
-            reader.readAsDataURL(file);
-        });
-
-    // Resize file
-    const resizeFile = (file) =>
-        new Promise((resolve) => {
-            Resizer.imageFileResizer(file, 400, 400, "PNG", 100, 0, resolve);
-        });
-
-    // Resize the image to a desired size
-    function resizeImage(url, width, height) {
-        return new Promise((resolve) => {
-            // Create new image
-            const inputImage = new Image();
-
-            // Resize
-            inputImage.onload = () => {
-                // Create Canvas
-                const canvas = document.createElement("canvas");
-                const ctx = canvas.getContext("2d");
-
-                // Set to target dimensions
-                canvas.width = width;
-                canvas.height = height;
-
-                // Draw image on the canvas
-                ctx.drawImage(url, 0, 0, width, height);
-
-                // Encode image to data-uri with base64
-                const imageBase64 = canvas.toDataURL();
-
-                // Resolve
-                resolve(imageBase64);
-            };
-
-            // Load Image
-            inputImage.src = url;
-        });
-    }
-*/
     // Crop the image to a desired aspect ratio
-    const cropImage = (url, aspectRatio) => {
+    const cropAndResizeImage = (url, aspectRatio, resizedWidth = null) => {
+        // Example imput: Crop to 16:9 and resize to a width of 500 px -> cropAndResizeImage(imageurl, 16 / 9, 500);
+
         return new Promise((resolve) => {
             // Create new image
             const inputImage = new Image();
@@ -348,20 +299,25 @@ export default function Auth() {
                 if (inputImageAspectRatio > aspectRatio) outputWidth = inputHeight * aspectRatio;
                 else if (inputImageAspectRatio < aspectRatio) outputHeight = inputWidth / aspectRatio;
 
+                // Get new image size
+                const sizeRatio = resizedWidth ? outputWidth / resizedWidth : 1;
+                const resizeWidth = inputWidth / sizeRatio;
+                const resizeHeight = inputHeight / sizeRatio;
+                console.log(resizeWidth, resizeHeight);
+
                 // Get crop displacements
-                const outputX = (outputWidth - inputWidth) * 0.5;
-                const outputY = (outputHeight - inputHeight) * 0.5;
+                const outputX = ((outputWidth - inputWidth) * 0.5) / sizeRatio;
+                const outputY = ((outputHeight - inputHeight) * 0.5) / sizeRatio;
                 console.log(outputX, outputY);
 
                 // Create Canvas
                 const canvas = document.createElement("canvas");
-                canvas.width = outputWidth;
-                canvas.height = outputHeight;
-                console.log(outputWidth, outputHeight);
+                canvas.width = resizedWidth ? resizedWidth : outputWidth;
+                canvas.height = resizedWidth ? resizedWidth / aspectRatio : outputHeight;
 
                 // Draw image on the canvas
                 const ctx = canvas.getContext("2d");
-                ctx.drawImage(inputImage, outputX, outputY);
+                ctx.drawImage(inputImage, outputX, outputY, resizeWidth, resizeHeight);
 
                 // Encode image to data-uri with base64
                 const imageBase64 = canvas.toDataURL();
@@ -386,30 +342,15 @@ export default function Auth() {
 
         // Crop and resize
         if (extension === "png" || extension === "jpg" || extension === "jpeg") {
-            var croppedImage = await cropImage(URL.createObjectURL(event.target.files[0]), 1);
-            //var resiedImage = await resizeImage(croppedImage, 400, 400);
-
-            console.log(croppedImage);
-            setSingupForm((prevState) => ({ ...prevState, image: croppedImage }));
-            showSignupScreen(true);
-            return;
-
-            // try {
-            //     const file = event.target.files[0];
-            //     const imageResult = await resizeFile(file);
-            //     setSingupForm((prevState) => ({ ...prevState, image: imageResult }));
-            //     showSignupScreen(true);
-            //     console.log(imageResult);
-            // } catch (err) {
-            //     console.log(err);
-            // }
-            // return;
-            // Save URI
-            //var imageResult = await fileToDataUri(event.target.files[0]);
-            //console.log(imageResult);
-            //setSingupForm((prevState) => ({ ...prevState, image: imageResult }));
-            //showSignupScreen(true);
+            try {
+                var croppedImage = await cropAndResizeImage(URL.createObjectURL(event.target.files[0]), 1, 400);
+                setSingupForm((prevState) => ({ ...prevState, image: croppedImage }));
+                showSignupScreen(true);
+            } catch (error) {
+                setCamError("Unable to load image");
+            }
         }
+
         // Set error
         else setCamError("Wrong file type");
     };
