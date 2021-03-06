@@ -285,7 +285,7 @@ export default function JoinRoom() {
                                 <input className="input" type="text" placeholder=" enter room code" value={codeForm} onChange={onCodeFormChange} autoComplete="off" ref={inputRef}></input>
                             </div>
 
-                            <button type="submit" className="button last" onClick={showRoomScreen}>
+                            <button type="submit" className="button closer" onClick={showRoomScreen}>
                                 JOIN ROOM
                             </button>
                         </form>

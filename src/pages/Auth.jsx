@@ -33,7 +33,7 @@ export default function Auth() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Auth", "color: grey; font-size: 11px");
 
     // Contexts
-    const { vibrate } = useContext(Utils);
+    const { vibrate, cropAndResizeImage } = useContext(Utils);
     const { register, login, isLoggedIn } = useContext(API);
     const { setBackgroundGradient } = useContext(Data);
 
@@ -276,61 +276,6 @@ export default function Auth() {
     // Image input ref
     const imageInputRef = useRef(null);
 
-    // Crop the image to a desired aspect ratio
-    const cropAndResizeImage = (url, aspectRatio, resizedWidth = null) => {
-        // Example imput: Crop to 16:9 and resize to a width of 500 px -> cropAndResizeImage(imageurl, 16 / 9, 500);
-
-        return new Promise((resolve) => {
-            // Create new image
-            const inputImage = new Image();
-
-            // Crop
-            inputImage.onload = () => {
-                // Original width and height of our image
-                const inputWidth = inputImage.naturalWidth;
-                const inputHeight = inputImage.naturalHeight;
-
-                // Aspect ratio of the original image
-                const inputImageAspectRatio = inputWidth / inputHeight;
-
-                // Check original aspect ratio against the desired one
-                let outputWidth = inputWidth;
-                let outputHeight = inputHeight;
-                if (inputImageAspectRatio > aspectRatio) outputWidth = inputHeight * aspectRatio;
-                else if (inputImageAspectRatio < aspectRatio) outputHeight = inputWidth / aspectRatio;
-
-                // Get new image size
-                const sizeRatio = resizedWidth ? outputWidth / resizedWidth : 1;
-                const resizeWidth = inputWidth / sizeRatio;
-                const resizeHeight = inputHeight / sizeRatio;
-                console.log(resizeWidth, resizeHeight);
-
-                // Get crop displacements
-                const outputX = ((outputWidth - inputWidth) * 0.5) / sizeRatio;
-                const outputY = ((outputHeight - inputHeight) * 0.5) / sizeRatio;
-                console.log(outputX, outputY);
-
-                // Create Canvas
-                const canvas = document.createElement("canvas");
-                canvas.width = resizedWidth ? resizedWidth : outputWidth;
-                canvas.height = resizedWidth ? resizedWidth / aspectRatio : outputHeight;
-
-                // Draw image on the canvas
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(inputImage, outputX, outputY, resizeWidth, resizeHeight);
-
-                // Encode image to data-uri with base64
-                const imageBase64 = canvas.toDataURL();
-
-                // Resolve
-                resolve(imageBase64);
-            };
-
-            // Load Image
-            inputImage.src = url;
-        });
-    };
-
     // Validate that the file is an image
     const validateFileType = async (event) => {
         // Return if there is no file
@@ -443,13 +388,13 @@ export default function Auth() {
                     <form autoComplete="off" noValidate spellCheck="false" onSubmit={onLogin}>
                         <div className="inputContainer">
                             <SVG className="inputIcon email" src={EmailIcon} />
-                            <input className="input email" type="email" placeholder=" email" name="email" value={loginForm.email} onChange={onLoginFormChange} autoComplete="off"></input>
+                            <input className="input" type="email" placeholder=" email" name="email" value={loginForm.email} onChange={onLoginFormChange} autoComplete="off"></input>
                         </div>
 
                         <div className="inputContainer">
                             <SVG className="inputIcon" src={PasswordIcon} />
                             <input
-                                className="input password"
+                                className="input"
                                 type="password"
                                 placeholder=" password"
                                 name="password"
@@ -459,7 +404,7 @@ export default function Auth() {
                             ></input>
                         </div>
 
-                        <button type="submit" className="button last">
+                        <button type="submit" className="button closer">
                             Login
                         </button>
 
@@ -477,15 +422,7 @@ export default function Auth() {
                     <form autoComplete="off" noValidate spellCheck="false" onSubmit={onSignUp}>
                         <div className="inputContainer">
                             <SVG className="inputIcon email" src={UserIcon} />
-                            <input
-                                className="input name"
-                                type="text"
-                                placeholder=" name"
-                                name="username"
-                                value={signupForm.username}
-                                onChange={onSingupFormChange}
-                                autoComplete="off"
-                            ></input>
+                            <input className="input" type="text" placeholder=" name" name="username" value={signupForm.username} onChange={onSingupFormChange} autoComplete="off"></input>
                         </div>
 
                         <div className="inputContainer">
@@ -496,7 +433,7 @@ export default function Auth() {
                         <div className="inputContainer">
                             <SVG className="inputIcon" src={PasswordIcon} />
                             <input
-                                className="input password"
+                                className="input"
                                 type="password"
                                 placeholder=" password"
                                 name="password"
@@ -506,7 +443,7 @@ export default function Auth() {
                             ></input>
                         </div>
 
-                        <button type="submit" className="button last">
+                        <button type="submit" className="button closer">
                             Sign Up
                         </button>
 

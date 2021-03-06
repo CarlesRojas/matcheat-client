@@ -16,7 +16,7 @@ const TIME_PER_RESTAURANT = 10;
 
 export default function Wait() {
     // Print Render
-    if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Loading", "color: grey; font-size: 11px");
+    if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Wait", "color: grey; font-size: 11px");
 
     // Contexts
     const { username, roomID, setRoomID, setRoomUsers, isBoss, restaurants, timeStart, setBackgroundGradient, landingDone, socketError } = useContext(Data);

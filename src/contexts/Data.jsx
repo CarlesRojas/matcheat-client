@@ -45,6 +45,7 @@ const DataProvider = (props) => {
         lime: ["#2d903a", "#69acff"],
         blaugrana: ["#ff5f7d", "#5542be"],
         grey: ["#5b5b5b", "#2e2e2e"],
+        white: ["#979797", "#727272"],
         neutral: ["#484848", "#747474"],
         green: ["#335e23", "#a4c73a"],
     };

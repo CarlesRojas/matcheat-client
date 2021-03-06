@@ -219,7 +219,7 @@ export default function CreateRoom() {
                     <SVG className="copyIcon" src={CopyIcon} />
                 </Glass>
 
-                <div className="button last" style={{ width: "90%", minHeight: "2.7em" }} onClick={onRoomStart}>
+                <div className="button closer" style={{ width: "90%", minHeight: "2.7em" }} onClick={onRoomStart}>
                     START
                 </div>
             </div>

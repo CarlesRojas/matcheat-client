@@ -289,6 +289,65 @@ const UtilsProvider = (props) => {
         if (navigator.vibrate) navigator.vibrate(miliseconds);
     };
 
+    // #######################################
+    //      IMAGE
+    // #######################################
+
+    // Crop the image to a desired aspect ratio
+    const cropAndResizeImage = (url, aspectRatio, resizedWidth = null) => {
+        // Example imput: Crop to 16:9 and resize to a width of 500 px -> cropAndResizeImage(imageurl, 16 / 9, 500);
+
+        return new Promise((resolve) => {
+            // Create new image
+            const inputImage = new Image();
+
+            // Crop
+            inputImage.onload = () => {
+                // Original width and height of our image
+                const inputWidth = inputImage.naturalWidth;
+                const inputHeight = inputImage.naturalHeight;
+
+                // Aspect ratio of the original image
+                const inputImageAspectRatio = inputWidth / inputHeight;
+
+                // Check original aspect ratio against the desired one
+                let outputWidth = inputWidth;
+                let outputHeight = inputHeight;
+                if (inputImageAspectRatio > aspectRatio) outputWidth = inputHeight * aspectRatio;
+                else if (inputImageAspectRatio < aspectRatio) outputHeight = inputWidth / aspectRatio;
+
+                // Get new image size
+                const sizeRatio = resizedWidth ? outputWidth / resizedWidth : 1;
+                const resizeWidth = inputWidth / sizeRatio;
+                const resizeHeight = inputHeight / sizeRatio;
+                console.log(resizeWidth, resizeHeight);
+
+                // Get crop displacements
+                const outputX = ((outputWidth - inputWidth) * 0.5) / sizeRatio;
+                const outputY = ((outputHeight - inputHeight) * 0.5) / sizeRatio;
+                console.log(outputX, outputY);
+
+                // Create Canvas
+                const canvas = document.createElement("canvas");
+                canvas.width = resizedWidth ? resizedWidth : outputWidth;
+                canvas.height = resizedWidth ? resizedWidth / aspectRatio : outputHeight;
+
+                // Draw image on the canvas
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(inputImage, outputX, outputY, resizeWidth, resizeHeight);
+
+                // Encode image to data-uri with base64
+                const imageBase64 = canvas.toDataURL();
+
+                // Resolve
+                resolve(imageBase64);
+            };
+
+            // Load Image
+            inputImage.src = url;
+        });
+    };
+
     return (
         <Utils.Provider
             value={{
@@ -327,6 +386,9 @@ const UtilsProvider = (props) => {
 
                 // VIBRATE
                 vibrate,
+
+                // IMAGE
+                cropAndResizeImage,
             }}
         >
             {props.children}
