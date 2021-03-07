@@ -1187,6 +1187,7 @@ body {
     z-index: 1;
     margin: 15% 0 25% 0;
     @include animation(heartbeat 3s linear infinite);
+    color: white;
 
     @keyframes heartbeat {
         58% {

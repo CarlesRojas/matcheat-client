@@ -526,7 +526,7 @@ export default function Settings() {
 
                 <animated.div className="section changeUsername" style={{ x: pagePositions.changeUsernameX }} {...gestureBind()}>
                     <Glass style={{ minHeight: "67%" }}>
-                        <SVG className="logo small" src={LogoIcon} />
+                        <SVG className="logo small" src={UserIcon} />
 
                         <form autoComplete="off" noValidate spellCheck="false" onSubmit={onChangeUsername}>
                             <div className="inputContainer">
@@ -566,7 +566,7 @@ export default function Settings() {
 
                 <animated.div className="section changeEmail" style={{ x: pagePositions.changeEmailX }} {...gestureBind()}>
                     <Glass style={{ minHeight: "67%" }}>
-                        <SVG className="logo small" src={LogoIcon} />
+                        <SVG className="logo small" src={EmailIcon} />
 
                         <form autoComplete="off" noValidate spellCheck="false" onSubmit={onChangeEmail}>
                             <div className="inputContainer">
@@ -605,7 +605,7 @@ export default function Settings() {
 
                 <animated.div className="section changePassword" style={{ x: pagePositions.changePasswordX }} {...gestureBind()}>
                     <Glass style={{ minHeight: "67%" }}>
-                        <SVG className="logo small" src={LogoIcon} />
+                        <SVG className="logo small" src={PasswordIcon} />
 
                         <form autoComplete="off" noValidate spellCheck="false" onSubmit={onChangePassword}>
                             <div className="inputContainer">
