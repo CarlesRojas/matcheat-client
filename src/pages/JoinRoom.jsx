@@ -24,7 +24,7 @@ export default function JoinRoom() {
 
     // Contexts
     const { vibrate } = useContext(Utils);
-    const { setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, image, username, socketError, settings } = useContext(Data);
+    const { setRoomID, setRoomUsers, isBoss, restaurants, mostAdvancedRoute, setBackgroundGradient, landingDone, image, username, socketError, settings } = useContext(Data);
     const { emit, sub, subOnce, unsub } = useContext(Socket);
 
     // Redirect state
@@ -136,6 +136,9 @@ export default function JoinRoom() {
         // Clear the restaurants
         restaurants.current = [];
 
+        // Reset the most advanced route
+        mostAdvancedRoute.current = "home";
+
         // Inform others in the room
         if (inform) emit("leaveRoom", {});
     };
@@ -218,7 +221,14 @@ export default function JoinRoom() {
         // Change Color
         setBackgroundGradient("blue");
 
-        if (landingDone.current) {
+        // Go home if we arrived here through the back button
+        if (mostAdvancedRoute.current === "loading" || mostAdvancedRoute.current === "restaurants" || mostAdvancedRoute.current === "wait" || mostAdvancedRoute.current === "ranking") {
+            mostAdvancedRoute.current = "home";
+            setRedirectTo("/");
+        }
+
+        // Start countdown
+        else if (landingDone.current) {
             // Show the join screen
             showJoinScreen(true);
 

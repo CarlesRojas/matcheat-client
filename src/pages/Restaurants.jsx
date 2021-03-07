@@ -24,7 +24,9 @@ export default function Restaurants() {
 
     // Contexts
     const { vibrate } = useContext(Utils);
-    const { username, roomID, setRoomID, roomUsers, setRoomUsers, isBoss, restaurants, timeStart, setBackgroundGradient, landingDone, socketError, settings } = useContext(Data);
+    const { username, roomID, setRoomID, roomUsers, setRoomUsers, isBoss, restaurants, timeStart, mostAdvancedRoute, setBackgroundGradient, landingDone, socketError, settings } = useContext(
+        Data
+    );
     const { emit } = useContext(Socket);
     const { addToRestaurantScore } = useContext(API);
 
@@ -389,6 +391,9 @@ export default function Restaurants() {
         // Clear the restaurants
         restaurants.current = [];
 
+        // Reset the most advanced route
+        mostAdvancedRoute.current = "home";
+
         // Inform others in the room
         if (inform) emit("leaveRoom", {});
     };
@@ -418,7 +423,17 @@ export default function Restaurants() {
         // Change Color
         setBackgroundGradient("neutral");
 
-        if (landingDone.current) {
+        // Go home if we arrived here through the back button
+        if (mostAdvancedRoute.current === "wait" || mostAdvancedRoute.current === "ranking") {
+            mostAdvancedRoute.current = "home";
+            setRedirectTo("/");
+        }
+
+        // Start countdown
+        else if (landingDone.current) {
+            // Set the most advanced page
+            mostAdvancedRoute.current = "restaurants";
+
             // Subscribe to error and disconnext events
             window.PubSub.sub("onSocketError", throwError);
 

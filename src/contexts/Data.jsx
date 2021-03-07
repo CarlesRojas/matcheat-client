@@ -30,6 +30,7 @@ const DataProvider = (props) => {
     // RESTAURANTS
     const restaurants = useRef([]);
     const timeStart = useRef(null);
+    const mostAdvancedRoute = useRef("home");
 
     // BACKGROUND POSITION
     const positionRef = useRef({ x: 0, y: 0 });
@@ -89,6 +90,7 @@ const DataProvider = (props) => {
                 // RESTAURANTS
                 restaurants,
                 timeStart,
+                mostAdvancedRoute,
 
                 // BACKGROUND POSITION
                 positionRef,

@@ -19,7 +19,7 @@ export default function Wait() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Wait", "color: grey; font-size: 11px");
 
     // Contexts
-    const { username, roomID, setRoomID, setRoomUsers, isBoss, restaurants, timeStart, setBackgroundGradient, landingDone, socketError } = useContext(Data);
+    const { username, roomID, setRoomID, setRoomUsers, isBoss, restaurants, mostAdvancedRoute, timeStart, setBackgroundGradient, landingDone, socketError } = useContext(Data);
     const { emit, subOnce, unsub } = useContext(Socket);
 
     // Redirect state
@@ -66,6 +66,9 @@ export default function Wait() {
         // Clear the restaurants
         restaurants.current = [];
 
+        // Reset the most advanced route
+        mostAdvancedRoute.current = "home";
+
         // Inform others in the room
         if (inform) emit("leaveRoom", {});
     };
@@ -92,8 +95,6 @@ export default function Wait() {
         setRedirectTo("/home");
     };
 
-    // ROJAS Prevent back button in loading, restaurants & waiting
-
     // #################################################
     //   COMPONENT MOUNT
     // #################################################
@@ -103,7 +104,17 @@ export default function Wait() {
         // Change Color
         setBackgroundGradient("blue");
 
-        if (landingDone.current) {
+        // Go home if we arrived here through the back button
+        if (mostAdvancedRoute.current === "ranking") {
+            mostAdvancedRoute.current = "home";
+            setRedirectTo("/");
+        }
+
+        // Start countdown
+        else if (landingDone.current) {
+            // Set the most advanced page
+            mostAdvancedRoute.current = "wait";
+
             // Subscribe to error and disconnext events
             window.PubSub.sub("onSocketError", throwError);
 

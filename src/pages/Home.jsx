@@ -24,7 +24,7 @@ export default function Home() {
 
     // Contexts
     const { useForceUpdate, vibrate } = useContext(Utils);
-    const { setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, username, image, landingDone, socketError, settings } = useContext(Data);
+    const { setRoomID, setRoomUsers, isBoss, restaurants, mostAdvancedRoute, setBackgroundGradient, username, image, landingDone, socketError, settings } = useContext(Data);
     const { connect, emit } = useContext(Socket);
 
     // Redirect state
@@ -53,6 +53,9 @@ export default function Home() {
 
         // Clear the restaurants
         restaurants.current = [];
+
+        // Reset the most advanced route
+        mostAdvancedRoute.current = "home";
 
         // Inform others in the room
         if (inform) emit("leaveRoom", {});
@@ -109,7 +112,7 @@ export default function Home() {
     // On componente mount
     useEffect(() => {
         // Leave room
-        leaveRoom(false);
+        leaveRoom(true);
 
         // Connect to socket
         connect();

@@ -14,7 +14,7 @@ export default function Ranking() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Loading", "color: grey; font-size: 11px");
 
     // Contexts
-    const { roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, socketError } = useContext(Data);
+    const { roomID, setRoomID, setRoomUsers, isBoss, restaurants, mostAdvancedRoute, setBackgroundGradient, landingDone, socketError } = useContext(Data);
     const { emit } = useContext(Socket);
     const { getRoomRestaurants } = useContext(API);
 
@@ -41,6 +41,9 @@ export default function Ranking() {
 
         // Clear the restaurants
         restaurants.current = [];
+
+        // Reset the most advanced route
+        mostAdvancedRoute.current = "home";
 
         // Inform others in the room
         if (inform) emit("leaveRoom", {});
@@ -77,7 +80,17 @@ export default function Ranking() {
         // Change Color
         setBackgroundGradient("blaugrana");
 
-        if (landingDone.current) {
+        // Go home if we arrived here through the back button
+        if (mostAdvancedRoute.current === "home") {
+            mostAdvancedRoute.current = "home";
+            setRedirectTo("/");
+        }
+
+        // Start countdown
+        else if (landingDone.current) {
+            // Set the most advanced page
+            mostAdvancedRoute.current = "ranking";
+
             // Subscribe to error and disconnext events
             window.PubSub.sub("onSocketError", throwError);
 

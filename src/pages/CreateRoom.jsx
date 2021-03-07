@@ -22,7 +22,7 @@ export default function CreateRoom() {
 
     // Contexts
     const { createUniqueID, copy, vibrate } = useContext(Utils);
-    const { roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, username, socketError, settings } = useContext(Data);
+    const { roomID, setRoomID, setRoomUsers, isBoss, restaurants, mostAdvancedRoute, setBackgroundGradient, landingDone, username, socketError, settings } = useContext(Data);
     const { emit, sub, subOnce, unsub } = useContext(Socket);
 
     // Redirect state
@@ -71,6 +71,9 @@ export default function CreateRoom() {
 
         // Clear the restaurants
         restaurants.current = [];
+
+        // Reset the most advanced route
+        mostAdvancedRoute.current = "home";
 
         // Inform others in the room
         if (inform) emit("leaveRoom", {});
@@ -143,7 +146,14 @@ export default function CreateRoom() {
         // Change Color
         setBackgroundGradient("lime");
 
-        if (landingDone.current) {
+        // Go home if we arrived here through the back button
+        if (mostAdvancedRoute.current === "loading" || mostAdvancedRoute.current === "restaurants" || mostAdvancedRoute.current === "wait" || mostAdvancedRoute.current === "ranking") {
+            mostAdvancedRoute.current = "home";
+            setRedirectTo("/");
+        }
+
+        // Start countdown
+        else if (landingDone.current) {
             // Animate
             const timeline = gsap.timeline({ defaults: { ease: "power1" } });
             timeline.fromTo(".createRoom > .container > .glass", { opacity: 0 }, { opacity: 1, duration: 0.2 }, "+=0.25");

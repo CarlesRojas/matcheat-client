@@ -19,7 +19,7 @@ export default function Loading() {
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Loading", "color: grey; font-size: 11px");
 
     // Contexts
-    const { username, roomID, setRoomID, setRoomUsers, isBoss, restaurants, setBackgroundGradient, landingDone, socketError } = useContext(Data);
+    const { username, roomID, setRoomID, setRoomUsers, isBoss, restaurants, mostAdvancedRoute, setBackgroundGradient, landingDone, socketError } = useContext(Data);
     const { emit, sub, unsub } = useContext(Socket);
     const { getPlaces, getRoomRestaurants } = useContext(API);
 
@@ -46,6 +46,9 @@ export default function Loading() {
 
         // Clear the restaurants
         restaurants.current = [];
+
+        // Reset the most advanced route
+        mostAdvancedRoute.current = "home";
 
         // Inform others in the room
         if (inform) emit("leaveRoom", {});
@@ -85,7 +88,17 @@ export default function Loading() {
         // Change Color
         setBackgroundGradient("red");
 
-        if (landingDone.current) {
+        // Go home if we arrived here through the back button
+        if (mostAdvancedRoute.current === "restaurants" || mostAdvancedRoute.current === "wait" || mostAdvancedRoute.current === "ranking") {
+            mostAdvancedRoute.current = "home";
+            setRedirectTo("/");
+        }
+
+        // Start countdown
+        else if (landingDone.current) {
+            // Set the most advanced page
+            mostAdvancedRoute.current = "loading";
+
             // Subscribe to error and disconnext events
             window.PubSub.sub("onSocketError", throwError);
 
