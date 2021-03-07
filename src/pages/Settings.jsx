@@ -15,9 +15,9 @@ import Setting from "components/Setting";
 // Contexts
 import { Utils } from "contexts/Utils";
 import { Data } from "contexts/Data";
+import { API } from "contexts/API";
 
 // Icons
-import LogoIcon from "resources/logo_white.svg";
 import SettingsIcon from "resources/icons/settings.svg";
 import UserIcon from "resources/icons/user.svg";
 import EmailIcon from "resources/icons/email.svg";
@@ -35,7 +35,8 @@ export default function Settings() {
 
     // Contexts
     const { vibrate, cropAndResizeImage } = useContext(Utils);
-    const { setBackgroundGradient, landingDone, vibrationSetting } = useContext(Data);
+    const { setBackgroundGradient, landingDone, settings } = useContext(Data);
+    const { changeUsername, changeEmail, changePassword, changeImage, changeSettings } = useContext(API);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
@@ -60,7 +61,8 @@ export default function Settings() {
     const [changeImageError, setChangeImageError] = useState(null);
     const [camError, setCamError] = useState(null);
 
-    // Success message
+    // Success & Error messages
+    const [errorMessage, setErrorMessage] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
 
     // When the change username form changes
@@ -92,18 +94,17 @@ export default function Settings() {
         event.preventDefault();
 
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
-        // Login
-        // ROJAS ADD API CALL
-        //const result = await login(loginForm.email, loginForm.password);
-        const result = {};
+        // Change Username
+        const result = await changeUsername(changeUsernameForm.password, changeUsernameForm.username);
 
         // Throw error
         if ("error" in result) setChangeUsernameError(result.error);
         else {
+            clearErrors();
             setSuccessMessage("User changed successfully");
-            showMainScreen(false);
+            showMainScreen(true);
         }
     };
 
@@ -112,16 +113,15 @@ export default function Settings() {
         event.preventDefault();
 
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
-        // Login
-        // ROJAS ADD API CALL
-        //const result = await login(loginForm.email, loginForm.password);
-        const result = {};
+        // Change email
+        const result = await changeEmail(changeEmailForm.password, changeEmailForm.email);
 
         // Throw error
         if ("error" in result) setChangeEmailError(result.error);
         else {
+            clearErrors();
             setSuccessMessage("Email changed successfully");
             showMainScreen(false);
         }
@@ -132,16 +132,15 @@ export default function Settings() {
         event.preventDefault();
 
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
-        // Login
-        // ROJAS ADD API CALL
-        //const result = await login(loginForm.email, loginForm.password);
-        const result = {};
+        // Change password
+        const result = await changePassword(changePasswordForm.password, changePasswordForm.newPassword);
 
         // Throw error
         if ("error" in result) setChangePasswordError(result.error);
         else {
+            clearErrors();
             setSuccessMessage("Password changed successfully");
             showMainScreen(false);
         }
@@ -152,26 +151,31 @@ export default function Settings() {
         event.preventDefault();
 
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
-        // Login
-        // ROJAS ADD API CALL
-        //const result = await login(loginForm.email, loginForm.password);
-        const result = {};
+        // Change password
+        const result = await changeImage(changeImageForm.password, changeImageForm.image);
 
         // Throw error
         if ("error" in result) setChangeImageError(result.error);
         else {
+            clearErrors();
             setSuccessMessage("Image changed successfully");
             showMainScreen(false);
         }
     };
 
     // When the user changes the vibration setting
-    const onVibrationSettingChange = (newValue) => {
-        console.log(`Vibrate ${newValue}`);
+    const onVibrateChange = async () => {
+        // Change settings
+        const result = await changeSettings(settings.current);
 
-        // ROJAS ADD API CALL
+        // Throw error
+        if ("error" in result) setErrorMessage(result.error);
+        else {
+            clearErrors();
+            setSuccessMessage("Setting updated successfully");
+        }
     };
 
     // #################################################
@@ -195,7 +199,7 @@ export default function Settings() {
     // Show the main screen
     const showMainScreen = (first) => {
         // Vibrate
-        if (!first && vibrationSetting.current) vibrate(25);
+        if (!first && settings.current.vibrate) vibrate(25);
 
         setBackgroundGradient("purple");
         resetForms();
@@ -207,7 +211,7 @@ export default function Settings() {
     // Show the change username screen
     const showChangeUsernameScreen = (keepForm) => {
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
         setBackgroundGradient("pink");
         if (!keepForm) resetForms();
@@ -220,7 +224,7 @@ export default function Settings() {
     // Show the change email screen
     const showChangeEmailScreen = (keepForm) => {
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
         setBackgroundGradient("pink");
         if (!keepForm) resetForms();
@@ -233,7 +237,7 @@ export default function Settings() {
     // Show the change password screen
     const showChangePasswordScreen = (keepForm) => {
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
         setBackgroundGradient("pink");
         if (!keepForm) resetForms();
@@ -246,7 +250,7 @@ export default function Settings() {
     // Show the change image screen
     const showChangeImageScreen = (keepForm) => {
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
         setBackgroundGradient("pink");
         if (!keepForm) resetForms();
@@ -259,7 +263,7 @@ export default function Settings() {
     // Show the camera screen
     const showCameraScreen = () => {
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
         setBackgroundGradient("lime");
         setPagePositions({ mainX: -SCREEN_WIDTH, changeUsernameX: SCREEN_WIDTH, changeEmailX: SCREEN_WIDTH, changePasswordX: SCREEN_WIDTH, changeImageX: -SCREEN_WIDTH, cameraX: 0 });
@@ -267,12 +271,22 @@ export default function Settings() {
         setCurrPage("camera");
     };
 
-    // Reset all form fields and errors
+    // Reset all form fields
     const resetForms = () => {
         setChangeUsernameForm({ username: "", password: "" });
         setChangeEmailForm({ email: "", password: "" });
         setChangePasswordForm({ newPassword: "", password: "" });
         setChangeImageForm({ image: "", password: "" });
+    };
+
+    // Clear all errors
+    const clearErrors = () => {
+        setChangeUsernameError(null);
+        setChangeEmailError(null);
+        setChangePasswordError(null);
+        setChangeImageError(null);
+        setCamError(null);
+        setErrorMessage(null);
     };
 
     // #################################################
@@ -380,6 +394,7 @@ export default function Settings() {
         const imageSrc = cameraRef.current.getScreenshot({ width: 400, height: 400 });
 
         setChangeImageForm((prevState) => ({ ...prevState, image: imageSrc }));
+        clearErrors();
         showChangeImageScreen(true);
     };
 
@@ -409,6 +424,7 @@ export default function Settings() {
             try {
                 var croppedImage = await cropAndResizeImage(URL.createObjectURL(event.target.files[0]), 1, 400);
                 setChangeImageForm((prevState) => ({ ...prevState, image: croppedImage }));
+                clearErrors();
                 showChangeImageScreen(true);
             } catch (error) {
                 setCamError("Unable to load image");
@@ -431,7 +447,7 @@ export default function Settings() {
     const onBackButtonClicked = () => {
         if (currPageRef.current === "main") {
             // Vibrate
-            if (vibrationSetting.current) vibrate(25);
+            if (settings.current.vibrate) vibrate(25);
 
             // Redirect to home
             setRedirectTo("/home");
@@ -494,6 +510,9 @@ export default function Settings() {
             />
         ) : null;
 
+    // Success / Error message on main screen
+    const message = successMessage ? <div className="success">{successMessage}</div> : <div className="error">{errorMessage}</div>;
+
     return (
         <div className="settings">
             <Navbar onBackButtonClicked={onBackButtonClicked}></Navbar>
@@ -518,9 +537,9 @@ export default function Settings() {
                             Change Image
                         </div>
 
-                        <Setting name="Vibration" action={onVibrationSettingChange} setting={vibrationSetting}></Setting>
+                        <Setting name="Vibration" action={onVibrateChange} settingName={"vibrate"}></Setting>
 
-                        <div className="success">{successMessage}</div>
+                        {message}
                     </Glass>
                 </animated.div>
 
@@ -615,7 +634,7 @@ export default function Settings() {
                                     type="password"
                                     placeholder=" new password"
                                     name="newPassword"
-                                    value={changePasswordForm.password}
+                                    value={changePasswordForm.newPassword}
                                     onChange={onChangePasswordFormChange}
                                     autoComplete="off"
                                 ></input>

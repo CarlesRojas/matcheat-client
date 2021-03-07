@@ -13,9 +13,9 @@ const apiVersion = "api_v1";
 const APIProvider = (props) => {
     // Contexts
     const { setCookie, getCookie, clearCookies, urltoFile } = useContext(Utils);
-    const { token, username, userID, image, restaurants } = useContext(Data);
+    const { token, username, userID, image, settings, restaurants } = useContext(Data);
 
-    const apiURL = "https://matcheat.herokuapp.com/"; //process.env.NODE_ENV === "production" ? "https://matcheat.herokuapp.com/" : "http://localhost:3100/";
+    const apiURL = process.env.NODE_ENV === "production" ? "https://matcheat.herokuapp.com/" : "http://localhost:3100/";
 
     // Create a new user
     const register = async (username, email, password, image) => {
@@ -80,12 +80,7 @@ const APIProvider = (props) => {
         // #################################################
 
         // Post data
-        postData = {
-            username,
-            email,
-            password,
-            image: url,
-        };
+        postData = { username, email, password, image: url };
 
         try {
             // Fetch
@@ -140,12 +135,14 @@ const APIProvider = (props) => {
             if ("username" in response) username.current = response.username;
             if ("id" in response) userID.current = response.id;
             if ("image" in response) image.current = response.image;
+            if ("settings" in response) settings.current = response.settings;
 
             // Set token cookie
             setCookie("matchEat_token", response.token, 365);
             setCookie("matchEat_name", response.username, 365);
             setCookie("matchEat_id", response.id, 365);
             setCookie("matchEat_image", response.image, 365);
+            setCookie("matchEat_settings", JSON.stringify(response.settings), 365);
 
             // Return response
             return response;
@@ -159,6 +156,8 @@ const APIProvider = (props) => {
         token.current = null;
         username.current = null;
         userID.current = null;
+        image.current = null;
+        settings.current = { vibrate: true };
 
         clearCookies();
     };
@@ -169,19 +168,23 @@ const APIProvider = (props) => {
         const nameInCookie = getCookie("matchEat_name");
         const idInCookie = getCookie("matchEat_id");
         const imageInCookie = getCookie("matchEat_image");
+        const settingsInCookieRaw = getCookie("matchEat_settings");
+        const settingsInCookie = settingsInCookieRaw ? JSON.parse(settingsInCookieRaw) : settingsInCookieRaw;
 
         // If they exist, save in data and return true
-        if (tokenInCookie && nameInCookie && idInCookie && imageInCookie) {
+        if (tokenInCookie && nameInCookie && idInCookie && imageInCookie && settingsInCookie) {
             token.current = tokenInCookie;
             username.current = nameInCookie;
             userID.current = idInCookie;
             image.current = imageInCookie;
+            settings.current = settingsInCookie;
 
             // Renew expiration
             setCookie("matchEat_token", tokenInCookie, 365);
             setCookie("matchEat_name", nameInCookie, 365);
             setCookie("matchEat_id", idInCookie, 365);
             setCookie("matchEat_image", imageInCookie, 365);
+            setCookie("matchEat_settings", JSON.stringify(settingsInCookie), 365);
 
             return true;
         }
@@ -277,6 +280,224 @@ const APIProvider = (props) => {
         }
     };
 
+    // Change the username
+    const changeUsername = async (password, newUsername) => {
+        // Post data
+        var postData = { username: username.current, password, newUsername };
+
+        try {
+            // Fetch
+            var rawResponse = await fetch(`${apiURL}${apiVersion}/changeUsername`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            // Get data from response
+            const response = await rawResponse.json();
+
+            if ("success" in response) {
+                // Save in the cookies and Data
+                username.current = newUsername;
+                setCookie("matchEat_name", newUsername, 365);
+            }
+
+            // Return response
+            return response;
+        } catch (error) {
+            return error;
+        }
+    };
+
+    // Change the email
+    const changeEmail = async (password, email) => {
+        // Post data
+        var postData = { username: username.current, password, email };
+
+        try {
+            // Fetch
+            var rawResponse = await fetch(`${apiURL}${apiVersion}/changeEmail`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            // Get data from response
+            const response = await rawResponse.json();
+
+            // Return response
+            return response;
+        } catch (error) {
+            return error;
+        }
+    };
+
+    // Change the password
+    const changePassword = async (password, newPassword) => {
+        // Post data
+        var postData = { username: username.current, password, newPassword };
+
+        try {
+            // Fetch
+            var rawResponse = await fetch(`${apiURL}${apiVersion}/changePassword`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            // Get data from response
+            const response = await rawResponse.json();
+
+            // Return response
+            return response;
+        } catch (error) {
+            return error;
+        }
+    };
+
+    // Change the image
+    const changeImage = async (password, newImage) => {
+        // Fail if there is no image
+        if (!newImage) return { error: "Profile picture missing." };
+
+        // #################################################
+        //   GET S3 URL WHERE WE CAN UPLOAD THE IMAGE
+        // #################################################
+
+        // Transform Base 64 to file
+        const fileName = new Date().toISOString() + "_" + username.current + ".png";
+        var imageFile = await urltoFile(newImage, fileName);
+
+        // Post data
+        var postData = {
+            fileName: fileName,
+            fileType: "image/png",
+        };
+
+        try {
+            // Fetch S3 url configuration
+            var rawResponse = await fetch(`${apiURL}${apiVersion}/aws/getS3URL`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify(postData),
+            });
+
+            // Get data from response
+            var response = await rawResponse.json();
+            var signedRequest = response.signedRequest;
+            var url = response.url;
+        } catch (error) {
+            return { error: "Error saving image" };
+        }
+
+        // #################################################
+        //   UPLOAD THE IMAGE
+        // #################################################
+
+        try {
+            // Fetch S3 url configuration
+            await fetch(signedRequest, {
+                method: "put",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "image/png",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: imageFile,
+            });
+        } catch (error) {
+            return { error: "Error saving image" };
+        }
+
+        // #################################################
+        //   CHANGE IN DB
+        // #################################################
+
+        // Post data
+        postData = { username: username.current, password, image: url };
+
+        try {
+            // Fetch
+            rawResponse = await fetch(`${apiURL}${apiVersion}/changeImage`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            // Get data from response
+            const response = await rawResponse.json();
+
+            if ("success" in response) {
+                // Save in the cookies and Data
+                image.current = url;
+                setCookie("matchEat_image", url, 365);
+            }
+
+            // Return response
+            return response;
+        } catch (error) {
+            return error;
+        }
+    };
+
+    // Change the settings
+    const changeSettings = async (newSettings) => {
+        // Post data
+        var postData = { username: username.current, settings: newSettings };
+
+        try {
+            // Fetch
+            var rawResponse = await fetch(`${apiURL}${apiVersion}/changeSettings`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            // Get data from response
+            const response = await rawResponse.json();
+
+            if ("success" in response) {
+                // Save in the cookies and Data
+                settings.current = newSettings;
+                setCookie("matchEat_settings", JSON.stringify(newSettings), 365);
+            }
+
+            // Return response
+            return response;
+        } catch (error) {
+            return error;
+        }
+    };
+
     // Return the context
     return (
         <API.Provider
@@ -289,6 +510,11 @@ const APIProvider = (props) => {
                 getPlaces,
                 getRoomRestaurants,
                 addToRestaurantScore,
+                changeUsername,
+                changeEmail,
+                changePassword,
+                changeImage,
+                changeSettings,
             }}
         >
             {props.children}

@@ -24,7 +24,7 @@ export default function Restaurants() {
 
     // Contexts
     const { vibrate } = useContext(Utils);
-    const { username, roomID, setRoomID, roomUsers, setRoomUsers, isBoss, restaurants, timeStart, setBackgroundGradient, landingDone, socketError, vibrationSetting } = useContext(Data);
+    const { username, roomID, setRoomID, roomUsers, setRoomUsers, isBoss, restaurants, timeStart, setBackgroundGradient, landingDone, socketError, settings } = useContext(Data);
     const { emit } = useContext(Socket);
     const { addToRestaurantScore } = useContext(API);
 
@@ -41,7 +41,7 @@ export default function Restaurants() {
     // When the user likes a restaurant
     const onLike = () => {
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
         // Score
         addToRestaurantScore(username.current, roomID, restaurants.current[currRestaurant.current].restaurantID, 1);
@@ -51,7 +51,7 @@ export default function Restaurants() {
     // When the user nopes a restaurant
     const onNope = () => {
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
         // Next
         currRestaurant.current++;
@@ -60,7 +60,7 @@ export default function Restaurants() {
     // When the user loves a restaurant
     const onLove = () => {
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
         // Score
         addToRestaurantScore(username.current, roomID, restaurants.current[currRestaurant.current].restaurantID, 2);

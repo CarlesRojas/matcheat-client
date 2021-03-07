@@ -320,12 +320,10 @@ const UtilsProvider = (props) => {
                 const sizeRatio = resizedWidth ? outputWidth / resizedWidth : 1;
                 const resizeWidth = inputWidth / sizeRatio;
                 const resizeHeight = inputHeight / sizeRatio;
-                console.log(resizeWidth, resizeHeight);
 
                 // Get crop displacements
                 const outputX = ((outputWidth - inputWidth) * 0.5) / sizeRatio;
                 const outputY = ((outputHeight - inputHeight) * 0.5) / sizeRatio;
-                console.log(outputX, outputY);
 
                 // Create Canvas
                 const canvas = document.createElement("canvas");

@@ -6,13 +6,13 @@ import { useDrag } from "react-use-gesture";
 import { Utils } from "contexts/Utils";
 import { Data } from "contexts/Data";
 
-export default function Setting({ name, action, setting }) {
+export default function Setting({ name, action, settingName }) {
     // Print Render
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Setting", "color: grey; font-size: 11px");
 
     // Contexts
     const { vibrate, clamp, invlerp } = useContext(Utils);
-    const { vibrationSetting } = useContext(Data);
+    const { settings } = useContext(Data);
 
     // Slider
     const sliderRef = useRef(null);
@@ -22,14 +22,14 @@ export default function Setting({ name, action, setting }) {
     // #################################################
 
     // Color position between 0 and 1
-    const [{ colorPos }, setColorPos] = useSpring(() => ({ colorPos: !setting.current ? 0 : 1 }));
+    const [{ colorPos }, setColorPos] = useSpring(() => ({ colorPos: !settings.current[settingName] ? 0 : 1 }));
 
     // #################################################
     //   ACTIONS
     // #################################################
 
     // Page position spring
-    const [{ x }, setPosition] = useSpring(() => ({ x: !setting.current ? "0%" : "25%" }));
+    const [{ x }, setPosition] = useSpring(() => ({ x: !settings.current[settingName] ? "0%" : "25%" }));
 
     // Deactivate Setting
     const deactivateSetting = (execAction) => {
@@ -37,11 +37,11 @@ export default function Setting({ name, action, setting }) {
         setPosition({ x: "0%" });
         setColorPos({ colorPos: 0 });
 
-        if (execAction && setting.current) {
-            setting.current = false;
+        if (execAction && settings.current[settingName]) {
+            settings.current[settingName] = false;
 
             // Vibrate
-            if (vibrationSetting.current) vibrate(25);
+            if (settings.current.vibrate) vibrate(25);
 
             // Send the action with a value of false
             action(false);
@@ -54,11 +54,11 @@ export default function Setting({ name, action, setting }) {
         setPosition({ x: "25%" });
         setColorPos({ colorPos: 1 });
 
-        if (execAction && !setting.current) {
-            setting.current = true;
+        if (execAction && !settings.current[settingName]) {
+            settings.current[settingName] = true;
 
             // Vibrate
-            if (vibrationSetting.current) vibrate(25);
+            if (settings.current.vibrate) vibrate(25);
 
             // Send the action with a value of true
             action(true);
@@ -82,7 +82,7 @@ export default function Setting({ name, action, setting }) {
             if (!down) {
                 if (mx > sliderWidth * 0.125 || vx > 1) activateSetting(true);
                 else if (mx < -sliderWidth * 0.125 || vx < -1) deactivateSetting(true);
-                else if (setting.current) activateSetting(false);
+                else if (settings.current[settingName]) activateSetting(false);
                 else deactivateSetting(false);
             }
 
@@ -108,7 +108,13 @@ export default function Setting({ name, action, setting }) {
             <animated.div className="backGradient" style={{ background: colorPos.to({ range: [0, 1], output: ["#ff3400b3", "#29be29b3"] }) }}>
                 Back
             </animated.div>
-            <animated.div className="slider" {...gestureBind()} style={{ x }} onClick={() => (setting.current ? deactivateSetting(true) : activateSetting(true))} ref={sliderRef}>
+            <animated.div
+                className="slider"
+                {...gestureBind()}
+                style={{ x }}
+                onClick={() => (settings.current[settingName] ? deactivateSetting(true) : activateSetting(true))}
+                ref={sliderRef}
+            >
                 {name}
             </animated.div>
         </div>

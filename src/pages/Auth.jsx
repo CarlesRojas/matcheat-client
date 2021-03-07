@@ -35,7 +35,7 @@ export default function Auth() {
     // Contexts
     const { vibrate, cropAndResizeImage } = useContext(Utils);
     const { register, login, isLoggedIn } = useContext(API);
-    const { setBackgroundGradient, vibrationSetting } = useContext(Data);
+    const { setBackgroundGradient, settings } = useContext(Data);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
@@ -69,7 +69,7 @@ export default function Auth() {
         event.preventDefault();
 
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
         // Show loading screen
         showLoadingScreen();
@@ -91,7 +91,7 @@ export default function Auth() {
         event.preventDefault();
 
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
         // Show loading screen
         showLoadingScreen();
@@ -142,7 +142,7 @@ export default function Auth() {
             timeline.fromTo(".welcome > .glass", { opacity: 0 }, { opacity: 1, duration: 1 }, "+=0.25");
         } else {
             // Vibrate
-            if (vibrationSetting.current) vibrate(25);
+            if (settings.current.vibrate) vibrate(25);
         }
 
         setBackgroundGradient("pink");
@@ -155,7 +155,7 @@ export default function Auth() {
     // Show the login screen
     const showLoginScreen = (keepForm) => {
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
         setBackgroundGradient("red");
         if (!keepForm) resetForms();
@@ -167,7 +167,7 @@ export default function Auth() {
     // Show the signup screen
     const showSignupScreen = (keepForm) => {
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
         setBackgroundGradient("purple");
         if (!keepForm) resetForms();
@@ -179,7 +179,7 @@ export default function Auth() {
     // Show the camera screen
     const showCameraScreen = () => {
         // Vibrate
-        if (vibrationSetting.current) vibrate(25);
+        if (settings.current.vibrate) vibrate(25);
 
         setBackgroundGradient("lime");
         setPagePositions({ welcomeX: -SCREEN_WIDTH, loginX: SCREEN_WIDTH, signupX: -SCREEN_WIDTH, loadingX: SCREEN_WIDTH, cameraX: 0 });

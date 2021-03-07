@@ -19,6 +19,7 @@ const DataProvider = (props) => {
     const username = useRef(null);
     const userID = useRef(null);
     const image = useRef(null);
+    const settings = useRef({ vibrate: true });
 
     // ROOM
     const [roomID, setRoomID] = useState(null);
@@ -64,9 +65,6 @@ const DataProvider = (props) => {
         currGradient.current = gradientName;
     };
 
-    // SETTINGS
-    const vibrationSetting = useRef(true);
-
     return (
         <Data.Provider
             value={{
@@ -78,6 +76,7 @@ const DataProvider = (props) => {
                 username,
                 userID,
                 image,
+                settings,
 
                 // ROOM
                 roomID,
@@ -102,9 +101,6 @@ const DataProvider = (props) => {
                 currGradient,
                 setGradient,
                 setBackgroundGradient,
-
-                // SETTINGS
-                vibrationSetting,
             }}
         >
             {props.children}
