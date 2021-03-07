@@ -741,7 +741,25 @@ body {
             width: 25%;
             z-index: 1;
             color: white;
-            margin: 4% 0 10% 0;
+            margin: 8% 0 5% 0;
+        }
+
+        .overflowContainer {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            flex-grow: 1;
+            overflow-y: scroll;
+
+            .settingsContainer {
+                position: relative;
+                // background-color: red;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+            }
         }
     }
 }
@@ -1093,6 +1111,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 50px;
     width: 85%;
     z-index: 1;
     cursor: pointer;
@@ -1137,6 +1156,10 @@ body {
 
     &.inactive {
         pointer-events: none;
+    }
+
+    &.red {
+        background: radial-gradient(circle, rgba(255, 52, 0, 0.6) 0%, rgba(255, 52, 0, 0.5) 75%);
     }
 }
 
@@ -1185,9 +1208,9 @@ body {
 .logo {
     width: 50%;
     z-index: 1;
+    color: white;
     margin: 15% 0 25% 0;
     @include animation(heartbeat 3s linear infinite);
-    color: white;
 
     @keyframes heartbeat {
         58% {
@@ -1699,6 +1722,7 @@ body {
     @include transition(transform 0.2s ease-in-out);
 
     .backGradient {
+        pointer-events: none;
         height: 100%;
         width: 100%;
         //background: radial-gradient(circle, #1eff00b3 0%, #00c53180 75%);
@@ -1706,12 +1730,12 @@ body {
         color: transparent;
         padding: 14px;
         font-size: 1rem;
-        pointer-events: none;
         backdrop-filter: blur(6px);
         @include border-radius(500px);
     }
 
     .slider {
+        pointer-events: all;
         position: absolute;
         width: 80%;
         top: 0;
@@ -1727,7 +1751,6 @@ body {
         padding: 14px;
         font-size: 1rem;
         font-weight: 700;
-        pointer-events: all;
         text-align: center;
         text-transform: uppercase;
         backdrop-filter: blur(6px);

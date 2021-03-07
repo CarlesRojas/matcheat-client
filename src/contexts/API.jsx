@@ -498,6 +498,37 @@ const APIProvider = (props) => {
         }
     };
 
+    // Delete account
+    const deleteAccount = async (password) => {
+        // Post data
+        var postData = { username: username.current, password };
+
+        try {
+            // Fetch
+            var rawResponse = await fetch(`${apiURL}${apiVersion}/deleteAccount`, {
+                method: "post",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    token: token.current,
+                },
+                body: JSON.stringify(postData),
+            });
+
+            // Get data from response
+            const response = await rawResponse.json();
+
+            // Logout
+            if ("success" in response) logout();
+
+            // Return response
+            return response;
+        } catch (error) {
+            return error;
+        }
+    };
+
     // Return the context
     return (
         <API.Provider
@@ -515,6 +546,7 @@ const APIProvider = (props) => {
                 changePassword,
                 changeImage,
                 changeSettings,
+                deleteAccount,
             }}
         >
             {props.children}

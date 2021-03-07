@@ -22,6 +22,7 @@ import SettingsIcon from "resources/icons/settings.svg";
 import UserIcon from "resources/icons/user.svg";
 import EmailIcon from "resources/icons/email.svg";
 import PasswordIcon from "resources/icons/password.svg";
+import DeleteIcon from "resources/icons/delete.svg";
 import CameraIcon from "resources/icons/cam.svg";
 import ReverseIcon from "resources/icons/reverse.svg";
 import FolderIcon from "resources/icons/folder.svg";
@@ -36,7 +37,7 @@ export default function Settings() {
     // Contexts
     const { vibrate, cropAndResizeImage } = useContext(Utils);
     const { setBackgroundGradient, landingDone, settings } = useContext(Data);
-    const { changeUsername, changeEmail, changePassword, changeImage, changeSettings } = useContext(API);
+    const { logout, changeUsername, changeEmail, changePassword, changeImage, changeSettings, deleteAccount } = useContext(API);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
@@ -53,12 +54,14 @@ export default function Settings() {
     const [changeEmailForm, setChangeEmailForm] = useState({ email: "", password: "" });
     const [changePasswordForm, setChangePasswordForm] = useState({ newPassword: "", password: "" });
     const [changeImageForm, setChangeImageForm] = useState({ image: "", password: "" });
+    const [deleteAccountForm, setDeleteAccountForm] = useState({ password: "" });
 
     // Errors in forms
     const [changeUsernameError, setChangeUsernameError] = useState(null);
     const [changeEmailError, setChangeEmailError] = useState(null);
     const [changePasswordError, setChangePasswordError] = useState(null);
     const [changeImageError, setChangeImageError] = useState(null);
+    const [deleteAccountError, setDeleteAccountError] = useState(null);
     const [camError, setCamError] = useState(null);
 
     // Success & Error messages
@@ -87,6 +90,12 @@ export default function Settings() {
     const onChangeImageFormChange = (event) => {
         const { name, value } = event.target;
         setChangeImageForm((prevState) => ({ ...prevState, [name]: value }));
+    };
+
+    // When the delete account form changes
+    const onDeleteAccountFormChange = (event) => {
+        const { name, value } = event.target;
+        setDeleteAccountForm((prevState) => ({ ...prevState, [name]: value }));
     };
 
     // When the users tries to change the username
@@ -165,6 +174,26 @@ export default function Settings() {
         }
     };
 
+    // When the users tries to delete the account
+    const onDeleteAccount = async (event) => {
+        event.preventDefault();
+
+        // Vibrate
+        if (settings.current.vibrate) vibrate(25);
+
+        // Change password
+        const result = await deleteAccount(deleteAccountForm.password);
+
+        // Throw error
+        if ("error" in result) setDeleteAccountError(result.error);
+        else {
+            clearErrors();
+            setSuccessMessage("Account Deleted successfully");
+            logout();
+            setRedirectTo("/");
+        }
+    };
+
     // When the user changes the vibration setting
     const onVibrateChange = async () => {
         // Change settings
@@ -178,11 +207,17 @@ export default function Settings() {
         }
     };
 
+    // On Log out
+    const onLogout = () => {
+        setRedirectTo("/");
+        logout();
+    };
+
     // #################################################
     //   PAGE NAVIGATION
     // #################################################
 
-    // Current page: "main" "changeUsername" "changeEmail" "changePassword" "changeImage" "camera"
+    // Current page: "main" "changeUsername" "changeEmail" "changePassword" "changeImage" "deleteAccount" "camera"
     const currPageRef = useRef("main");
     const [, setCurrPage] = useState("main");
 
@@ -193,6 +228,7 @@ export default function Settings() {
         changeEmailX: SCREEN_WIDTH,
         changePasswordX: SCREEN_WIDTH,
         changeImageX: SCREEN_WIDTH,
+        deleteAccountX: SCREEN_WIDTH,
         cameraX: SCREEN_WIDTH,
     }));
 
@@ -203,7 +239,15 @@ export default function Settings() {
 
         setBackgroundGradient("purple");
         resetForms();
-        setPagePositions({ mainX: 0, changeUsernameX: SCREEN_WIDTH, changeEmailX: SCREEN_WIDTH, changePasswordX: SCREEN_WIDTH, changeImageX: SCREEN_WIDTH, cameraX: SCREEN_WIDTH });
+        setPagePositions({
+            mainX: 0,
+            changeUsernameX: SCREEN_WIDTH,
+            changeEmailX: SCREEN_WIDTH,
+            changePasswordX: SCREEN_WIDTH,
+            changeImageX: SCREEN_WIDTH,
+            deleteAccountX: SCREEN_WIDTH,
+            cameraX: SCREEN_WIDTH,
+        });
         currPageRef.current = "main";
         setCurrPage("main");
     };
@@ -215,8 +259,16 @@ export default function Settings() {
 
         setBackgroundGradient("pink");
         if (!keepForm) resetForms();
-        setSuccessMessage();
-        setPagePositions({ mainX: -SCREEN_WIDTH, changeUsernameX: 0, changeEmailX: SCREEN_WIDTH, changePasswordX: SCREEN_WIDTH, changeImageX: SCREEN_WIDTH, cameraX: SCREEN_WIDTH });
+        setSuccessMessage("");
+        setPagePositions({
+            mainX: -SCREEN_WIDTH,
+            changeUsernameX: 0,
+            changeEmailX: SCREEN_WIDTH,
+            changePasswordX: SCREEN_WIDTH,
+            changeImageX: SCREEN_WIDTH,
+            deleteAccountX: SCREEN_WIDTH,
+            cameraX: SCREEN_WIDTH,
+        });
         currPageRef.current = "changeUsername";
         setCurrPage("changeUsername");
     };
@@ -228,8 +280,16 @@ export default function Settings() {
 
         setBackgroundGradient("pink");
         if (!keepForm) resetForms();
-        setSuccessMessage();
-        setPagePositions({ mainX: -SCREEN_WIDTH, changeUsernameX: SCREEN_WIDTH, changeEmailX: 0, changePasswordX: SCREEN_WIDTH, changeImageX: SCREEN_WIDTH, cameraX: SCREEN_WIDTH });
+        setSuccessMessage("");
+        setPagePositions({
+            mainX: -SCREEN_WIDTH,
+            changeUsernameX: SCREEN_WIDTH,
+            changeEmailX: 0,
+            changePasswordX: SCREEN_WIDTH,
+            changeImageX: SCREEN_WIDTH,
+            deleteAccountX: SCREEN_WIDTH,
+            cameraX: SCREEN_WIDTH,
+        });
         currPageRef.current = "changeEmail";
         setCurrPage("changeEmail");
     };
@@ -241,8 +301,16 @@ export default function Settings() {
 
         setBackgroundGradient("pink");
         if (!keepForm) resetForms();
-        setSuccessMessage();
-        setPagePositions({ mainX: -SCREEN_WIDTH, changeUsernameX: SCREEN_WIDTH, changeEmailX: SCREEN_WIDTH, changePasswordX: 0, changeImageX: SCREEN_WIDTH, cameraX: SCREEN_WIDTH });
+        setSuccessMessage("");
+        setPagePositions({
+            mainX: -SCREEN_WIDTH,
+            changeUsernameX: SCREEN_WIDTH,
+            changeEmailX: SCREEN_WIDTH,
+            changePasswordX: 0,
+            changeImageX: SCREEN_WIDTH,
+            deleteAccountX: SCREEN_WIDTH,
+            cameraX: SCREEN_WIDTH,
+        });
         currPageRef.current = "changePassword";
         setCurrPage("changePassword");
     };
@@ -254,10 +322,39 @@ export default function Settings() {
 
         setBackgroundGradient("pink");
         if (!keepForm) resetForms();
-        setSuccessMessage();
-        setPagePositions({ mainX: -SCREEN_WIDTH, changeUsernameX: SCREEN_WIDTH, changeEmailX: SCREEN_WIDTH, changePasswordX: SCREEN_WIDTH, changeImageX: 0, cameraX: SCREEN_WIDTH });
+        setSuccessMessage("");
+        setPagePositions({
+            mainX: -SCREEN_WIDTH,
+            changeUsernameX: SCREEN_WIDTH,
+            changeEmailX: SCREEN_WIDTH,
+            changePasswordX: SCREEN_WIDTH,
+            changeImageX: 0,
+            deleteAccountX: SCREEN_WIDTH,
+            cameraX: SCREEN_WIDTH,
+        });
         currPageRef.current = "changeImage";
         setCurrPage("changeImage");
+    };
+
+    // Show the delete account screen
+    const showDeleteAccountScreen = (keepForm) => {
+        // Vibrate
+        if (settings.current.vibrate) vibrate(25);
+
+        setBackgroundGradient("red");
+        if (!keepForm) resetForms();
+        setSuccessMessage("");
+        setPagePositions({
+            mainX: -SCREEN_WIDTH,
+            changeUsernameX: SCREEN_WIDTH,
+            changeEmailX: SCREEN_WIDTH,
+            changePasswordX: SCREEN_WIDTH,
+            changeImageX: SCREEN_WIDTH,
+            deleteAccountX: 0,
+            cameraX: SCREEN_WIDTH,
+        });
+        currPageRef.current = "deleteAccount";
+        setCurrPage("deleteAccount");
     };
 
     // Show the camera screen
@@ -266,7 +363,15 @@ export default function Settings() {
         if (settings.current.vibrate) vibrate(25);
 
         setBackgroundGradient("lime");
-        setPagePositions({ mainX: -SCREEN_WIDTH, changeUsernameX: SCREEN_WIDTH, changeEmailX: SCREEN_WIDTH, changePasswordX: SCREEN_WIDTH, changeImageX: -SCREEN_WIDTH, cameraX: 0 });
+        setPagePositions({
+            mainX: -SCREEN_WIDTH,
+            changeUsernameX: SCREEN_WIDTH,
+            changeEmailX: SCREEN_WIDTH,
+            changePasswordX: SCREEN_WIDTH,
+            changeImageX: -SCREEN_WIDTH,
+            deleteAccountX: SCREEN_WIDTH,
+            cameraX: 0,
+        });
         currPageRef.current = "camera";
         setCurrPage("camera");
     };
@@ -277,6 +382,7 @@ export default function Settings() {
         setChangeEmailForm({ email: "", password: "" });
         setChangePasswordForm({ newPassword: "", password: "" });
         setChangeImageForm({ image: "", password: "" });
+        setDeleteAccountForm({ password: "" });
     };
 
     // Clear all errors
@@ -285,6 +391,7 @@ export default function Settings() {
         setChangeEmailError(null);
         setChangePasswordError(null);
         setChangeImageError(null);
+        setDeleteAccountError(null);
         setCamError(null);
         setErrorMessage(null);
     };
@@ -308,6 +415,7 @@ export default function Settings() {
                 currPageRef.current !== "changeEmail" &&
                 currPageRef.current !== "changePassword" &&
                 currPageRef.current !== "changeImage" &&
+                currPageRef.current !== "deleteAccount" &&
                 currPageRef.current !== "camera"
             ) {
                 cancel();
@@ -322,6 +430,7 @@ export default function Settings() {
                 else if (currPageRef.current === "changeEmail") showChangeEmailScreen(true);
                 else if (currPageRef.current === "changePassword") showChangePasswordScreen(true);
                 else if (currPageRef.current === "changeImage") showChangeImageScreen(true);
+                else if (currPageRef.current === "deleteAccount") showDeleteAccountScreen(true);
                 else if (currPageRef.current === "camera") showCameraScreen();
             }
 
@@ -335,6 +444,7 @@ export default function Settings() {
                         changeEmailX: SCREEN_WIDTH,
                         changePasswordX: SCREEN_WIDTH,
                         changeImageX: SCREEN_WIDTH,
+                        deleteAccountX: SCREEN_WIDTH,
                         cameraX: SCREEN_WIDTH,
                     });
                 else if (currPageRef.current === "changeEmail")
@@ -344,6 +454,7 @@ export default function Settings() {
                         changeEmailX: displ,
                         changePasswordX: SCREEN_WIDTH,
                         changeImageX: SCREEN_WIDTH,
+                        deleteAccountX: SCREEN_WIDTH,
                         cameraX: SCREEN_WIDTH,
                     });
                 else if (currPageRef.current === "changePassword")
@@ -353,6 +464,7 @@ export default function Settings() {
                         changeEmailX: SCREEN_WIDTH,
                         changePasswordX: displ,
                         changeImageX: SCREEN_WIDTH,
+                        deleteAccountX: SCREEN_WIDTH,
                         cameraX: SCREEN_WIDTH,
                     });
                 else if (currPageRef.current === "changeImage")
@@ -362,6 +474,17 @@ export default function Settings() {
                         changeEmailX: SCREEN_WIDTH,
                         changePasswordX: SCREEN_WIDTH,
                         changeImageX: displ,
+                        deleteAccountX: SCREEN_WIDTH,
+                        cameraX: SCREEN_WIDTH,
+                    });
+                else if (currPageRef.current === "deleteAccount")
+                    setPagePositions({
+                        mainX: -SCREEN_WIDTH + displ,
+                        changeUsernameX: SCREEN_WIDTH,
+                        changeEmailX: SCREEN_WIDTH,
+                        changePasswordX: SCREEN_WIDTH,
+                        changeImageX: SCREEN_WIDTH,
+                        deleteAccountX: displ,
                         cameraX: SCREEN_WIDTH,
                     });
                 else if (currPageRef.current === "camera")
@@ -371,6 +494,7 @@ export default function Settings() {
                         changeEmailX: SCREEN_WIDTH,
                         changePasswordX: SCREEN_WIDTH,
                         changeImageX: -SCREEN_WIDTH + displ,
+                        deleteAccountX: SCREEN_WIDTH,
                         cameraX: displ,
                     });
             }
@@ -518,26 +642,38 @@ export default function Settings() {
             <Navbar onBackButtonClicked={onBackButtonClicked}></Navbar>
             <div className="container">
                 <animated.div className="section main" style={{ x: pagePositions.mainX }}>
-                    <Glass style={{ minHeight: "67%" }}>
+                    <Glass style={{ minHeight: "67%", maxHeight: "calc(100% - 1rem)" }}>
                         <SVG className="settingsIcon" src={SettingsIcon} />
 
-                        <div className="button lower closer" onClick={showChangeUsernameScreen}>
-                            Change Name
-                        </div>
+                        <div className="overflowContainer">
+                            <div className="settingsContainer">
+                                <div className="button lower closer red" onClick={onLogout} style={{ marginTop: "4%" }}>
+                                    Log Out
+                                </div>
 
-                        <div className="button lower closer" onClick={showChangeEmailScreen}>
-                            Change Email
-                        </div>
+                                <div className="button lower closer red" onClick={showDeleteAccountScreen}>
+                                    Delete Account
+                                </div>
 
-                        <div className="button lower closer" onClick={showChangePasswordScreen}>
-                            Change Password
-                        </div>
+                                <div className="button lower closer" onClick={showChangeUsernameScreen}>
+                                    Change Name
+                                </div>
 
-                        <div className="button lower closer" onClick={showChangeImageScreen}>
-                            Change Image
-                        </div>
+                                <div className="button lower closer" onClick={showChangeEmailScreen}>
+                                    Change Email
+                                </div>
 
-                        <Setting name="Vibration" action={onVibrateChange} settingName={"vibrate"}></Setting>
+                                <div className="button lower closer" onClick={showChangePasswordScreen}>
+                                    Change Password
+                                </div>
+
+                                <div className="button lower closer" onClick={showChangeImageScreen}>
+                                    Change Image
+                                </div>
+
+                                <Setting name="Vibration" action={onVibrateChange} settingName={"vibrate"}></Setting>
+                            </div>
+                        </div>
 
                         {message}
                     </Glass>
@@ -685,6 +821,33 @@ export default function Settings() {
                             </button>
 
                             <div className="error">{changeImageError}</div>
+                        </form>
+                    </Glass>
+                </animated.div>
+
+                <animated.div className="section deleteAccount" style={{ x: pagePositions.deleteAccountX }} {...gestureBind()}>
+                    <Glass style={{ minHeight: "67%" }}>
+                        <SVG className="logo small" src={DeleteIcon} />
+
+                        <form autoComplete="off" noValidate spellCheck="false" onSubmit={onDeleteAccount}>
+                            <div className="inputContainer">
+                                <SVG className="inputIcon" src={PasswordIcon} />
+                                <input
+                                    className="input"
+                                    type="password"
+                                    placeholder=" password"
+                                    name="password"
+                                    value={deleteAccountForm.password}
+                                    onChange={onDeleteAccountFormChange}
+                                    autoComplete="off"
+                                ></input>
+                            </div>
+
+                            <button type="submit" className="button closer">
+                                Delete Account
+                            </button>
+
+                            <div className="error">{deleteAccountError}</div>
                         </form>
                     </Glass>
                 </animated.div>
