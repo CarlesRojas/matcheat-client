@@ -1,8 +1,11 @@
 import React, { useEffect, useContext, useState } from "react";
 import { Redirect } from "react-router-dom";
+import { getDistance } from "geolib";
 
 // Components
 import Navbar from "components/Navbar";
+import Winner from "components/Winner";
+import Loser from "components/Loser";
 
 // Contexts
 import { Data } from "contexts/Data";
@@ -23,6 +26,49 @@ export default function Ranking() {
 
     // Go to landing if not done already
     if (!redirectTo && !landingDone.current) setRedirectTo("/");
+
+    // #################################################
+    //   RESTAURANTS
+    // #################################################
+
+    const [restaurantsRanking, setRestaurantsRanking] = useState(null);
+
+    // Sort dunction for restaurants
+    const sortRestaurants = (restaurantA, restaurantB) => {
+        // Deconstruct
+        const { loves: lovesA, likes: likesA, rating: ratingA, lat: latA, latBoss: latBossA, lon: lonA, lonBoss: lonBossA, price: priceA } = restaurantA;
+        const { loves: lovesB, likes: likesB, rating: ratingB, lat: latB, latBoss: latBossB, lon: lonB, lonBoss: lonBossB, price: priceB } = restaurantB;
+
+        // Return if the data is incomplete
+        if (!lovesA || !likesA || !lovesB || !likesB) return 0;
+
+        // Get scores
+        const scoreA = likesA.length + lovesA.length * 2;
+        const scoreB = likesB.length + lovesB.length * 2;
+
+        // If scores are different return the result
+        if (scoreA > scoreB) return -1;
+        else if (scoreB > scoreA) return 1;
+
+        // Sort by rating
+        if (ratingA > ratingB) return -1;
+        else if (ratingB > ratingA) return 1;
+
+        // Get distances to boss
+        const distanceA = Math.round(getDistance({ latitude: latA, longitude: lonA }, { latitude: latBossA, longitude: lonBossA }));
+        const distanceB = Math.round(getDistance({ latitude: latB, longitude: lonB }, { latitude: latBossB, longitude: lonBossB }));
+
+        // Sort by distance
+        if (distanceA > distanceB) return -1;
+        else if (distanceB > distanceA) return 1;
+
+        // Sort by price
+        if (priceA > priceB) return -1;
+        else if (priceB > priceA) return 1;
+
+        // Don't alter order
+        return 0;
+    };
 
     // #################################################
     //   ROOM
@@ -50,9 +96,12 @@ export default function Ranking() {
     };
 
     // Delete room if user leaves this page
-    const onBackButtonClicked = () => {
+    const onExitRoom = () => {
         // Leave room
         leaveRoom(true);
+
+        // Redirect to home
+        setRedirectTo("/home");
     };
 
     // #################################################
@@ -99,7 +148,11 @@ export default function Ranking() {
                 // Get the restaurants
                 await getRoomRestaurants(roomID);
 
-                console.log(restaurants.current);
+                // Sort the restaurants with the most liked on top
+                restaurants.current.sort(sortRestaurants);
+
+                // Create restaurant objects
+                setRestaurantsRanking(restaurants.current.map((data, i) => (i === 0 ? <Winner data={data} position={i} key={i} /> : <Loser data={data} position={i} key={i} />)));
             };
             getRestaurantsWithScores();
         }
@@ -122,8 +175,17 @@ export default function Ranking() {
 
     return (
         <div className="ranking">
-            <Navbar prevPage="/home" onBackButtonClicked={onBackButtonClicked}></Navbar>
-            <div className="container"></div>
+            <Navbar></Navbar>
+
+            <div className="button lower closer" onClick={onExitRoom}>
+                Exit Room
+            </div>
+
+            <div className="container">
+                <div className="overflowContainer">
+                    <div className="restaurantsContainer">{restaurantsRanking}</div>
+                </div>
+            </div>
         </div>
     );
 }

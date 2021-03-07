@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import { getDistance } from "geolib";
 import classnames from "classnames";
 import SVG from "react-inlinesvg";
 
@@ -11,7 +12,14 @@ import Glass from "components/Glass";
 
 export default function Restaurant({ data, verticalGestureBind, horizontalGestureBind }) {
     // Deconstruct data
-    const { adress, /*lat, latBoss, lon, lonBoss,*/ bossName, name, photos, price, rating } = data;
+    const { adress, lat, latBoss, lon, lonBoss, bossName, name, photos, price, rating } = data;
+
+    // #################################################
+    //   DISTANCE
+    // #################################################
+
+    // Distance
+    const distanceToBoss = useRef(Math.round(getDistance({ latitude: lat, longitude: lon }, { latitude: latBoss, longitude: lonBoss })));
 
     // #################################################
     //   PICTURES CARROUSEL
@@ -81,7 +89,9 @@ export default function Restaurant({ data, verticalGestureBind, horizontalGestur
                     <div className="priceContainer">{expansive}</div>
                 </Glass>
 
-                <p className="distance">300m away from {bossName}</p>
+                <p className="distance">
+                    {distanceToBoss.current}m away from {bossName}
+                </p>
             </div>
         </div>
     );

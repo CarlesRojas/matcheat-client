@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSpring, animated } from "react-spring";
 import SVG from "react-inlinesvg";
 import classnames from "classnames";
