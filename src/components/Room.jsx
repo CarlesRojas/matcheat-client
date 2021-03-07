@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 
 // Components
 import ProfileList from "components/ProfileList";
@@ -14,17 +14,6 @@ export default function Room() {
     const { roomUsers } = useContext(Data);
 
     // #################################################
-    //   COMPONENT MOUNT
-    // #################################################
-
-    // On componente mount
-    useEffect(() => {
-        return () => {};
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    // #################################################
     //   RENDER
     // #################################################
 
@@ -34,7 +23,6 @@ export default function Room() {
     // Num users text
     const numUsers = users.length > 1 ? `${users.length} people` : "only you";
 
-    // ROJAS improve animation when a user enters the room
     return (
         <div id="room" className="room">
             <div className="roomContainer">

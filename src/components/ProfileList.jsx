@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useSpring, animated } from "react-spring";
 import SVG from "react-inlinesvg";
-import gsap from "gsap";
 import classnames from "classnames";
 
 // Icons
@@ -13,14 +13,16 @@ export default function ProfileList({ image, text, clickable, inverted }) {
     // Print Render
     if (process.env.REACT_APP_DEBUGG === "true" && process.env.NODE_ENV !== "production") console.log("%cRender Profile List", "color: grey; font-size: 11px");
 
+    // Scale spring
+    const [{ scale }, setScale] = useSpring(() => ({ scale: 0 }));
+
     // #################################################
     //   COMPONENT MOUNT
     // #################################################
 
     // On componente mount
     useEffect(() => {
-        const timeline = gsap.timeline({ defaults: { ease: "power1" } });
-        timeline.fromTo(".profileList ", { opacity: 0 }, { opacity: 1, duration: 0.2 }, "+=0.25");
+        setScale({ scale: 1 });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -54,5 +56,9 @@ export default function ProfileList({ image, text, clickable, inverted }) {
             </Glass>
         );
 
-    return <div className="profileList">{content}</div>;
+    return (
+        <animated.div className="profileList" style={{ scale }}>
+            {content}
+        </animated.div>
+    );
 }
