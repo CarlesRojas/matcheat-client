@@ -74,7 +74,7 @@ export default function Loser({ data, position }) {
 
                         <a
                             className="googleMapsLink"
-                            href={`https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=${lat},${lon}&destination_place_id=${restaurantID}`}
+                            href={`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}&destination_place_id=${restaurantID}`}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
