@@ -1,4 +1,11 @@
 // #######################################
+//      FONTS
+// #######################################
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&display=swap');
+
+// #######################################
 //      VARIABLES
 // #######################################
 
@@ -121,6 +128,7 @@ $line-height: 22px;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: 'Montserrat', sans-serif;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     overscroll-behavior: none;
 }
@@ -141,7 +149,7 @@ body {
     width: 100%;
     overflow: hidden;
 
-    font-family: "Montserrat", "Helvetica", "Verdana", "Arial", sans-serif;
+    font-family: 'Montserrat', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     @include touch-action(none);
@@ -317,8 +325,9 @@ body {
                 color: white;
                 border: 0;
                 outline: none;
+                font-family: 'Fira Mono', monospace;
                 font-size: 1.5rem;
-                font-weight: 700;
+                font-weight: 500;
                 text-align: center;
             }
         }
@@ -421,12 +430,15 @@ body {
                         color: white;
                         border: 0;
                         outline: none;
+                        font-family: 'Fira Mono', monospace;
                         font-size: 1rem;
-                        font-weight: 600;
+                        font-weight: 500;
 
                         @include inputPlaceholder() {
                             color: white;
                             opacity: 0.4;
+                            font-family: 'Montserrat', sans-serif;
+                            font-weight: 600;
                         }
                     }
                 }
@@ -1791,14 +1803,14 @@ body {
 
     .numberContainer {
         position: absolute;
-        top: 65vw;
-        left: 0;
-        width: 100%;
-        height: 6rem;
-        z-index: 20;
         display: flex;
         align-items: center;
         justify-content: center;
+        height: 6rem;
+        width: 100%;
+        top: 65vw;
+        left: 0;
+        z-index: 20;
 
         .number {
             display: flex;
@@ -1924,7 +1936,6 @@ body {
                 min-width: 100%;
 
                 .loveUser {
-                    border: solid 2px #2487ff;
                     height: 2.6rem;
                     max-height: 2.6rem;
                     min-height: 2.6rem;
@@ -1932,11 +1943,11 @@ body {
                     max-width: 2.6rem;
                     min-width: 2.6rem;
                     margin: 0.2rem;
+                    border: solid 2px #2487ff;
                     @include border-radius(100vw);
                 }
 
                 .likeUser {
-                    border: solid 2px transparent;
                     height: 2.6rem;
                     max-height: 2.6rem;
                     min-height: 2.6rem;
@@ -1944,6 +1955,7 @@ body {
                     max-width: 2.6rem;
                     min-width: 2.6rem;
                     margin: 0.2rem;
+                    border: solid 2px transparent;
                     @include border-radius(100vw);
                 }
             }
@@ -1951,8 +1963,8 @@ body {
     }
 
     .padding {
-        width: 100%;
         height: 6vw;
+        width: 100%;
     }
 
     .distance {
@@ -2011,14 +2023,14 @@ body {
 
             .picture {
                 position: absolute;
-                top: 0;
-                left: 0;
                 height: 25vw;
                 max-height: 25vw;
                 min-height: 25vw;
                 width: 25vw;
                 max-width: 25vw;
                 min-width: 25vw;
+                top: 0;
+                left: 0;
                 z-index: 20;
                 background-position: center;
                 background-size: cover;
@@ -2088,7 +2100,6 @@ body {
                 min-width: 100%;
 
                 .loveUser {
-                    border: solid 2px #2487ff;
                     height: 2.6rem;
                     max-height: 2.6rem;
                     min-height: 2.6rem;
@@ -2096,11 +2107,11 @@ body {
                     max-width: 2.6rem;
                     min-width: 2.6rem;
                     margin: 0.2rem;
+                    border: solid 2px #2487ff;
                     @include border-radius(100vw);
                 }
 
                 .likeUser {
-                    border: solid 2px transparent;
                     height: 2.6rem;
                     max-height: 2.6rem;
                     min-height: 2.6rem;
@@ -2108,6 +2119,7 @@ body {
                     max-width: 2.6rem;
                     min-width: 2.6rem;
                     margin: 0.2rem;
+                    border: solid 2px transparent;
                     @include border-radius(100vw);
                 }
             }
@@ -2115,18 +2127,18 @@ body {
     }
 
     .padding {
-        width: 100%;
         height: 6vw;
+        width: 100%;
     }
 
     .number {
         position: absolute;
-        top: 0.3rem;
         display: flex;
         align-items: center;
         justify-content: center;
         height: 3rem;
         width: 3rem;
+        top: 0.3rem;
         z-index: 20;
         background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 75%);
         background-position: 50px -150px;
