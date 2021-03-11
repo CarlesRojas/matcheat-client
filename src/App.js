@@ -69,6 +69,11 @@ export default function App() {
                     <Route path="/auth" component={Auth} exact></Route>
 
                     {/* ################################# */}
+                    {/*   LANDING PAGE FOR REDIRECTS      */}
+                    {/* ################################# */}
+                    <Route path="/landing" component={Landing} exact></Route>
+
+                    {/* ################################# */}
                     {/*   LANDING PAGE                    */}
                     {/* ################################# */}
                     <Route path="/" component={Landing} exact></Route>
