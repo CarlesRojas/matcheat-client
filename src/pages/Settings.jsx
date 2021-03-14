@@ -693,7 +693,7 @@ export default function Settings() {
                                     name="username"
                                     value={changeUsernameForm.username}
                                     onChange={onChangeUsernameFormChange}
-                                    autoComplete="off"
+                                    autoComplete="new-password"
                                 ></input>
                             </div>
 
@@ -706,7 +706,7 @@ export default function Settings() {
                                     name="password"
                                     value={changeUsernameForm.password}
                                     onChange={onChangeUsernameFormChange}
-                                    autoComplete="off"
+                                    autoComplete="new-password"
                                 ></input>
                             </div>
 
@@ -733,7 +733,7 @@ export default function Settings() {
                                     name="email"
                                     value={changeEmailForm.email}
                                     onChange={onChangeEmailFormChange}
-                                    autoComplete="off"
+                                    autoComplete="new-password"
                                 ></input>
                             </div>
 
@@ -746,7 +746,7 @@ export default function Settings() {
                                     name="password"
                                     value={changeEmailForm.password}
                                     onChange={onChangeEmailFormChange}
-                                    autoComplete="off"
+                                    autoComplete="new-password"
                                 ></input>
                             </div>
 
@@ -772,7 +772,7 @@ export default function Settings() {
                                     name="newPassword"
                                     value={changePasswordForm.newPassword}
                                     onChange={onChangePasswordFormChange}
-                                    autoComplete="off"
+                                    autoComplete="new-password"
                                 ></input>
                             </div>
 
@@ -785,7 +785,7 @@ export default function Settings() {
                                     name="password"
                                     value={changePasswordForm.password}
                                     onChange={onChangePasswordFormChange}
-                                    autoComplete="off"
+                                    autoComplete="new-password"
                                 ></input>
                             </div>
 
@@ -812,7 +812,7 @@ export default function Settings() {
                                     name="password"
                                     value={changeImageForm.password}
                                     onChange={onChangeImageFormChange}
-                                    autoComplete="off"
+                                    autoComplete="new-password"
                                 ></input>
                             </div>
 
@@ -839,7 +839,7 @@ export default function Settings() {
                                     name="password"
                                     value={deleteAccountForm.password}
                                     onChange={onDeleteAccountFormChange}
-                                    autoComplete="off"
+                                    autoComplete="new-password"
                                 ></input>
                             </div>
 

@@ -421,13 +421,29 @@ export default function Auth() {
 
                     <form autoComplete="off" noValidate spellCheck="false" onSubmit={onSignUp}>
                         <div className="inputContainer">
-                            <SVG className="inputIcon email" src={UserIcon} />
-                            <input className="input" type="text" placeholder=" name" name="username" value={signupForm.username} onChange={onSingupFormChange} autoComplete="off"></input>
+                            <SVG className="inputIcon" src={UserIcon} />
+                            <input
+                                className="input"
+                                type="text"
+                                placeholder=" name"
+                                name="username"
+                                value={signupForm.username}
+                                onChange={onSingupFormChange}
+                                autoComplete="new-password"
+                            ></input>
                         </div>
 
                         <div className="inputContainer">
                             <SVG className="inputIcon email" src={EmailIcon} />
-                            <input className="input email" type="email" placeholder=" email" name="email" value={signupForm.email} onChange={onSingupFormChange} autoComplete="off"></input>
+                            <input
+                                className="input email"
+                                type="email"
+                                placeholder=" email"
+                                name="email"
+                                value={signupForm.email}
+                                onChange={onSingupFormChange}
+                                autoComplete="new-password"
+                            ></input>
                         </div>
 
                         <div className="inputContainer">
@@ -439,7 +455,7 @@ export default function Auth() {
                                 name="password"
                                 value={signupForm.password}
                                 onChange={onSingupFormChange}
-                                autoComplete="off"
+                                autoComplete="new-password"
                             ></input>
                         </div>
 
