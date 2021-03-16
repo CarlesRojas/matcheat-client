@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState, useContext, memo } from "react";
+import { isMobileOnly } from "react-device-detect";
 import { useSpring } from "react-spring";
 import SVG from "react-inlinesvg";
 
@@ -13,6 +14,8 @@ const SCREEN_WIDTH = window.innerWidth;
 const SCREEN_HEIGHT = window.innerHeight;
 const TILE_SIZE = SCREEN_WIDTH / 2;
 const NUM_TILES = { x: Math.ceil(SCREEN_WIDTH / TILE_SIZE) + 2, y: Math.ceil(SCREEN_HEIGHT / TILE_SIZE) + 2 };
+const TILE_SIZE_DESKTOP = SCREEN_WIDTH / 10;
+const NUM_TILES_DESKTOP = { x: Math.ceil(SCREEN_WIDTH / TILE_SIZE_DESKTOP) + 2, y: Math.ceil(SCREEN_HEIGHT / TILE_SIZE_DESKTOP) + 2 };
 const MAX_FPS = 120;
 const FPS = 60;
 const DECELERATION = 10;
@@ -51,14 +54,11 @@ const Background = memo(() => {
         // Update alpha
         if (Math.abs(alpha) > 20) {
             newMotion.alpha =
-                (Math.sign(motion.current.alpha) === Math.sign(alpha) || motion.current.alpha === 0) && Math.abs(motion.current.alpha) > Math.abs(alpha)
-                    ? motion.current.alpha
-                    : alpha;
+                (Math.sign(motion.current.alpha) === Math.sign(alpha) || motion.current.alpha === 0) && Math.abs(motion.current.alpha) > Math.abs(alpha) ? motion.current.alpha : alpha;
         }
 
         if (Math.abs(beta) > 20) {
-            newMotion.beta =
-                (Math.sign(motion.current.beta) === Math.sign(beta) || motion.current.beta === 0) && Math.abs(motion.current.beta) > Math.abs(beta) ? motion.current.beta : beta;
+            newMotion.beta = (Math.sign(motion.current.beta) === Math.sign(beta) || motion.current.beta === 0) && Math.abs(motion.current.beta) > Math.abs(beta) ? motion.current.beta : beta;
         }
 
         motion.current = newMotion;
@@ -158,22 +158,25 @@ const Background = memo(() => {
     // #################################################
 
     // Tile matrix
+    var numTiles = isMobileOnly ? NUM_TILES : NUM_TILES_DESKTOP;
+    var tileSize = isMobileOnly ? TILE_SIZE : TILE_SIZE_DESKTOP;
+
     var tiles = [];
-    var xSize = NUM_TILES.x * TILE_SIZE;
-    var ySize = NUM_TILES.y * TILE_SIZE;
-    for (let i = 0; i < NUM_TILES.x; i++) {
-        for (let j = 0; j < NUM_TILES.y; j++) {
+    var xSize = numTiles.x * tileSize;
+    var ySize = numTiles.y * tileSize;
+    for (let i = 0; i < numTiles.x; i++) {
+        for (let j = 0; j < numTiles.y; j++) {
             // Get X position
-            var displX = position.x + i * TILE_SIZE;
-            if (displX > 0) var xPos = (displX % xSize) - TILE_SIZE;
-            else xPos = TILE_SIZE * (NUM_TILES.x - 1) - (Math.abs(displX) % xSize);
+            var displX = position.x + i * tileSize;
+            if (displX > 0) var xPos = (displX % xSize) - tileSize;
+            else xPos = tileSize * (numTiles.x - 1) - (Math.abs(displX) % xSize);
 
             // Get Y position
-            var displY = position.y + j * TILE_SIZE;
-            if (displY > 0) var yPos = (displY % ySize) - TILE_SIZE;
-            else yPos = TILE_SIZE * (NUM_TILES.y - 1) - (Math.abs(displY) % ySize);
+            var displY = position.y + j * tileSize;
+            if (displY > 0) var yPos = (displY % ySize) - tileSize;
+            else yPos = tileSize * (numTiles.y - 1) - (Math.abs(displY) % ySize);
 
-            tiles.push(<SVG key={`${i - 1}-${j - 1}`} className="cell" src={Icons} style={{ width: TILE_SIZE, transform: `translate(${xPos}px, ${yPos}px)`, opacity: 0.6 }} />);
+            tiles.push(<SVG key={`${i - 1}-${j - 1}`} className="cell" src={Icons} style={{ width: tileSize, transform: `translate(${xPos}px, ${yPos}px)`, opacity: 0.6 }} />);
         }
     }
 

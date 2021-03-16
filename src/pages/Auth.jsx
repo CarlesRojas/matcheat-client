@@ -35,11 +35,14 @@ export default function Auth() {
     // Contexts
     const { vibrate, cropAndResizeImage } = useContext(Utils);
     const { register, login, isLoggedIn } = useContext(API);
-    const { setBackgroundGradient, settings } = useContext(Data);
+    const { setBackgroundGradient, settings, landingDone } = useContext(Data);
 
     // Redirect state
     const [redirectTo, setRedirectTo] = useState(null);
     const isLoggedInRef = useRef(false);
+
+    // Go to landing if not done already
+    if (!redirectTo && !landingDone.current) setRedirectTo("/");
 
     // #################################################
     //   FORMS
@@ -126,7 +129,7 @@ export default function Auth() {
     const [, setCurrPage] = useState("welcome");
 
     // Page position spring
-    const [{ welcomeX, loginX, signupX, loadingX, cameraX }, setPagePositions] = useSpring(() => ({
+    const [pagePositions, setPagePositions] = useSpring(() => ({
         welcomeX: 0,
         loginX: SCREEN_WIDTH,
         signupX: SCREEN_WIDTH,
@@ -137,10 +140,10 @@ export default function Auth() {
     // Show the welcome screen
     const showWelcomeScreen = (first) => {
         // Fade in if it is the first time
-        if (first) {
+        if (first & landingDone.current) {
             const timeline = gsap.timeline({ defaults: { ease: "power1" } });
             timeline.fromTo(".welcome > .glass", { opacity: 0 }, { opacity: 1, duration: 1 }, "+=0.25");
-        } else {
+        } else if (landingDone.current) {
             // Vibrate
             if (settings.current.vibrate) vibrate(25);
         }
@@ -314,16 +317,18 @@ export default function Auth() {
         // Change Color
         setBackgroundGradient("pink");
 
-        // Get number of cameras
-        const getNumCams = async () => {
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            const cameras = devices.filter(({ kind, label }) => kind === "videoinput" && !label.includes("OBS"));
-            setNumCameras(cameras.length);
-        };
-        getNumCams();
+        if (landingDone.current) {
+            // Get number of cameras
+            const getNumCams = async () => {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const cameras = devices.filter(({ kind, label }) => kind === "videoinput" && !label.includes("OBS"));
+                setNumCameras(cameras.length);
+            };
+            getNumCams();
 
-        // Go to welcome page
-        if (!isLoggedInRef.current) showWelcomeScreen(true);
+            // Go to welcome page
+            if (!isLoggedInRef.current) showWelcomeScreen(true);
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -365,7 +370,7 @@ export default function Auth() {
 
     return (
         <div className="auth">
-            <animated.div className="section welcome" style={{ x: welcomeX }}>
+            <animated.div className="section welcome" style={{ x: pagePositions.welcomeX }}>
                 <Glass style={{ minHeight: "67%" }}>
                     <SVG className="logo" src={LogoIcon} />
 
@@ -379,7 +384,7 @@ export default function Auth() {
                 </Glass>
             </animated.div>
 
-            <animated.div className="section login" style={{ x: loginX }} {...gestureBind()}>
+            <animated.div className="section login" style={{ x: pagePositions.loginX }} {...gestureBind()}>
                 <Glass style={{ minHeight: "67%" }}>
                     <SVG className="backButton" src={BackIcon} onClick={() => showWelcomeScreen(false)} />
 
@@ -413,7 +418,7 @@ export default function Auth() {
                 </Glass>
             </animated.div>
 
-            <animated.div className="section signup" style={{ x: signupX }} {...gestureBind()}>
+            <animated.div className="section signup" style={{ x: pagePositions.signupX }} {...gestureBind()}>
                 <Glass style={{ minHeight: "67%" }}>
                     <SVG className="backButton" src={BackIcon} onClick={() => showWelcomeScreen(false)} />
 
@@ -468,7 +473,7 @@ export default function Auth() {
                 </Glass>
             </animated.div>
 
-            <animated.div className="section cam" style={{ x: cameraX }} {...gestureBind()}>
+            <animated.div className="section cam" style={{ x: pagePositions.cameraX }} {...gestureBind()}>
                 <Glass style={{ minHeight: "67%" }}>
                     <SVG className="backButton" src={BackIcon} onClick={() => showSignupScreen(true)} />
 
@@ -489,7 +494,7 @@ export default function Auth() {
                 </Glass>
             </animated.div>
 
-            <animated.div className="section loading" style={{ x: loadingX }}>
+            <animated.div className="section loading" style={{ x: pagePositions.loadingX }}>
                 <SVG className="loadingIcon" src={LogoIcon} />
             </animated.div>
         </div>

@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useContext, useState } from "react";
 import { Redirect } from "react-router-dom";
 import SVG from "react-inlinesvg";
+import { isMobileOnly } from "react-device-detect";
 import gsap from "gsap";
 
 // Icons
@@ -123,6 +124,9 @@ export default function Landing() {
 
     // Landing Complete
     landingDone.current = true;
+
+    // App is only available in a mobile phone
+    if (!isMobileOnly) return <Redirect to={"/onlyMobile"} push={true} />;
 
     // Already logged in -> Go Home
     if (isLoggedIn()) return <Redirect to={"/home"} push={true} />;

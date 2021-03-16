@@ -2,6 +2,7 @@ import React from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
 // Pages
+import OnlyMobile from "pages/OnlyMobile";
 import Settings from "pages/Settings";
 import Ranking from "pages/Ranking";
 import Wait from "pages/Wait";
@@ -23,6 +24,11 @@ export default function App() {
 
             <Router>
                 <Switch>
+                    {/* ################################# */}
+                    {/*   ONLY MOBILE                     */}
+                    {/* ################################# */}
+                    <Route path="/onlyMobile" component={OnlyMobile} exact></Route>
+
                     {/* ################################# */}
                     {/*   SETTINGS                        */}
                     {/* ################################# */}
